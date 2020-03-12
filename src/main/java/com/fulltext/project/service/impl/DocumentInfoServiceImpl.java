@@ -1,9 +1,6 @@
 package com.fulltext.project.service.impl;
 
-import com.fulltext.project.bo.DocumentMenuNode;
-import com.fulltext.project.bo.DocumentSearchBO;
-import com.fulltext.project.bo.DocumentSerialBO;
-import com.fulltext.project.bo.DocumentSerialDetailBO;
+import com.fulltext.project.bo.*;
 import com.fulltext.project.constants.ElementTypeEnum;
 import com.fulltext.project.dao.DocumentInfoMapper;
 import com.fulltext.project.dao.DocumentStorageMapper;
@@ -232,9 +229,12 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
         Map<String,String> params = new HashMap<>();
         if(StringUtils.isEmpty(menuInfoStrArr[1])){
             //整篇
-
+            //es service.method(,content)
+            ConstructInvertedIndexBO elasticSearchBO = ConstructInvertedIndexBO.builder().author("123").body("123").build();
+//            List<String> newKeyWords = service.method(elasticSearchBO);
         }else{
             //某个叶子章节
+            //es service.method(,content)
         }
     }
 
