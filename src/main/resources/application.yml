@@ -32,3 +32,8 @@ spring:
       test-on-return: false
       default-auto-commit: true
       max-age: 30000
+#  elasticsearch:
+#    rest:
+#      uris: http://localhost:9200
+#      username: elastic
+#      password: 123456

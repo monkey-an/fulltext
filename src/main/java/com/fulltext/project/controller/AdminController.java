@@ -43,16 +43,16 @@ public class AdminController {
 
 
     @RequestMapping("")
-    public String innerIndex(){
+    public String innerIndex() {
         return "admin/admin_index";
     }
 
     @RequestMapping("/getMainPage")
-    public String getMainPage(HttpServletRequest request){
+    public String getMainPage(HttpServletRequest request) {
         String funName = request.getParameter("funName");
         String resultView = "";
-        if(StringUtils.isNotEmpty(funName)) {
-            switch (funName){
+        if (StringUtils.isNotEmpty(funName)) {
+            switch (funName) {
                 case "admin-docuemnt-input":
                     resultView = "admin/add_document";
                     break;
@@ -74,18 +74,18 @@ public class AdminController {
 
     @RequestMapping("/getAllUserByPaging")
     @ResponseBody
-    public PageBean<User> getAllUserByPaging(@RequestParam(value="pageNo",required=true,defaultValue="1")int pageNo,
-                                             @RequestParam(value="pageSize",required=true,defaultValue="10")int pageSize,
-                                             @RequestParam(value="nickName",required=false)String nickName,
-                                             @RequestParam(value="email",required=false)String email){
-        if(StringUtils.isEmpty(nickName)){
+    public PageBean<User> getAllUserByPaging(@RequestParam(value = "pageNo", required = true, defaultValue = "1") int pageNo,
+                                             @RequestParam(value = "pageSize", required = true, defaultValue = "10") int pageSize,
+                                             @RequestParam(value = "nickName", required = false) String nickName,
+                                             @RequestParam(value = "email", required = false) String email) {
+        if (StringUtils.isEmpty(nickName)) {
             nickName = null;
         }
-        if(StringUtils.isEmpty(email)){
+        if (StringUtils.isEmpty(email)) {
             email = null;
         }
-        PageInfo<User> pageInfo = userService.selectAllUserByPaging(pageNo, pageSize ,nickName ,email);
-        PageBean<User> pageBean= PageVoUtils.convertTopageVo(pageInfo);
+        PageInfo<User> pageInfo = userService.selectAllUserByPaging(pageNo, pageSize, nickName, email);
+        PageBean<User> pageBean = PageVoUtils.convertTopageVo(pageInfo);
         return pageBean;
     }
 
@@ -95,10 +95,10 @@ public class AdminController {
                                                                    @RequestParam(value = "pageSize", required = true, defaultValue = "10") int pageSize,
                                                                    @RequestParam(value = "documentName", required = false) String documentName,
                                                                    @RequestParam(value = "year", required = false) String year) {
-        if(StringUtils.isEmpty(documentName)){
+        if (StringUtils.isEmpty(documentName)) {
             documentName = null;
         }
-        if(StringUtils.isEmpty(year)){
+        if (StringUtils.isEmpty(year)) {
             year = null;
         }
         PageInfo<DocumentSearchBO> pageInfo = documentInfoService.selectSearchDocumentByPaging(pageNo, pageSize, documentName, year);
@@ -108,7 +108,7 @@ public class AdminController {
 
     @RequestMapping("/getAllMenuNameMap")
     @ResponseBody
-    public List<Map<String,Object>> getAllMenuNameMap() {
+    public List<Map<String, Object>> getAllMenuNameMap() {
         return documentInfoService.getAllMenuNameMap();
     }
 
