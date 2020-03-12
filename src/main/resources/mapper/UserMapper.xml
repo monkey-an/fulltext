@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulltext.project.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.fulltext.project.entity.User">
+
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="department_id" jdbcType="BIGINT" property="departmentId" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="id_card_no" jdbcType="VARCHAR" property="idCardNo" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="efficative_date" jdbcType="TIMESTAMP" property="efficativeDate" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_col">
+    id, nick_name, company_id, company_name, department_id, department_name, login_name,
+    email, phone, real_name, id_card_no, salt, password, status, efficative_date, create_time,
+    update_time
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fulltext.project.entity.User">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user (nick_name, company_id, company_name, 
+      department_id, department_name, login_name, 
+      email, phone, real_name, 
+      id_card_no, salt, password, 
+      status, efficative_date, create_time, 
+      update_time)
+    values (#{nickName,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{companyName,jdbcType=VARCHAR}, 
+      #{departmentId,jdbcType=BIGINT}, #{departmentName,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
+      #{idCardNo,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{efficativeDate,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.fulltext.project.entity.User">
+
+    update user
+    set nick_name = #{nickName,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=BIGINT},
+      department_name = #{departmentName,jdbcType=VARCHAR},
+      login_name = #{loginName,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      real_name = #{realName,jdbcType=VARCHAR},
+      id_card_no = #{idCardNo,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      efficative_date = #{efficativeDate,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_col"></include>
+    from user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_col"></include>
+    from user
+    <where>
+      <if test="nickName != null" >
+        nick_name=#{nickName}
+      </if>
+      <if test="email != null" >
+        AND email=#{email}
+      </if>
+    </where>
+  </select>
+  <select id="selectOneByLoginName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_col"></include>
+    from user
+    where login_name=#{loginName}
+    limit 1;
+  </select>
+</mapper>

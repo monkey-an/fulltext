@@ -1,0 +1,95 @@
+<div class="row" style="margin-left: 10px;">
+    <div class="row col-md-6">
+        <h4>文档录入</h4>
+        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
+        <form style="margin:10px 10px 10px 10px;">
+            <div class="form-group">
+                <label for="document-name-input">文档名称</label>
+                <input type="text" class="form-control" id="document-name-input" placeholder="请输入文档名称">
+            </div>
+            <div class="form-group">
+                <label for="serial-name-input">所属系列</label>
+                <input type="text" class="form-control" id="serial-name-input" placeholder="请输入所属系列">
+            </div>
+            <div class="form-group">
+                <label for="document-author-input">文档作者</label>
+                <input type="text" class="form-control" id="document-author-input" placeholder="请输入文档作者">
+            </div>
+            <div class="form-group">
+                <label for="document-publisher-input">出版社\组织</label>
+                <input type="text" class="form-control" id="document-publisher-input" placeholder="请输入出版社\组织">
+            </div>
+            <div class="form-group">
+                <label for="document-year-input">出版年份</label>
+                <input type="text" class="form-control" id="document-year-input" placeholder="请输入出版年份">
+            </div>
+            <div class="form-group">
+                <label for="document-isbn-input">ISBN</label>
+                <input type="text" class="form-control" id="document-isbn-input" placeholder="请输入ISBN">
+            </div>
+            <div class="form-group">
+                <label for="document-total-page-input">总页数</label>
+                <input type="text" class="form-control" id="document-total-page-input" placeholder="请输入总页数">
+            </div>
+            <div class="form-group">
+                <label for="document-total-count-input">总字数</label>
+                <input type="text" class="form-control" id="document-total-count-input" placeholder="请输入总页数">
+            </div>
+            <div class="form-group">
+                <label for="document-desc-input">文档简介</label>
+                <input type="text" class="form-control" id="document-desc-input" placeholder="请输入文档简介">
+            </div>
+            <div class="form-group">
+                <label for="document-summary-input">文档摘要</label>
+                <input type="text" class="form-control" id="document-summary-input" placeholder="请输入文档摘要">
+            </div>
+            <div class="form-group">
+                <label for="document-price-input">售价</label>
+                <div class="input-group">
+                    <span class="input-group-addon">¥</span>
+                    <input type="text" class="form-control" id="document-price-input" placeholder="请输入售价(两位小数)">
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-default" id="document-add-button">录入</button>
+        </form>
+    </div>
+    <div class="row col-md-6">
+        <h4>目录录入</h4>
+        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
+        <form style="margin:10px 10px 10px 10px;">
+            <div class="form-group">
+                <label for="document-price-input">目录上级</label>
+                <select class="form-control" id="parent_menu">
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="document-menu-name-input">目录名称</label>
+                <input type="text" class="form-control" id="document-menu-name-input" placeholder="请输入目录名称">
+            </div>
+            <div class="form-group">
+                <label for="document-menu-page-input">起止页码</label>
+                <input type="text" class="form-control" id="document-menu-page-input" placeholder="请输入起止页码">
+            </div>
+            <div class="form-group">
+                是否叶子节点 <input type="checkbox" id="if_leaf">
+            </div>
+            <div class="form-group" id="document-menu-author-div" style="display:none">
+                <label for="document-menu-author-input">作者</label>
+                <input type="text" class="form-control" id="document-menu-author-input"
+                       placeholder="请输入单独作者，如不填则与所属文档作者一致">
+            </div>
+            <div class="form-group" id="document-menu-summary-div" style="display:none">
+                <label for="document-menu-summary-input">目录摘要</label>
+                <input type="text" class="form-control" id="document-menu-summary-input" placeholder="请输入目录摘要">
+            </div>
+            <div class="form-group" id="document-menu-keywords-div" style="display:none">
+                <label for="document-menu-keywords-input">关键字</label>
+                <input type="text" class="form-control" id="document-menu-keywords-input" placeholder="请输入关键字">
+            </div>
+
+            <button type="button" class="btn btn-default" id="document-menu-add-button">录入</button>
+        </form>
+    </div>
+</div>
+<script src="/static/javascript/add_document.js"></script>

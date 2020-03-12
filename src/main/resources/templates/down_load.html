@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thymeleaf</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css">
+</head>
+<body>
+<div class="container-fluid">
+    <div th:replace="common/page_header :: page_header"></div>
+
+    <div class="row">
+        <div class="panel panel-default col-md-8 col-md-offset-2">
+            <div class="panel-body">
+                <div class="row bg-info">
+                    <p style="margin-left: 10px;margin-top: 10px;margin-bottom: 10px;">网络首发时间：<span th:text="${documentInfo.getCreateTime()}"></span></p>
+                </div>
+                <div class="row">
+                    <h3 class="text-center" th:text="${documentInfo.getDocumentName()}"></h3>
+                    <P class="text-center" th:text="${documentInfo.getDocumentAuthor()}"></P>
+                    <P class="text-center" th:text="${documentInfo.getDocumentAuthor()}"></P>
+                    <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+                </div>
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="row">
+                            <span class="label label-default">摘要：</span>
+                            <span th:text="${documentInfo.getDocumentSummary()}"></span>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <span class="label label-default">简介：</span>
+                            <span th:text="${documentInfo.getDocumentDesc()}"></span>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <span class="label label-default">关键词：</span>
+                            <span th:text="${documentInfo.getDocumentDesc()}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="thumbnail">
+                            <img style="width: 300px;height: 300px" th:src="${documentBookImage}" alt="...">
+                            <div class="caption">
+                                <h3 class="text-center" th:text="${documentInfo.getDocumentName()}"></h3>
+                                <p class="text-center">ISBN：<span th:text="${documentInfo.getDocumentIsbn()}"></span></p>
+                                <p class="text-center" th:text="${documentInfo.getSerialName()}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+                    <a href="charge">充值</a>
+                    <a th:href="@{/downLoad(documentId=${documentIdStr},menuId=${menuIdStr},downLoadType='pdf')}" target="_blank">PDF下载</a>
+                    <a th:href="@{/downLoad(documentId=${documentIdStr},menuId=${menuIdStr},downLoadType='word')}" target="_blank">WORD下载</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="common/page_footer :: page_footer"></div>
+</div>
+<script src="/static/javascript/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<script src="/static/javascript/hello.js"></script>
+<script src="/static/javascript/downLoad.js"></script>
+</body>
+</html>

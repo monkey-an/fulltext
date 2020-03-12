@@ -1,0 +1,28 @@
+body{
+    padding-top: 70px;
+}
+
+.header{
+    height: 55px;
+    background: #000080;
+    border-bottom: 1px solid #ebebeb;
+    color: #F8F8FF;
+    font-size: 18px;
+}
+
+.background{
+    height: 600px;
+    background: url("/static/img/banner.jpg") repeat-x,repeat-y center top #1b66e6;
+}
+
+.footer{
+    height: 200px;
+    background: #000080;;
+    border-top: 1px solid #ebebeb;
+    color: #F8F8FF;
+}
+
+.shadow-box{
+    border-radius: 2%;
+    box-shadow: 10px 10px 20px 10px rgba(0,0,0,0.5)
+}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulltext.project.dao.DocumentDetailMapper">
+  <resultMap id="BaseResultMap" type="com.fulltext.project.entity.DocumentDetail">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="document_id" jdbcType="BIGINT" property="documentId" />
+    <result column="menu_id" jdbcType="BIGINT" property="menuId" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="key_words" jdbcType="VARCHAR" property="keyWords" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from document_detail
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fulltext.project.entity.DocumentDetail">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into document_detail (document_id, menu_id, author, 
+      summary, key_words, status, 
+      create_time, update_time)
+    values (#{documentId,jdbcType=BIGINT}, #{menuId,jdbcType=BIGINT}, #{author,jdbcType=VARCHAR}, 
+      #{summary,jdbcType=VARCHAR}, #{keyWords,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.fulltext.project.entity.DocumentDetail">
+    update document_detail
+    set document_id = #{documentId,jdbcType=BIGINT},
+      menu_id = #{menuId,jdbcType=BIGINT},
+      author = #{author,jdbcType=VARCHAR},
+      summary = #{summary,jdbcType=VARCHAR},
+      key_words = #{keyWords,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, document_id, menu_id, author, summary, key_words, status, create_time,
+    update_time
+    from document_detail
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, document_id, menu_id, author, summary, key_words, status, create_time,
+    update_time
+    from document_detail
+  </select>
+</mapper>

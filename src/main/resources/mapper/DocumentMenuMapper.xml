@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulltext.project.dao.DocumentMenuMapper">
+  <resultMap id="BaseResultMap" type="com.fulltext.project.entity.DocumentMenu">
+
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="document_id" jdbcType="BIGINT" property="documentId" />
+    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+    <result column="menu_page" jdbcType="VARCHAR" property="menuPage" />
+    <result column="parent_menu_id" jdbcType="BIGINT" property="parentMenuId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from document_menu
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fulltext.project.entity.DocumentMenu">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into document_menu (document_id, menu_name, menu_page, 
+      parent_menu_id, create_time, update_time
+      )
+    values (#{documentId,jdbcType=BIGINT}, #{menuName,jdbcType=VARCHAR}, #{menuPage,jdbcType=VARCHAR}, 
+      #{parentMenuId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.fulltext.project.entity.DocumentMenu">
+    update document_menu
+    set document_id = #{documentId,jdbcType=BIGINT},
+      menu_name = #{menuName,jdbcType=VARCHAR},
+      menu_page = #{menuPage,jdbcType=VARCHAR},
+      parent_menu_id = #{parentMenuId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, document_id, menu_name, menu_page, parent_menu_id, create_time, update_time
+    from document_menu
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, document_id, menu_name, menu_page, parent_menu_id, create_time, update_time
+    from document_menu
+  </select>
+
+  <select id="selectByDocumentId" resultMap="BaseResultMap">
+    select id, document_id, menu_name, menu_page, parent_menu_id, create_time, update_time
+    from document_menu
+    where document_id=#{documentId}
+  </select>
+</mapper>
