@@ -16,7 +16,7 @@ spring:
     fulltext:
       jdbc-url: jdbc:mysql://localhost:3306/full_text?useUnicode=true
       username: root
-      password:
+      password: root123
       driver-class-name: com.mysql.jdbc.Driver
       filters: stat
       maxActive: 20
@@ -32,8 +32,7 @@ spring:
       test-on-return: false
       default-auto-commit: true
       max-age: 30000
-#  elasticsearch:
-#    rest:
-#      uris: http://localhost:9200
-#      username: elastic
-#      password: 123456
+
+elasticsearch:
+  rest:
+    uris: http://localhost:9200

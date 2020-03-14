@@ -26,6 +26,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/user/doLogin")
                 .excludePathPatterns("/user/regist")
                 .excludePathPatterns("/user/doRegist")
-                .excludePathPatterns("/static/**");
+                .excludePathPatterns("/static/**")
+                .excludePathPatterns("/elastic/**");
     }
 }
