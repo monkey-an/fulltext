@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>工单详情</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css">
+    <style>
+        /* 表格样式 */
+        .table > tbody > tr > td {
+            text-align: center;
+            vertical-align: middle;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div th:replace="common/page_header :: page_header"></div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="row">
+                <p th:text="${currentNode.getFlowName()}"></p>
+                <p th:text="'提交者：'+${task.getCommitUserName()}"></p>
+                <p th:text="'当前节点：'+${task.getCurrentNodeName()}"></p>
+                <p th:text="'当前状态：'+${task.getStatusDesc()}"></p>
+                <p>历史节点:
+                    <span th:each="taskDetail : ${taskDetailList}">
+                        <span th:text="${taskDetail.getOperUserName()}"></span>
+                        <span class="glyphicon glyphicon-arrow-right"></span>
+                    </span>
+                    <span style="color: red" th:text="${user.getRealName()}"></span>
+                </p>
+                <div th:unless="${taskAttachmentList==null}">
+                    <p>附件：</p>
+                    <p th:each="taskAttachment : ${taskAttachmentList}">
+                        <a th:href="@{/downLoadTaskAttachment(attachmentId=${taskAttachment.getId()})}" th:text="${taskAttachment.getAttachmentName()}"></a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row" th:unless="${taskFormHtmlList==null}">
+                <div>
+                    <h5>已提交表单</h5>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" th:each="formHtml,formHtmlStat : ${taskFormHtmlList}"
+                            th:class="${formHtmlStat.index==0}? 'active' : ''">
+                            <a th:href="'form-'+${formHtml.getFormNoDesc()}" role="tab" data-toggle="tab"
+                               th:text="'表单'+${formHtml.getFormNoDesc()}"></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div role="tabpanel"
+                         th:each="formHtml,formHtmlStat : ${taskFormHtmlList}"
+                         th:id="'form-'+${formHtml.getFormNoDesc()}"
+                         th:class="${formHtmlStat.index==0}? 'tab-pane fade active in' : 'tab-pane fade'"
+                         th:utext="${taskFormHtmlList.get(0).getFormContent()}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 col-md-offset-2" th:unless="${currentNode.getAttachmentNameList()==null}">
+            <p>本节点所需附件如下：</p>
+            <p th:each="attachName,attachNameStat : ${currentNode.getAttachmentNameList()}">
+                <span th:text="${attachName}"></span><input type="file" th:name="'attach-'+${attachName}" th:id="'upload-attach-'+${attachNameStat.index}" style="margin-left: 10px;display: inline;"/>
+            </p>
+        </div>
+        <div class="col-md-8 col-md-offset-2 form-group" id="document-menu-summary-div">
+            <input type="hidden" id="flow-no" th:data="${currentNode.getFlowNo()}">
+            <input type="hidden" id="task-id" th:data="${task.getTaskId()}">
+            <input type="hidden" id="flow-name" th:data="${currentNode.getFlowName()}">
+            <button type="button" class="btn btn-success" id="save">保存</button>
+            <button type="button" class="btn btn-danger" id="commit" disabled="disabled">提交</button>
+        </div>
+    </div>
+
+    <div th:replace="common/page_footer :: page_footer"></div>
+
+    <script src="/static/javascript/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
+    <script src="/static/javascript/flowDetail.js"></script>
+</div>
+
+
+</body>
+</html>

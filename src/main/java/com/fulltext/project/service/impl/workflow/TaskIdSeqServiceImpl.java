@@ -1,4 +1,4 @@
-package com.fulltext.project.service.impl;
+package com.fulltext.project.service.impl.workflow;
 
 import com.fulltext.project.dao.TaskIdSeqMapper;
 import com.fulltext.project.entity.TaskIdSeq;

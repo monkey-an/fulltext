@@ -23,6 +23,8 @@ public class WorkFlowNode {
     private String flowName;
     //流程编号
     private String flowNo;
+    //节点名称
+    private String nodeName;
     //需要添加进流程的表单编号
     private String formNo;
     //此节点是否需要审批

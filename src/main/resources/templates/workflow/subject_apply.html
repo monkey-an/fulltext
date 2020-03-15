@@ -179,7 +179,7 @@
             $.each($("table") ,function (i, val) {
                 if("need"==$(val).attr("form-type")) {
                     var formId = $(val).prop("id");
-                    var tableHtml = $(val).html();
+                    var tableHtml = $(val).prop("outerHTML");
                     formData.append(formId, tableHtml);
                 }
             });

@@ -10,4 +10,6 @@ public interface TaskAttachmentService {
     List<TaskAttachment> selectTaskAttachmentListByIdList(List<Long> idList);
     int insert(TaskAttachment entity);
     int update(TaskAttachment entity);
+
+    List<TaskAttachment> selectTaskAttachmentListByTaskId(Long taskId);
 }

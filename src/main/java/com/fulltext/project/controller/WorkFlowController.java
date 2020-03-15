@@ -110,15 +110,23 @@ public class WorkFlowController {
     public String flowDetail(HttpServletRequest request,Model model) {
         User user = (User) request.getSession().getAttribute(ConstantValue.USER_SESSION_KEY);
         Long taskId = Long.parseLong(request.getParameter("taskId"));
-        taskService.initTaskDetail(user,taskId,model);
-        return "flow_detail";
+        String initResult = taskService.initTaskDetail(user,taskId,model);
+        if("SUCCESS".equals(initResult)){
+            return "workflow/flow_detail";
+        }else{
+            return "workflow/flow_error";
+        }
     }
 
     @RequestMapping("/myFlowDetail")
     public String myFlowDetail(HttpServletRequest request,Model model) {
         User user = (User) request.getSession().getAttribute(ConstantValue.USER_SESSION_KEY);
         Long taskId = Long.parseLong(request.getParameter("taskId"));
-        taskService.initMyTaskDetail(user,taskId,model);
-        return "my_flow_detail";
+        String initResult = taskService.initMyTaskDetail(user,taskId,model);
+        if("SUCCESS".equals(initResult)){
+            return "workflow/my_flow_detail";
+        }else{
+            return "workflow/flow_error";
+        }
     }
 }

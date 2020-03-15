@@ -10,4 +10,6 @@ public interface TaskDetailService {
     List<TaskDetail> selectTaskDetailListByIdList(List<Long> idList);
     int insert(TaskDetail entity);
     int update(TaskDetail entity);
+
+    List<TaskDetail> selectTaskDetailByTaskId(Long taskId);
 }

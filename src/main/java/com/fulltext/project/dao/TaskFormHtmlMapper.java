@@ -10,4 +10,6 @@ public interface TaskFormHtmlMapper {
     List<TaskFormHtml> selectAll();
     int updateByPrimaryKey(TaskFormHtml record);
     TaskFormHtml selectByTaskIdAndFormNo(@Param("taskId") Long taskId,@Param("formNo") String formNo);
+
+    List<TaskFormHtml> selectTaskFormHtmlByTaskId(@Param("taskId") Long taskId);
 }

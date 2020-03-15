@@ -1,4 +1,4 @@
-package com.fulltext.project.service.impl;
+package com.fulltext.project.service.impl.workflow;
 
 import com.fulltext.project.dao.TaskFormHtmlMapper;
 import com.fulltext.project.entity.TaskFormHtml;
@@ -37,5 +37,10 @@ public class TaskFormHtmlServiceImpl implements TaskFormHtmlService {
     @Override
     public TaskFormHtml selectTaskFormHtmlByTaskIdAndFormNo(Long taskId, String formNo) {
         return taskFormHtmlMapper.selectByTaskIdAndFormNo(taskId,formNo);
+    }
+
+    @Override
+    public List<TaskFormHtml> selectTaskFormHtmlByTaskId(Long taskId) {
+        return taskFormHtmlMapper.selectTaskFormHtmlByTaskId(taskId);
     }
 }

@@ -87,6 +87,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
         WorkFlowNode stepTwoNode = WorkFlowNode.builder()
                 .flowName(rootNode.getFlowName())
                 .flowNo("1-2")
+                .nodeName("申报单位审核")
                 .needApproval(true)
                 .approvalRole("leader")
                 .build();
@@ -96,6 +97,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
         WorkFlowNode stepThreeNode = WorkFlowNode.builder()
                 .flowName(rootNode.getFlowName())
                 .flowNo("1-3")
+                .nodeName("处员初审")
                 .needApproval(true)
                 .approvalRole("soft-office-member")
                 .build();
@@ -105,6 +107,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
         WorkFlowNode stepFourNode = WorkFlowNode.builder()
                 .flowName(rootNode.getFlowName())
                 .flowNo("1-4")
+                .nodeName("处长审核")
                 .needApproval(true)
                 .approvalRole("soft-office-master")
                 .build();
@@ -114,6 +117,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
         WorkFlowNode stepFiveNode = WorkFlowNode.builder()
                 .flowName(rootNode.getFlowName())
                 .flowNo("1-5")
+                .nodeName("主管副主任审核")
                 .needApproval(true)
                 .approvalRole("soft-office-deputy-director")
                 .build();
@@ -123,6 +127,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
         WorkFlowNode stepSixNode = WorkFlowNode.builder()
                 .flowName(rootNode.getFlowName())
                 .flowNo("1-6")
+                .nodeName("主任审核")
                 .needApproval(true)
                 .approvalRole("soft-office-director")
                 .build();
@@ -132,6 +137,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
         WorkFlowNode stepSevenNode = WorkFlowNode.builder()
                 .flowName(rootNode.getFlowName())
                 .flowNo("1-7")
+                .nodeName("专家评审")
                 .needApproval(true)
                 .approvalRole("soft-office-expert")
                 .formNo("form-1-7")
@@ -146,6 +152,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
         WorkFlowNode stepEightNode = WorkFlowNode.builder()
                 .flowName(rootNode.getFlowName())
                 .flowNo("1-8")
+                .nodeName("报送研究成果")
                 .needApproval(false)
                 .attachmentNameList(stepEightAttachList)
                 .build();
@@ -155,6 +162,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
         WorkFlowNode stepNineNode = WorkFlowNode.builder()
                 .flowName(rootNode.getFlowName())
                 .flowNo("1-9")
+                .nodeName("专家复审")
                 .needApproval(true)
                 .approvalRole("soft-office-expert")
                 .formNo("form-1-9")
@@ -226,7 +234,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
                 taskService.insert(task);
             } else {
                 //去数据库把本流程数据取出来
-                Long taskId = Long.parseLong(request.getParameter("taskId"));
+                Long taskId = Long.parseLong(request.getParameter("task-id"));
                 task = taskService.selectTaskByTaskId(taskId);
             }
 
@@ -277,7 +285,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
             if (currentNode.isNeedApproval()) {
                 Document tableDoc = Jsoup.parse(form11Html);
                 Elements lastTrTds = tableDoc.select("tr").select("td");
-                String approvalResult = lastTrTds.last().html();
+                String approvalResult = lastTrTds.get(lastTrTds.size()-2).html();
                 if (approvalResult.contains("同意")) {
                     nextNode = currentNode.getNextFlow();
                 }else{
@@ -304,6 +312,9 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
             } else {
                 //继续下一节点
                 //更新数据库，写下一节点的处理状态及信息，返回成功。
+                task.setCurrentNodeNo(nextNode.getFlowNo());
+                task.setCurrentNodeName(nextNode.getNodeName());
+
                 if(nextNode.isNeedApproval()){
                     //推给审核者
                     User targetUser = null;
@@ -363,7 +374,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
 
     private void createOrUpdateHtml(String form11Html,String form17Html,String form19Html,Task task){
         if(StringUtils.isNotEmpty(form11Html)){
-            String formNo = formHtmlToFormNo.get("form11Html");
+            String formNo = formHtmlToFormNo.get("form11");
             TaskFormHtml taskFormHtml = taskFormHtmlService.selectTaskFormHtmlByTaskIdAndFormNo(task.getTaskId(),formNo);
             if(taskFormHtml!=null){
                 taskFormHtml.setFormContent(form11Html);
@@ -381,7 +392,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
         }
 
         if(StringUtils.isNotEmpty(form17Html)){
-            String formNo = formHtmlToFormNo.get("form17Html");
+            String formNo = formHtmlToFormNo.get("form17");
             TaskFormHtml taskFormHtml = taskFormHtmlService.selectTaskFormHtmlByTaskIdAndFormNo(task.getTaskId(),formNo);
             if(taskFormHtml!=null){
                 taskFormHtml.setFormContent(form17Html);
@@ -399,7 +410,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
         }
 
         if(StringUtils.isNotEmpty(form19Html)){
-            String formNo = formHtmlToFormNo.get("form19Html");
+            String formNo = formHtmlToFormNo.get("form19");
             TaskFormHtml taskFormHtml = taskFormHtmlService.selectTaskFormHtmlByTaskIdAndFormNo(task.getTaskId(),formNo);
             if(taskFormHtml!=null){
                 taskFormHtml.setFormContent(form19Html);

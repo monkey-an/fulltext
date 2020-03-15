@@ -10,4 +10,6 @@ public interface TaskFormHtmlService {
     int insert(TaskFormHtml entity);
     int update(TaskFormHtml entity);
     TaskFormHtml selectTaskFormHtmlByTaskIdAndFormNo(Long taskId,String formNo);
+
+    List<TaskFormHtml> selectTaskFormHtmlByTaskId(Long taskId);
 }

@@ -11,4 +11,9 @@ public class TaskFormHtml {
     private String formContent;
     private Date createTime;
     private Date updateTime;
+
+    public String getFormNoDesc(){
+        String[] arr = formNo.split("-");
+        return arr[arr.length-1];
+    }
 }

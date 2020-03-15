@@ -45,4 +45,9 @@
         from task_form_html
         where task_id=#{taskId} and form_no=#{formNo} limit 1;
     </select>
+    <select id="selectTaskFormHtmlByTaskId" resultMap="BaseResultMap">
+        select id, task_id, form_no, form_content, create_time, update_time
+        from task_form_html
+        where task_id=#{taskId} order by form_no;
+    </select>
 </mapper>

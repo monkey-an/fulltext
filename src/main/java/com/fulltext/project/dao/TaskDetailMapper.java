@@ -1,6 +1,8 @@
 package com.fulltext.project.dao;
 
 import com.fulltext.project.entity.TaskDetail;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface TaskDetailMapper {
@@ -18,4 +20,6 @@ public interface TaskDetailMapper {
 
 
     int updateByPrimaryKey(TaskDetail record);
+
+    List<TaskDetail> selectTaskDetailByTaskId(@Param("taskId") Long taskId);
 }

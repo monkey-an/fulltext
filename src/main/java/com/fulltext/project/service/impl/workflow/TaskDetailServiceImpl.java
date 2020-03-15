@@ -1,4 +1,4 @@
-package com.fulltext.project.service.impl;
+package com.fulltext.project.service.impl.workflow;
 
 import com.fulltext.project.dao.TaskDetailMapper;
 import com.fulltext.project.entity.TaskDetail;
@@ -37,5 +37,10 @@ public class TaskDetailServiceImpl implements TaskDetailService {
     @Override
     public int update(TaskDetail entity) {
         return 0;
+    }
+
+    @Override
+    public List<TaskDetail> selectTaskDetailByTaskId(Long taskId) {
+        return taskDetailMapper.selectTaskDetailByTaskId(taskId);
     }
 }

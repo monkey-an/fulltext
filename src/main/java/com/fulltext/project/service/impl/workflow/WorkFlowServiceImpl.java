@@ -29,6 +29,7 @@ public abstract class WorkFlowServiceImpl implements WorkFlowService {
     static {
         WorkFlowNode softScienceRootNode = WorkFlowNode.builder()
                 .flowName(softScienceProjectApplication)
+                .nodeName("提交申请")
                 .needApproval(false)
                 .build();
 
