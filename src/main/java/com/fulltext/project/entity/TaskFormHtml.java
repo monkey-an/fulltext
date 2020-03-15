@@ -1,28 +1,14 @@
 package com.fulltext.project.entity;
-
 import lombok.Builder;
 import lombok.Data;
-
 import java.util.Date;
-
 @Data
 @Builder
-public class TaskAttachment {
-
+public class TaskFormHtml {
     private Long id;
-
-
     private Long taskId;
-
-
-    private String attachmentName;
-
-
-    private String path;
-
-
+    private String formNo;
+    private String formContent;
     private Date createTime;
-
-
     private Date updateTime;
 }

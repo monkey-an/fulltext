@@ -20,22 +20,7 @@ public class TaskIdSeqServiceImpl implements TaskIdSeqService {
     private TaskIdSeqMapper taskIdSeqMapper;
 
     @Override
-    public TaskIdSeq selectTaskIdSeqById(Long id) {
-        return null;
-    }
-
-    @Override
-    public List<TaskIdSeq> selectTaskIdSeqListByIdList(List<Long> idList) {
-        return null;
-    }
-
-    @Override
     public int insert(TaskIdSeq entity) {
-        return 0;
-    }
-
-    @Override
-    public int update(TaskIdSeq entity) {
-        return 0;
+        return taskIdSeqMapper.insert(entity);
     }
 }

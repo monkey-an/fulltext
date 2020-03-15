@@ -1,21 +1,44 @@
-<div class="col-md-7 panel panel-default" style="margin-top: 10px;">
-    <div class="panel-heading">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div class="col-md-7" style="margin-top: 10px;">
+    <div class="col-md-12" style="margin-top: 10px;">
         我的待办
+        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
     </div>
-    <div class="panel-body">
-        面板内容
+
+    <div class="col-md-12">
+        <ul class="list-group" th:unless="${toMeTask==null}">
+            <li class="list-group-item" th:each="task,taskStat : ${toMeTask}">
+                <span class="badge" th:text="${task.getStatusDesc()}"></span>
+                <a target="_blank" th:href="@{/workflow/flowDetail(taskId=${task.getTaskId()})}" th:text="${task.getTaskName()}+'-'+${task.getCommitUserName()}+'-'+${task.getCreateDateDesc()}"></a>
+            </li>
+        </ul>
+        <div style="text-align: center;" th:if="${toMeTask==null}">
+            <img src="/static/img/emptytask.png" style="margin: 0 auto;">
+            <p style="color: gray">暂无待办事项</p>
+        </div>
     </div>
 </div>
-<div class="col-md-5 panel panel-default" style="margin-top: 10px;">
-    <div class="panel-heading">
-        我的已办
+<div class="col-md-5" style="margin-top: 10px;">
+    <div class="col-md-12" style="margin-top: 10px;">
+        我的流程
+        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
     </div>
-    <div class="panel-body">
-        面板内容
+
+    <div class="col-md-12">
+        <ul class="list-group" th:unless="${myTask==null}">
+            <li class="list-group-item" th:each="task,taskStat : ${myTask}">
+                <span class="badge" th:text="${task.getStatusDesc()}"></span>
+                <a target="_blank" th:href="@{/workflow/myFlowDetail(taskId=${task.getTaskId()})}" th:text="${task.getTaskName()}+'-'+${task.getCommitUserName()}+'-'+${task.getCreateDateDesc()}"></a>
+            </li>
+        </ul>
+        <div style="text-align: center;" th:if="${myTask==null}">
+            <img src="/static/img/emptytask.png" style="margin: 0 auto;">
+            <p style="color: gray">暂无已提交事项</p>
+        </div>
     </div>
 </div>
 <script>
     function pageDivCallBack(){
-        alert("mywork page");
     }
 </script>

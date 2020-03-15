@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulltext.project.dao.TaskDetailMapper">
+    <resultMap id="BaseResultMap" type="com.fulltext.project.entity.TaskDetail">
+
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="task_id" jdbcType="BIGINT" property="taskId"/>
+        <result column="oper_user_id" jdbcType="BIGINT" property="operUserId"/>
+        <result column="oper_user_name" jdbcType="VARCHAR" property="operUserName"/>
+        <result column="oper_type" jdbcType="VARCHAR" property="operType"/>
+        <result column="oper_result" jdbcType="VARCHAR" property="operResult"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+
+    delete from task_detail
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.fulltext.project.entity.TaskDetail">
+
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into task_detail (task_id, oper_user_id, oper_user_name,
+        oper_type, oper_result, create_time,
+        update_time)
+        values (#{taskId,jdbcType=BIGINT}, #{operUserId,jdbcType=BIGINT}, #{operUserName,jdbcType=VARCHAR},
+        #{operType,jdbcType=VARCHAR}, #{operResult,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.fulltext.project.entity.TaskDetail">
+
+    update task_detail
+    set task_id = #{taskId,jdbcType=BIGINT},
+      oper_user_id = #{operUserId,jdbcType=BIGINT},
+      oper_user_name = #{operUserName,jdbcType=VARCHAR},
+      oper_type = #{operType,jdbcType=VARCHAR},
+      oper_result = #{operResult,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+
+    select id, task_id, oper_user_id, oper_user_name, oper_type, oper_result, create_time, 
+    update_time
+    from task_detail
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+
+    select id, task_id, oper_user_id, oper_user_name, oper_type, oper_result, create_time, 
+    update_time
+    from task_detail
+  </select>
+</mapper>

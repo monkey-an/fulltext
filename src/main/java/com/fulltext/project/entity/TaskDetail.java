@@ -5,9 +5,10 @@ import lombok.Data;
 
 import java.util.Date;
 
+
 @Data
 @Builder
-public class TaskAttachment {
+public class TaskDetail {
 
     private Long id;
 
@@ -15,10 +16,16 @@ public class TaskAttachment {
     private Long taskId;
 
 
-    private String attachmentName;
+    private Long operUserId;
 
 
-    private String path;
+    private String operUserName;
+
+
+    private String operType;
+
+
+    private String operResult;
 
 
     private Date createTime;

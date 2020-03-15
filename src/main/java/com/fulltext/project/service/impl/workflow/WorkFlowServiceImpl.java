@@ -1,4 +1,4 @@
-package com.fulltext.project.service.impl;
+package com.fulltext.project.service.impl.workflow;
 
 import com.fulltext.project.bo.WorkFlowNode;
 import com.fulltext.project.service.WorkFlowService;
@@ -20,9 +20,9 @@ import java.util.Map;
 @Service
 @Slf4j
 public abstract class WorkFlowServiceImpl implements WorkFlowService {
-    private static final String softScienceProjectApplication = "软科学课题申报";
+    protected static final String softScienceProjectApplication = "软科学课题申报";
 
-    private static final Map<String, WorkFlowNode> flowRootNodeMap = new HashMap<>();
+    protected static final Map<String, WorkFlowNode> flowRootNodeMap = new HashMap<>();
 
     public abstract void createWholeFlow(WorkFlowNode rootNode);
 
@@ -31,7 +31,11 @@ public abstract class WorkFlowServiceImpl implements WorkFlowService {
                 .flowName(softScienceProjectApplication)
                 .needApproval(false)
                 .build();
+
+        flowRootNodeMap.put(softScienceProjectApplication,softScienceRootNode);
     }
+
+    public abstract WorkFlowNode getRootNode();
 
 
 }

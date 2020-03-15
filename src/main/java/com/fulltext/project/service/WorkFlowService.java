@@ -1,5 +1,7 @@
 package com.fulltext.project.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Description
  * <p>
@@ -9,4 +11,5 @@ package com.fulltext.project.service;
  * @author anlu.
  */
 public interface WorkFlowService {
+    String process(HttpServletRequest request);
 }

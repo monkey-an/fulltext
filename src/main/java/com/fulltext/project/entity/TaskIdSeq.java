@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class TaskIdSeq {
 
-    private Integer id;
+    private Long id;
 }

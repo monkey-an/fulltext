@@ -12,4 +12,5 @@ public interface UserRoleService {
     int update(UserRole entity);
 
     UserRole selectOneByUserId(Long userId);
+    UserRole selectOneByRoleName(String roleName);
 }

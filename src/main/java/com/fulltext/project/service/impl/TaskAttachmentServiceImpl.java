@@ -11,7 +11,7 @@ import java.util.List;
 
 
 /**
- * Created by CodeGenerator on 2020/03/06.
+ * Created by CodeGenerator on 2020/03/14.
  */
 @Service
 @Transactional
@@ -31,7 +31,7 @@ public class TaskAttachmentServiceImpl implements TaskAttachmentService {
 
     @Override
     public int insert(TaskAttachment entity) {
-        return 0;
+        return taskAttachmentMapper.insert(entity);
     }
 
     @Override

@@ -33,13 +33,13 @@ public class WorkFlowNode {
     private List<String> attachmentNameList;
     //已有附件下载连接
     private Map<String,String> attachmentDownLoadUrl;
-    //当前节点审批状态：驳回、通过、审批中
-    private String currentApproval;
+    //当前节点审批状态：驳回、通过、审批中 REJECT DONE DOING
+    private String currentApprovalStatus;
     //当前节点处理人名
     private String currentApprovalUserName;
     //当前节点处理人ID
     private String currentApprovalUserId;
-    //当前已有表单map,key->formName,value->formHtml
+    //当前已有表单map,key->formName+formNo,value->formHtml
     private Map<String,String> formMap = new HashMap<>();
 
     //下一节点

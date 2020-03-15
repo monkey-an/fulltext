@@ -1,26 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fulltext.project.dao.TaskMapper">
-  <resultMap id="BaseResultMap" type="com.fulltext.project.entity.Task">
+    <resultMap id="BaseResultMap" type="com.fulltext.project.entity.Task">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="task_id" jdbcType="BIGINT" property="taskId"/>
+        <result column="task_name" jdbcType="VARCHAR" property="taskName"/>
+        <result column="commit_user_id" jdbcType="BIGINT" property="commitUserId"/>
+        <result column="current_node_no" jdbcType="VARCHAR" property="currentNodeNo"/>
+        <result column="current_approval_user_id" jdbcType="VARCHAR" property="currentApprovalUserId"/>
+        <result column="current_approval_user_name" jdbcType="VARCHAR" property="currentApprovalUserName"/>
+        <result column="current_approval_status" jdbcType="VARCHAR" property="currentApprovalStatus"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from task
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.fulltext.project.entity.Task">
 
-    <id column="id" jdbcType="INTEGER" property="id" />
-  </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into task (task_id, task_name, commit_user_id,
+        current_node_no, current_approval_user_id, current_approval_user_name,
+        current_approval_status, create_time, update_time
+        )
+        values (#{taskId,jdbcType=BIGINT}, #{taskName,jdbcType=VARCHAR}, #{commitUserId,jdbcType=BIGINT},
+        #{currentNodeNo,jdbcType=VARCHAR}, #{currentApprovalUserId,jdbcType=VARCHAR},
+        #{currentApprovalUserName,jdbcType=VARCHAR},
+        #{currentApprovalStatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.fulltext.project.entity.Task">
+        update task
+        set task_id = #{taskId,jdbcType=BIGINT},
+        task_name = #{taskName,jdbcType=VARCHAR},
+        commit_user_id = #{commitUserId,jdbcType=BIGINT},
+        commit_user_name = #{commitUserName,jdbcType=VARCHAR},
+        current_node_no = #{currentNodeNo,jdbcType=VARCHAR},
+        current_approval_user_id = #{currentApprovalUserId,jdbcType=VARCHAR},
+        current_approval_user_name = #{currentApprovalUserName,jdbcType=VARCHAR},
+        current_approval_status = #{currentApprovalStatus,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id, task_id, task_name, commit_user_id, commit_user_name, current_node_no, current_approval_user_id,
+        current_approval_user_name, current_approval_status, create_time, update_time
+        from task
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, task_id, task_name, commit_user_id, commit_user_name, current_node_no, current_approval_user_id,
+        current_approval_user_name, current_approval_status, create_time, update_time
+        from task
+    </select>
+    <select id="selectTaskByTaskId" resultMap="BaseResultMap">
+        select id, task_id, task_name, commit_user_id, commit_user_name, current_node_no, current_approval_user_id,
+        current_approval_user_name, current_approval_status, create_time, update_time
+        from task
+        where task_id=#{taskId} limit 1;
+    </select>
 
-    delete from task
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.fulltext.project.entity.Task">
+    <select id="selectByCommitUserId" resultMap="BaseResultMap">
+        select id, task_id, task_name, commit_user_id, commit_user_name, current_node_no, current_approval_user_id,
+        current_approval_user_name, current_approval_status, create_time, update_time
+        from task
+        where commit_user_id=#{userId};
+    </select>
 
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into task ()
-    values ()
-  </insert>
-  <select id="selectAll" resultMap="BaseResultMap">
-
-    select id
-    from task
-  </select>
+    <select id="selectByCurrentUserId" resultMap="BaseResultMap">
+        select id, task_id, task_name, commit_user_id, commit_user_name, current_node_no, current_approval_user_id,
+        current_approval_user_name, current_approval_status, create_time, update_time
+        from task
+        where current_approval_user_id=#{userId};
+    </select>
 </mapper>
