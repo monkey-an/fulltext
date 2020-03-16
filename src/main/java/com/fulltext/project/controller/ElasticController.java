@@ -26,8 +26,7 @@ public class ElasticController {
 
     @GetMapping("/init")
     public List<String> init(){
-        elasticService.createIndex();
-        List<DocBean> list =new ArrayList<>();
+//        elasticService.createIndex();
 
         List<String> keyWords = new ArrayList<>();
         keyWords.add("制度");
@@ -47,10 +46,9 @@ public class ElasticController {
                  keyWords,
                  "夏春胜",
                  members);
-//        list.add(new DocBean(2L,"XX0210","XX7475","xxxxxxxxxx",1));
-//        list.add(new DocBean(3L,"XX0257","XX8097","xxxxxxxxxxxxxxxxxx",1));
-        elasticService.save(doc_1);
-        return elasticService.extractKeyword(body, 5);
+
+        List<String> kws = elasticService.saveReturnKeywords(doc_1, 10);
+        return kws;
     }
 
     @GetMapping("/all")
