@@ -36,5 +36,5 @@ public interface ElasticsearchService {
     List<DocBean> findByAuthor(String author);
 
     List<DocBean> findByMembers(String members);
-
+    List<String> extractKeyword(String content, int topk);
 }

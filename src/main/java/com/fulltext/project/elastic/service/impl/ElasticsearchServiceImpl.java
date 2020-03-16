@@ -3,6 +3,7 @@ package com.fulltext.project.elastic.service.impl;
 import com.fulltext.project.elastic.dao.ElasticsearchDao;
 import com.fulltext.project.elastic.entity.DocBean;
 import com.fulltext.project.elastic.service.ElasticsearchService;
+import com.hankcs.hanlp.HanLP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -78,6 +79,11 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
     @Override
     public List<DocBean> findByMembers(String members) {
         return elasticsearchDao.findByMembers(members, null);
+    }
+
+    @Override
+    public List<String> extractKeyword(String content, int topk) {
+        return HanLP.extractKeyword(content, topk);
     }
 
     @Override
