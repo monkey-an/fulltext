@@ -7,6 +7,7 @@ import com.fulltext.project.service.*;
 import com.fulltext.project.service.impl.workflow.SoftScienceProjectApplicationServiceImpl;
 import com.fulltext.project.service.impl.workflow.WorkFlowServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -52,6 +54,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private SoftScienceProjectApplicationServiceImpl softScienceProjectApplicationService;
+
+    @Autowired
+    private TaskFormService taskFormService;
+
 
     @Override
     public Task selectTaskById(Long id) {
@@ -159,6 +165,14 @@ public class TaskServiceImpl implements TaskService {
         //装进model
         if(taskAttachmentList!=null && taskAttachmentList.size()>0) {
             model.addAttribute("taskFormHtmlList", taskFormHtmlList);
+        }
+
+        //判断有无新增表单
+        if(StringUtils.isNotEmpty(currentNode.getFormNo())){
+            TaskForm taskForm = taskFormService.selectTaskFormByFormNo(currentNode.getFormNo());
+            if(taskForm!=null){
+                model.addAttribute("taskForm",taskForm);
+            }
         }
 
         //返回success

@@ -10,6 +10,20 @@ $("#save").on("click",function() {
     $("#commit").removeAttr("disabled");
 })
 
+$(".newForm td").on("dblclick",function() {
+    if($(this).html()=='') {
+        var inputHtml = "<input type='text' style='width: 95%;'/>";
+        var inputAera = "<textarea style='width: 95%;' rows='8'>";
+        if($(this).height()<40) {
+            $(this).html(inputHtml);
+            $(this).find("input").focus();
+        }else{
+            $(this).html(inputAera);
+            $(this).find("textarea").focus();
+        }
+    }
+})
+
 $("#agreey").on("click",function(){
     $(this).parent().html("同意");
 })

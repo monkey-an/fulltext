@@ -47,7 +47,7 @@
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" th:each="formHtml,formHtmlStat : ${taskFormHtmlList}"
                             th:class="${formHtmlStat.index==0}? 'active' : ''">
-                            <a th:href="'form-'+${formHtml.getFormNoDesc()}" role="tab" data-toggle="tab"
+                            <a th:href="'#form-'+${formHtml.getFormNoDesc()}" role="tab" data-toggle="tab"
                                th:text="'表单'+${formHtml.getFormNoDesc()}"></a>
                         </li>
                     </ul>
@@ -57,9 +57,15 @@
                          th:each="formHtml,formHtmlStat : ${taskFormHtmlList}"
                          th:id="'form-'+${formHtml.getFormNoDesc()}"
                          th:class="${formHtmlStat.index==0}? 'tab-pane fade active in' : 'tab-pane fade'"
-                         th:utext="${taskFormHtmlList.get(0).getFormContent()}">
+                         th:utext="${formHtml.getFormContent()}">
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 col-md-offset-2 newForm" th:unless="${taskForm==null}" >
+            <div class="row" th:utext="${taskForm.getFormContent()}">
+
             </div>
         </div>
 
