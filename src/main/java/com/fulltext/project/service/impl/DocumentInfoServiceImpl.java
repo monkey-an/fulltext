@@ -7,10 +7,7 @@ import com.fulltext.project.dao.DocumentStorageMapper;
 import com.fulltext.project.elastic.entity.DocBean;
 import com.fulltext.project.elastic.service.ElasticsearchService;
 import com.fulltext.project.entity.*;
-import com.fulltext.project.service.DocumentDetailService;
-import com.fulltext.project.service.DocumentInfoService;
-import com.fulltext.project.service.DocumentMenuService;
-import com.fulltext.project.service.DocumentStorageService;
+import com.fulltext.project.service.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -46,8 +43,8 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
     @Autowired
     private ElasticsearchService elasticsearchService;
 
-
-
+    @Autowired
+    private DocumentIdSeqService documentIdSeqService;
 
 
     @Override
@@ -169,6 +166,7 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
     public List<Map<String, Object>> getAllMenuNameMap() {
         List<Map<String,Object>> resultList = new ArrayList<>();
         List<DocumentInfo> documentInfoList = documentInfoMapper.selectAll(null,null);
+
         for (DocumentInfo documentInfo : documentInfoList) {
             Map<String,Object> tempMap = new HashMap<>();
             tempMap.put("documentId",documentInfo.getDocumentId());
@@ -340,8 +338,10 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
     @Override
     public boolean addDocument(HttpServletRequest request) {
         String documentName = request.getParameter("document-name-input");
+        String documentType = request.getParameter("documentType");
         String serialName = request.getParameter("serial-name-input");
         String author = request.getParameter("document-author-input");
+        String documentMembers = request.getParameter("document-members-input");
         String publisher = request.getParameter("document-publisher-input");
         String year = request.getParameter("document-year-input");
         String isbn = request.getParameter("document-isbn-input");
@@ -351,8 +351,13 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
         String summary = request.getParameter("document-summary-input");
         String priceStr = request.getParameter("document-price-input");
 
+        DocumentIdSeq idSeq = new DocumentIdSeq();
+        documentIdSeqService.insert(idSeq);
+
         DocumentInfo documentInfo = DocumentInfo.builder()
+                .documentId(idSeq.getId())
                 .documentName(documentName)
+                .documentTypeId(Long.parseLong(documentType))
                 .serialName(serialName)
                 .documentAuthor(author)
                 .documentYear(year)
@@ -363,11 +368,13 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
                 .documentPrice(BigDecimal.valueOf(Float.parseFloat(priceStr)))
                 .createTime(new Date())
                 .updateTime(new Date())
+                .documentTotalCount(Integer.parseInt(totalCountStr))
+                .documentPublisher(publisher)
+                .documentMembers(documentMembers)
+                .status(1)
                 .build();
 
         int count = insert(documentInfo);
         return count>0;
     }
-
-
 }

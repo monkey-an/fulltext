@@ -34,6 +34,9 @@ $("#document-add-button").on("click",function () {
         formData.append(name,value);
     });
 
+    var documentType = $("#document_type").val();
+    formData.append("documentType",documentType);
+
     $.ajax({
         url:"/admin/document_add",
         type:'post',

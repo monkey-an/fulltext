@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fulltext.project.dao.DocumentInfoMapper">
   <resultMap id="BaseResultMap" type="com.fulltext.project.entity.DocumentInfo">
-
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="document_id" jdbcType="BIGINT" property="documentId" />
     <result column="document_type_id" jdbcType="BIGINT" property="documentTypeId" />
@@ -15,8 +14,11 @@
     <result column="document_price" jdbcType="DECIMAL" property="documentPrice" />
     <result column="document_desc" jdbcType="VARCHAR" property="documentDesc" />
     <result column="document_summary" jdbcType="VARCHAR" property="documentSummary" />
+    <result column="document_members" jdbcType="VARCHAR" property="documentMembers"/>
+    <result column="document_publisher" jdbcType="VARCHAR" property="documentPublisher"/>
+    <result column="document_total_count" jdbcType="INTEGER" property="documentTotalCount"/>
     <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -24,7 +26,7 @@
     id, document_id, document_type_id, serial_name, document_name, document_author,
     document_total_page,
     document_year, document_isbn, document_price, document_desc, document_summary, remark,
-    status, create_time, update_time
+    status, create_time, update_time, document_members, document_total_count, document_publisher
   </sql>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -39,13 +41,15 @@
       document_name, document_author, document_total_page, document_year,
       document_isbn, document_price, document_desc, 
       document_summary, remark, status, 
-      create_time, update_time)
+      create_time, update_time, document_members, document_total_count, document_publisher)
     values (#{documentId,jdbcType=BIGINT}, #{documentTypeId,jdbcType=BIGINT}, #{serialName,jdbcType=VARCHAR}, 
       #{documentName,jdbcType=VARCHAR}, #{documentAuthor,jdbcType=VARCHAR}, #{documentTotalPage,jdbcType=INTEGER},
       #{documentYear,jdbcType=VARCHAR},
       #{documentIsbn,jdbcType=VARCHAR}, #{documentPrice,jdbcType=DECIMAL}, #{documentDesc,jdbcType=VARCHAR}, 
-      #{documentSummary,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{documentSummary,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{documentMembers,jdbcType=VARCHAR}, #{documentTotalCount,jdbcType=INTEGER}, #{documentPublisher,jdbcType=VARCHAR}
+      )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.fulltext.project.entity.DocumentInfo">
     update document_info
@@ -61,9 +65,12 @@
       document_desc = #{documentDesc,jdbcType=VARCHAR},
       document_summary = #{documentSummary,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
+      status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      document_members = #{documentMembers,jdbcType=VARCHAR},
+      document_total_count = #{documentTotalCount,jdbcType=INTEGER},
+      document_publisher = #{documentPublisher,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">

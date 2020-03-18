@@ -20,22 +20,7 @@ public class DocumentIdSeqServiceImpl implements DocumentIdSeqService {
     private DocumentIdSeqMapper documentIdSeqMapper;
 
     @Override
-    public DocumentIdSeq selectDocumentIdSeqById(Long id) {
-        return null;
-    }
-
-    @Override
-    public List<DocumentIdSeq> selectDocumentIdSeqListByIdList(List<Long> idList) {
-        return null;
-    }
-
-    @Override
     public int insert(DocumentIdSeq entity) {
-        return 0;
-    }
-
-    @Override
-    public int update(DocumentIdSeq entity) {
-        return 0;
+        return documentIdSeqMapper.insert(entity);
     }
 }
