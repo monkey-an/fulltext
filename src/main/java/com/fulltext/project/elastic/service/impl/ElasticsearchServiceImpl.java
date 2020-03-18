@@ -4,6 +4,8 @@ import com.fulltext.project.elastic.dao.ElasticsearchDao;
 import com.fulltext.project.elastic.entity.DocBean;
 import com.fulltext.project.elastic.service.ElasticsearchService;
 import com.hankcs.hanlp.HanLP;
+import com.hankcs.hanlp.seg.common.Term;
+import com.hankcs.hanlp.tokenizer.NotionalTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Description
@@ -90,7 +93,9 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
     @Override
     public List<String> saveReturnKeywords(DocBean docBean, int topK) {
         String body = docBean.getBody();
-        List<String> hanlp_kws = extractKeyword(body, topK);
+        List<Term> segmentResult = NotionalTokenizer.segment(body);
+        List<String> words= segmentResult.stream().map(term->term.word).collect(Collectors.toList());
+        List<String> hanlp_kws = extractKeyword(words.toString(), topK);
         List<String> kws  = docBean.getKeyWords();
 
         for (String word: hanlp_kws) {
