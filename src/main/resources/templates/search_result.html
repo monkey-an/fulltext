@@ -4,16 +4,33 @@
     <title>Thymeleaf</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
     <link rel="stylesheet" type="text/css" href="/static/css/common.css">
 </head>
 <body>
 <div class="container-fluid">
-    搜索结果
+    <div th:replace="common/page_header :: page_header"></div>
+
+    <input type="hidden" id="searchWordsInput" th:value="${searchWords}">
+    <input type="hidden" id="searchKeyInput" th:value="${searchKey}">
+    <input type="hidden" id="searchValueInput" th:value="${searchValue}">
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 panel panel-default">
+            <div style="margin-top: 20px;">
+                <table id="table"></table>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="common/page_footer :: page_footer"></div>
 </div>
 <script src="/static/javascript/jquery-3.4.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
-<script src="/static/javascript/hello.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
+<script src="/static/javascript/search.js"></script>
+<script src="/static/javascript/page_header.js"></script>
 </body>
 </html>

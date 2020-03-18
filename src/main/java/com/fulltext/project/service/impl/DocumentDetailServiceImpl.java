@@ -31,12 +31,12 @@ public class DocumentDetailServiceImpl implements DocumentDetailService {
 
     @Override
     public int insert(DocumentDetail entity) {
-        return 0;
+        return documentDetailMapper.insert(entity);
     }
 
     @Override
     public int update(DocumentDetail entity) {
-        return 0;
+        return documentDetailMapper.updateByPrimaryKey(entity);
     }
 
     @Override

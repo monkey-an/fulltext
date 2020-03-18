@@ -1,13 +1,15 @@
 package com.fulltext.project.controller;
 
-import com.fulltext.project.bo.DocumentMenuNode;
-import com.fulltext.project.bo.DocumentSerialBO;
-import com.fulltext.project.bo.DocumentSerialDetailBO;
+import com.fulltext.project.bo.*;
 import com.fulltext.project.constants.ConstantValue;
 import com.fulltext.project.constants.ElementTypeEnum;
+import com.fulltext.project.elastic.entity.DocBean;
+import com.fulltext.project.elastic.service.ElasticsearchService;
 import com.fulltext.project.entity.*;
 import com.fulltext.project.service.*;
 import com.fulltext.project.util.FileUtil;
+import com.fulltext.project.util.PageVoUtils;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -27,9 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -63,6 +64,9 @@ public class PageController {
 
     @Autowired
     private NoticeFlowService noticeFlowService;
+
+    @Autowired
+    private ElasticsearchService elasticsearchService;
 
     @RequestMapping("")
     public String helloPage(HttpServletRequest request,Model model){
@@ -181,8 +185,28 @@ public class PageController {
     }
 
     @RequestMapping("search")
-    public String search(){
+    public String search(HttpServletRequest request,Model model){
+        String searchWords = request.getParameter("search_words");
+        String searchKey = request.getParameter("searchKey");
+        String searchValue = request.getParameter("searchValue");
+
+        model.addAttribute("searchWords",searchWords);
+        model.addAttribute("searchKey",searchKey);
+        model.addAttribute("searchValue",searchValue);
+
         return "search_result";
+    }
+
+    @RequestMapping("/realSearch")
+    @ResponseBody
+    public PageBean<DocumentInfo> getAllSearchDocumentByPaging(@RequestParam(value = "pageNo", required = true, defaultValue = "1") int pageNo,
+                                                                   @RequestParam(value = "pageSize", required = true, defaultValue = "10") int pageSize,
+                                                                   @RequestParam(value = "searchValue", required = true) String searchValue,
+                                                                   @RequestParam(value = "searchWords", required = true) String searchWords) {
+
+        PageInfo<DocumentInfo> pageInfo = documentInfoService.selectUserSearchDocumentByPaging(pageNo, pageSize, searchValue, searchWords);
+        PageBean<DocumentInfo> pageBean = PageVoUtils.convertTopageVo(pageInfo);
+        return pageBean;
     }
 
     @RequestMapping("charge")

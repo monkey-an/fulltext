@@ -41,3 +41,17 @@ $("#searchKeys li").on("click",function() {
     $("#searchKey").html(text);
     searchReload();
 });
+
+$("#search_form_button").on("click",function() {
+    var param = "?";
+    var form = $("#search_form");
+    $.each(form.find("input"), function (i, val) {
+        param = param + $(val).prop("name")+"="+$(val).val()+"&";
+    });
+
+    param = param + "searchKey"+"="+$("#searchKey").html()+"&";
+    param = param + "searchValue"+"="+$("#searchValue").html()+"&";
+
+    window.open("/search"+param);
+
+})

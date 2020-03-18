@@ -4,6 +4,7 @@ import com.fulltext.project.elastic.dao.ElasticsearchDao;
 import com.fulltext.project.elastic.entity.DocBean;
 import com.fulltext.project.elastic.service.ElasticsearchService;
 import com.hankcs.hanlp.HanLP;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import java.util.List;
  * @author anlu.
  */
 @Service("ElasticsearchService")
+@Slf4j
 public class ElasticsearchServiceImpl implements ElasticsearchService {
 
     @Autowired
@@ -92,7 +94,7 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
         String body = docBean.getBody();
         List<String> hanlp_kws = extractKeyword(body, topK);
         List<String> kws  = docBean.getKeyWords();
-
+        log.info(kws.toString());
         for (String word: hanlp_kws) {
                 if (!kws.contains(word)){
                     kws.add(word);

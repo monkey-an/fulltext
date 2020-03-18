@@ -101,4 +101,12 @@
     from document_info
     where document_id =#{documentId}
   </select>
+  <select id="selectDocumentInfoListByDocumentIdList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from document_info
+    where document_id in <foreach collection="documentIdList" item="documentId" open="(" close=")" separator=",">
+    #{documentId}
+  </foreach>
+  </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.fulltext.project.elastic.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -22,6 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @Accessors(chain = true)
 @Document(indexName = "book", type = "_doc", shards = 1, replicas = 0)
+@Builder
 public class DocBean {
     @Id
     private String businessId;
