@@ -50,4 +50,16 @@
     update_time
     from document_detail
   </select>
+  <select id="selectDocumentDetailByDocumentAndMenuId" resultMap="BaseResultMap">
+    select id, document_id, menu_id, author, summary, key_words, status, create_time,
+    update_time
+    from document_detail
+    where document_id=#{documentId} and menu_id=#{menuId}
+  </select>
+  <select id="selectDocumentDetailByDocumentId" resultMap="BaseResultMap">
+    select id, document_id, menu_id, author, summary, key_words, status, create_time,
+    update_time
+    from document_detail
+    where document_id=#{documentId} and menu_id is null;
+  </select>
 </mapper>

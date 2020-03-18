@@ -7,6 +7,7 @@ $("#save").on("click",function() {
         var temp = $(val).val().replace(/\n/g,"<br/>");
         $(val).parent().html(temp);
     });
+    $("table button").remove();
     $("#commit").removeAttr("disabled");
 })
 

@@ -26,7 +26,7 @@
                     <div class="col-md-9">
                         <div class="row">
                             <span class="label label-default">摘要：</span>
-                            <span th:text="${documentInfo.getDocumentSummary()}"></span>
+                            <span th:text="${documentDetail.getSummary()}"></span>
                         </div>
                         <div class="row" style="margin-top: 10px;">
                             <span class="label label-default">简介：</span>
@@ -34,7 +34,7 @@
                         </div>
                         <div class="row" style="margin-top: 10px;">
                             <span class="label label-default">关键词：</span>
-                            <span th:text="${documentInfo.getDocumentDesc()}"></span>
+                            <span th:text="${documentDetail.getKeyWords()}"></span>
                         </div>
                     </div>
                     <div class="col-md-3">

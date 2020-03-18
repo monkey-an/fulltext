@@ -96,4 +96,10 @@
     where login_name=#{loginName}
     limit 1;
   </select>
+  <select id="selectByPrimaryKeyList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_col"></include>
+    from user
+    where id in <foreach collection="idList" item="id" open="(" close=")" separator=",">#{id}</foreach>
+  </select>
 </mapper>

@@ -22,4 +22,6 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     User selectOneByLoginName(@Param("loginName") String loginName);
+
+    List<User> selectByPrimaryKeyList(@Param("idList") List<Long> idList);
 }

@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Description
@@ -225,6 +226,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
                         .taskName(currentNode.getFlowName())
                         .commitUserId(user.getId())
                         .commitUserName(user.getRealName())
+                        .currentApprovalUserCount(1)
                         .currentNodeNo(currentNode.getFlowNo())
                         .currentApprovalStatus("DOING")
                         .createTime(new Date())
@@ -241,6 +243,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
             //写taskDetail
             TaskDetail taskDetail = TaskDetail.builder()
                     .taskId(task.getTaskId())
+                    .operNodeNo(currentNode.getFlowNo())
                     .operUserId(user.getId())
                     .operUserName(user.getRealName())
                     .operType(findCount==0?"CREATE":"APPROVAL")
@@ -276,7 +279,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
             }
 
             //当前节点的表单，存起来
-            createOrUpdateHtml(form11Html, form17Html, form19Html, task);
+            createOrUpdateHtml(form11Html, form17Html, form19Html, task,user);
 
             //判断当前节点是否需要审批
             //如果当前节点需要审批，通过审批表单最后一行取，判断是否有同意两个字
@@ -298,65 +301,90 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
 
             //获取下一节点，判断下一节点是否需要审核，如果需要审核，找审核人，如果找不到审核人，说明流程应该结束（自己就是大老板那种），如果不需要审核，那么审核人是推回自己，说明需要提交一些材料上来
             if (nextNode == null) {
-                //结束，把当前处理用户再推回提交用户
-                if(!"REJECT".equals(taskDetail.getOperResult())){
-                    //正常结束
-                    task.setCurrentApprovalStatus("DONE");
-                }else{
-                    //被拒绝
-                    task.setCurrentApprovalStatus("REJECT");
-                }
-                User commiter = userService.selectUserById(task.getCommitUserId());
-                task.setCurrentApprovalUserId(commiter.getId()+"");
-                task.setCurrentApprovalUserName(commiter.getRealName());
-            } else {
-                //继续下一节点
-                //更新数据库，写下一节点的处理状态及信息，返回成功。
-                task.setCurrentNodeNo(nextNode.getFlowNo());
-                task.setCurrentNodeName(nextNode.getNodeName());
+                //当前节点需要处理的人数，和实际已处理的人数相同，才继续往下一节点走
+                //获取当前已处理人数
+                List<TaskDetail> taskDetailList = taskDetailService.selectTaskDetailByTaskIdAndOperNodeNo(task.getTaskId(),currentNode.getFlowNo());
 
-                if(nextNode.isNeedApproval()){
-                    //推给审核者
-                    User targetUser = null;
-                    switch (nextNode.getApprovalRole()){
-                        case "leader":
-                            Department department = departmentService.selectDepartmentById(user.getDepartmentId());
-                            if(user.getId().equals(department.getLeaderUserId())) {
-                                Department upperDepartment = departmentService.selectDepartmentById(department.getParentDepartmentId());
-                                if (upperDepartment != null) {
-                                    targetUser = userService.selectUserById(upperDepartment.getLeaderUserId());
-                                }
-                            }else{
-                                targetUser = userService.selectUserById(department.getLeaderUserId());
-                            }
-                            break;
-                        case "soft-office-member":
-                        case "soft-office-master":
-                        case "soft-office-deputy-director":
-                        case "soft-office-director":
-                        case "soft-office-expert":
-                            UserRole userRole = userRoleService.selectOneByRoleName(nextNode.getApprovalRole());
-                            if(userRole!=null){
-                                targetUser = userService.selectUserById(userRole.getUserId());
-                            }
-                            break;
-                    }
-                    //需要审核但找不到审核人，说明流程应该结束（自己就是大老板那种）
-                    if(targetUser == null){
-                        User commiter = userService.selectUserById(task.getCommitUserId());
-                        task.setCurrentApprovalUserId(commiter.getId()+"");
-                        task.setCurrentApprovalUserName(commiter.getRealName());
+                if(taskDetailList.stream().map(TaskDetail::getOperUserId).distinct().count()==(task.getCurrentApprovalUserCount()-1)) {
+                    //结束，把当前处理用户再推回提交用户
+                    if (!"REJECT".equals(taskDetail.getOperResult())) {
+                        //正常结束
                         task.setCurrentApprovalStatus("DONE");
-                    }else{
-                        task.setCurrentApprovalUserId(targetUser.getId()+"");
-                        task.setCurrentApprovalUserName(targetUser.getRealName());
+                    } else {
+                        //被拒绝
+                        task.setCurrentApprovalStatus("REJECT");
                     }
-
-                }else{
-                    //推给提交者
                     User commiter = userService.selectUserById(task.getCommitUserId());
-                    task.setCurrentApprovalUserId(commiter.getId()+"");
+                    task.setCurrentApprovalUserId(commiter.getId() + "");
                     task.setCurrentApprovalUserName(commiter.getRealName());
+                    task.setCurrentApprovalUserCount(1);
+                }
+            } else {
+                //当前节点需要处理的人数，和实际已处理的人数相同，才继续往下一节点走
+                //获取当前已处理人数
+                List<TaskDetail> taskDetailList = taskDetailService.selectTaskDetailByTaskIdAndOperNodeNo(task.getTaskId(),currentNode.getFlowNo());
+
+                if(taskDetailList.stream().map(TaskDetail::getOperUserId).distinct().count()==(task.getCurrentApprovalUserCount()-1)) {
+                    //所有人都审核完了
+                    //继续下一节点
+                    //更新数据库，写下一节点的处理状态及信息，返回成功。
+                    task.setCurrentNodeNo(nextNode.getFlowNo());
+                    task.setCurrentNodeName(nextNode.getNodeName());
+
+                    if (nextNode.isNeedApproval()) {
+                        //推给审核者
+                        List<User> targetUser = new ArrayList<>();
+                        switch (nextNode.getApprovalRole()) {
+                            case "leader":
+                                Department department = departmentService.selectDepartmentById(user.getDepartmentId());
+                                if (user.getId().equals(department.getLeaderUserId())) {
+                                    Department upperDepartment = departmentService.selectDepartmentById(department.getParentDepartmentId());
+                                    if (upperDepartment != null) {
+                                        User tempUser = userService.selectUserById(upperDepartment.getLeaderUserId());
+                                        targetUser.add(tempUser);
+                                    }
+                                } else {
+                                    User tempUser = userService.selectUserById(department.getLeaderUserId());
+                                    targetUser.add(tempUser);
+                                }
+                                break;
+                            case "soft-office-member":
+                            case "soft-office-master":
+                            case "soft-office-deputy-director":
+                            case "soft-office-director":
+                            case "soft-office-expert":
+                                List<UserRole> userRoleList = userRoleService.selectListByRoleName(nextNode.getApprovalRole());
+                                if (!CollectionUtils.isEmpty(userRoleList)) {
+                                    List<Long> userIdList = userRoleList.stream().map(UserRole::getUserId).collect(Collectors.toList());
+                                    targetUser = userService.selectUserListByIdList(userIdList);
+                                }
+                                break;
+                        }
+                        //需要审核但找不到审核人，说明流程应该结束（自己就是大老板那种）
+                        if (CollectionUtils.isEmpty(targetUser)) {
+                            task.setCurrentApprovalUserId(task.getCommitUserId()+"");
+                            task.setCurrentApprovalUserName(task.getCommitUserName());
+                            task.setCurrentApprovalUserCount(1);
+                            task.setCurrentApprovalStatus("DONE");
+                        } else {
+                            StringBuilder userIdString = new StringBuilder();
+                            StringBuilder userNameString = new StringBuilder();
+                            targetUser.forEach(u->{
+                                userIdString.append(","+u.getId());
+                                userNameString.append(","+u.getRealName());
+                            });
+                            task.setCurrentApprovalUserId(userIdString+",");
+                            task.setCurrentApprovalUserCount(targetUser.size());
+                            task.setCurrentApprovalUserName(userNameString+",");
+                        }
+
+                    } else {
+                        //推给提交者
+                        User commiter = userService.selectUserById(task.getCommitUserId());
+                        task.setCurrentApprovalUserId(commiter.getId() + "");
+                        task.setCurrentApprovalUserCount(1);
+                        task.setCurrentApprovalUserName(commiter.getRealName());
+                    }
                 }
             }
 
@@ -372,7 +400,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
         return result;
     }
 
-    private void createOrUpdateHtml(String form11Html,String form17Html,String form19Html,Task task){
+    private void createOrUpdateHtml(String form11Html,String form17Html,String form19Html,Task task,User user){
         if(StringUtils.isNotEmpty(form11Html)){
             String formNo = formHtmlToFormNo.get("form11");
             TaskFormHtml taskFormHtml = taskFormHtmlService.selectTaskFormHtmlByTaskIdAndFormNo(task.getTaskId(),formNo);
@@ -382,6 +410,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
             }else{
                 taskFormHtml = TaskFormHtml.builder()
                         .taskId(task.getTaskId())
+                        .commitUserId(user.getId())
                         .formNo(formNo)
                         .formContent(form11Html)
                         .createTime(new Date())
@@ -391,40 +420,31 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
             }
         }
 
-        if(StringUtils.isNotEmpty(form17Html)){
+        if (StringUtils.isNotEmpty(form17Html)) {
+            //直接写
             String formNo = formHtmlToFormNo.get("form17");
-            TaskFormHtml taskFormHtml = taskFormHtmlService.selectTaskFormHtmlByTaskIdAndFormNo(task.getTaskId(),formNo);
-            if(taskFormHtml!=null){
-                taskFormHtml.setFormContent(form17Html);
-                taskFormHtmlService.update(taskFormHtml);
-            }else{
-                taskFormHtml = TaskFormHtml.builder()
-                        .taskId(task.getTaskId())
-                        .formNo(formNo)
-                        .formContent(form17Html)
-                        .createTime(new Date())
-                        .updateTime(new Date())
-                        .build();
-                taskFormHtmlService.insert(taskFormHtml);
-            }
+            TaskFormHtml taskFormHtml = TaskFormHtml.builder()
+                    .taskId(task.getTaskId())
+                    .commitUserId(user.getId())
+                    .formNo(formNo)
+                    .formContent(form17Html)
+                    .createTime(new Date())
+                    .updateTime(new Date())
+                    .build();
+            taskFormHtmlService.insert(taskFormHtml);
         }
 
-        if(StringUtils.isNotEmpty(form19Html)){
+        if (StringUtils.isNotEmpty(form19Html)) {
             String formNo = formHtmlToFormNo.get("form19");
-            TaskFormHtml taskFormHtml = taskFormHtmlService.selectTaskFormHtmlByTaskIdAndFormNo(task.getTaskId(),formNo);
-            if(taskFormHtml!=null){
-                taskFormHtml.setFormContent(form19Html);
-                taskFormHtmlService.update(taskFormHtml);
-            }else{
-                taskFormHtml = TaskFormHtml.builder()
-                        .taskId(task.getTaskId())
-                        .formNo(formNo)
-                        .formContent(form19Html)
-                        .createTime(new Date())
-                        .updateTime(new Date())
-                        .build();
-                taskFormHtmlService.insert(taskFormHtml);
-            }
+            TaskFormHtml taskFormHtml = TaskFormHtml.builder()
+                    .taskId(task.getTaskId())
+                    .commitUserId(user.getId())
+                    .formNo(formNo)
+                    .formContent(form19Html)
+                    .createTime(new Date())
+                    .updateTime(new Date())
+                    .build();
+            taskFormHtmlService.insert(taskFormHtml);
         }
     }
 

@@ -6,14 +6,20 @@
         <result column="task_id" jdbcType="BIGINT" property="taskId"/>
         <result column="task_name" jdbcType="VARCHAR" property="taskName"/>
         <result column="commit_user_id" jdbcType="BIGINT" property="commitUserId"/>
+        <result column="commit_user_name" jdbcType="VARCHAR" property="commitUserName"/>
         <result column="current_node_no" jdbcType="VARCHAR" property="currentNodeNo"/>
         <result column="current_node_name" jdbcType="VARCHAR" property="currentNodeName"/>
+        <result column="current_approval_user_count" jdbcType="INTEGER" property="currentApprovalUserCount"/>
         <result column="current_approval_user_id" jdbcType="VARCHAR" property="currentApprovalUserId"/>
         <result column="current_approval_user_name" jdbcType="VARCHAR" property="currentApprovalUserName"/>
         <result column="current_approval_status" jdbcType="VARCHAR" property="currentApprovalStatus"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
+    <sql id="BaseCol">
+        id, task_id, task_name, commit_user_id, commit_user_name, current_node_no, current_node_name,current_approval_user_count,current_approval_user_id,
+        current_approval_user_name, current_approval_status, create_time, update_time
+    </sql>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from task
         where id = #{id,jdbcType=BIGINT}
@@ -24,11 +30,11 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into task (task_id, task_name, commit_user_id,
-        current_node_no, current_node_name, current_approval_user_id, current_approval_user_name,
+        current_node_no, current_node_name, current_approval_user_count, current_approval_user_id, current_approval_user_name,
         current_approval_status, create_time, update_time
         )
         values (#{taskId,jdbcType=BIGINT}, #{taskName,jdbcType=VARCHAR}, #{commitUserId,jdbcType=BIGINT},
-        #{currentNodeNo,jdbcType=VARCHAR}, #{currentNodeName,jdbcType=VARCHAR}, #{currentApprovalUserId,jdbcType=VARCHAR},
+        #{currentNodeNo,jdbcType=VARCHAR}, #{currentNodeName,jdbcType=VARCHAR}, #{currentApprovalUserCount,jdbcType=INTEGER}, #{currentApprovalUserId,jdbcType=VARCHAR},
         #{currentApprovalUserName,jdbcType=VARCHAR},
         #{currentApprovalStatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
         )
@@ -41,6 +47,7 @@
         commit_user_name = #{commitUserName,jdbcType=VARCHAR},
         current_node_no = #{currentNodeNo,jdbcType=VARCHAR},
         current_node_name = #{currentNodeName,jdbcType=VARCHAR},
+        current_approval_user_count = #{currentApprovalUserCount,jdbcType=INTEGER},
         current_approval_user_id = #{currentApprovalUserId,jdbcType=VARCHAR},
         current_approval_user_name = #{currentApprovalUserName,jdbcType=VARCHAR},
         current_approval_status = #{currentApprovalStatus,jdbcType=VARCHAR},
@@ -49,34 +56,30 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select id, task_id, task_name, commit_user_id, commit_user_name, current_node_no, current_node_name,current_approval_user_id,
-        current_approval_user_name, current_approval_status, create_time, update_time
+        select
+        <include refid="BaseCol"></include>
         from task
         where id = #{id,jdbcType=BIGINT}
     </select>
     <select id="selectAll" resultMap="BaseResultMap">
-        select id, task_id, task_name, commit_user_id, commit_user_name, current_node_no, current_node_name, current_approval_user_id,
-        current_approval_user_name, current_approval_status, create_time, update_time
+        select <include refid="BaseCol"></include>
         from task
     </select>
     <select id="selectTaskByTaskId" resultMap="BaseResultMap">
-        select id, task_id, task_name, commit_user_id, commit_user_name, current_node_no, current_node_name, current_approval_user_id,
-        current_approval_user_name, current_approval_status, create_time, update_time
+        select <include refid="BaseCol"></include>
         from task
         where task_id=#{taskId} limit 1;
     </select>
 
     <select id="selectByCommitUserId" resultMap="BaseResultMap">
-        select id, task_id, task_name, commit_user_id, commit_user_name, current_node_no, current_node_name, current_approval_user_id,
-        current_approval_user_name, current_approval_status, create_time, update_time
+        select <include refid="BaseCol"></include>
         from task
         where commit_user_id=#{userId};
     </select>
 
     <select id="selectByCurrentUserId" resultMap="BaseResultMap">
-        select id, task_id, task_name, commit_user_id, commit_user_name, current_node_no, current_node_name, current_approval_user_id,
-        current_approval_user_name, current_approval_status, create_time, update_time
+        select <include refid="BaseCol"></include>
         from task
-        where current_approval_user_id=#{userId};
+        where current_approval_user_id=#{userId} or current_approval_user_id like '%,${userId},%';
     </select>
 </mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulltext.project.dao.TaskFormMapper">
+  <resultMap id="BaseResultMap" type="com.fulltext.project.entity.TaskForm">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="form_no" jdbcType="VARCHAR" property="formNo" />
+    <result column="form_content" jdbcType="VARCHAR" property="formContent" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <select id="selectTaskFormByFormNo" resultMap="BaseResultMap">
+    select id, form_no, form_content, create_time, update_time
+    from task_form
+    where form_no=#{formNo}
+  </select>
+</mapper>

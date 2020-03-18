@@ -48,4 +48,9 @@ public class UserRoleServiceImpl implements UserRoleService {
     public UserRole selectOneByRoleName(String roleName) {
         return userRoleMapper.selectOneByRoleName(roleName);
     }
+
+    @Override
+    public List<UserRole> selectListByRoleName(String roleName) {
+        return userRoleMapper.selectListByRoleName(roleName);
+    }
 }

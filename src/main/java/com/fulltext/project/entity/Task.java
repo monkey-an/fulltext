@@ -16,6 +16,7 @@ public class Task {
     private String commitUserName;
     private String currentNodeNo;
     private String currentNodeName;
+    private Integer currentApprovalUserCount;
     private String currentApprovalUserId;
     private String currentApprovalUserName;
     private String currentApprovalStatus;

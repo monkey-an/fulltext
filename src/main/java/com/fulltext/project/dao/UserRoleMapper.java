@@ -24,4 +24,6 @@ public interface UserRoleMapper {
     UserRole selectOneByUserId(@Param("userId") Long userId);
 
     UserRole selectOneByRoleName(@Param("roleName") String roleName);
+
+    List<UserRole> selectListByRoleName(@Param("roleName") String roleName);
 }

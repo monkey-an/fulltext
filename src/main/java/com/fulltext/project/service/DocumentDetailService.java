@@ -10,4 +10,8 @@ public interface DocumentDetailService {
     List<DocumentDetail> selectDocumentDetailListByIdList(List<Long> idList);
     int insert(DocumentDetail entity);
     int update(DocumentDetail entity);
+
+    DocumentDetail selectDocumentDetailByDocumentAndMenuId(long parseLong, long parseLong1);
+
+    DocumentDetail selectDocumentDetailByDocumentId(long parseLong);
 }

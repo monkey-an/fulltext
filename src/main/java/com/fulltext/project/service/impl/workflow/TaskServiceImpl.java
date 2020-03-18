@@ -18,7 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -92,7 +92,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> selectByCurrentUserId(Long userId) {
-        List<Task> temp = taskMapper.selectByCurrentUserId(userId);
+        List<Task> temp = taskMapper.selectByCurrentUserId(userId+"");
         temp = temp.stream()
                 .filter(task->task.getCurrentApprovalStatus().equals("DOING"))
                 .collect(Collectors.toList());
@@ -109,7 +109,8 @@ public class TaskServiceImpl implements TaskService {
 
         //判断当前登录用户是不是审核人
         //如果不是，返回error，无权查看
-        if(!user.getId().equals(Long.parseLong(task.getCurrentApprovalUserId()))){
+        List<String> currentuserList = Arrays.asList(task.getCurrentApprovalUserId().split(","));
+        if(!currentuserList.contains(user.getId()+"")){
             return "ERROR";
         }
 
@@ -133,10 +134,20 @@ public class TaskServiceImpl implements TaskService {
         }
 
         model.addAttribute("currentNode",currentNode);
+        String currentFormNo = currentNode.getFlowNo();
 
         //取出taskDetail，装进model
         List<TaskDetail> taskDetailList = taskDetailService.selectTaskDetailByTaskId(task.getTaskId());
-        model.addAttribute("taskDetailList",taskDetailList);
+        List<TaskDetail> tempList = taskDetailList.stream().filter(taskDetail -> taskDetail.getOperNodeNo().equals(currentFormNo)&& taskDetail.getOperUserId().equals(user.getId())).collect(Collectors.toList());
+        if(!CollectionUtils.isEmpty(tempList)){
+            return "ERROR";
+        }
+
+        Map<String,TaskDetail> taskDetailFormNoMap = new HashMap<>();
+        taskDetailList.forEach(taskDetail -> taskDetailFormNoMap.put(taskDetail.getOperNodeNo(),taskDetail));
+        List<TaskDetail> washupTaskDetailList = new ArrayList<>();
+        washupTaskDetailList.addAll(taskDetailFormNoMap.values());
+        model.addAttribute("taskDetailList",washupTaskDetailList);
 
         //取出附件下载链接,装进model
         List<TaskAttachment> taskAttachmentList = taskAttachmentService.selectTaskAttachmentListByTaskId(task.getTaskId());
@@ -146,6 +157,7 @@ public class TaskServiceImpl implements TaskService {
 
         //取出表单
         List<TaskFormHtml> taskFormHtmlList = taskFormHtmlService.selectTaskFormHtmlByTaskId(task.getTaskId());
+        taskFormHtmlList = taskFormHtmlList.stream().filter(taskFormHtml -> task.getCommitUserId().equals(taskFormHtml.getCommitUserId())).collect(Collectors.toList());
         //在第一个表单上生成审批意见
         if(currentNode.isNeedApproval()) {
             if (taskFormHtmlList != null && taskFormHtmlList.size() > 0) {
@@ -159,7 +171,7 @@ public class TaskServiceImpl implements TaskService {
             }
         }
 
-        if(task.getCommitUserId().equals(Long.parseLong(task.getCurrentApprovalUserId()))){
+        if(currentuserList.contains(task.getCommitUserId()+"")){
             taskFormHtmlList = taskFormHtmlList.subList(0,1);
         }
         //装进model

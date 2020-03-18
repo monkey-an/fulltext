@@ -22,4 +22,6 @@ public interface TaskDetailMapper {
     int updateByPrimaryKey(TaskDetail record);
 
     List<TaskDetail> selectTaskDetailByTaskId(@Param("taskId") Long taskId);
+
+    List<TaskDetail> selectTaskDetailByTaskIdAndOperNodeNo(@Param("taskId") Long taskId, @Param("formNo")String formNo);
 }

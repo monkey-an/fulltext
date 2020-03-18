@@ -13,4 +13,5 @@ public interface UserRoleService {
 
     UserRole selectOneByUserId(Long userId);
     UserRole selectOneByRoleName(String roleName);
+    List<UserRole> selectListByRoleName(String roleName);
 }

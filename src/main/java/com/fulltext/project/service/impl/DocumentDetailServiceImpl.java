@@ -38,4 +38,14 @@ public class DocumentDetailServiceImpl implements DocumentDetailService {
     public int update(DocumentDetail entity) {
         return 0;
     }
+
+    @Override
+    public DocumentDetail selectDocumentDetailByDocumentAndMenuId(long documentId, long menuId) {
+        return documentDetailMapper.selectDocumentDetailByDocumentAndMenuId(documentId,menuId);
+    }
+
+    @Override
+    public DocumentDetail selectDocumentDetailByDocumentId(long documentId) {
+        return documentDetailMapper.selectDocumentDetailByDocumentId(documentId);
+    }
 }

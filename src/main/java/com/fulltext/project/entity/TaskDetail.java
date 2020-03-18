@@ -15,6 +15,8 @@ public class TaskDetail {
 
     private Long taskId;
 
+    private String operNodeNo;
+
 
     private Long operUserId;
 

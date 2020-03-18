@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> selectUserListByIdList(List<Long> idList) {
-        return null;
+        return userMapper.selectByPrimaryKeyList(idList);
     }
 
     @Override

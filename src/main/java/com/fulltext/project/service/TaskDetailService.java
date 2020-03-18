@@ -12,4 +12,6 @@ public interface TaskDetailService {
     int update(TaskDetail entity);
 
     List<TaskDetail> selectTaskDetailByTaskId(Long taskId);
+
+    List<TaskDetail> selectTaskDetailByTaskIdAndOperNodeNo(Long taskId, String formNo);
 }
