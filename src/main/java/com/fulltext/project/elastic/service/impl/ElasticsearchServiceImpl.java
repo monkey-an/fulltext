@@ -3,12 +3,14 @@ package com.fulltext.project.elastic.service.impl;
 import com.fulltext.project.elastic.dao.ElasticsearchDao;
 import com.fulltext.project.elastic.entity.DocBean;
 import com.fulltext.project.elastic.service.ElasticsearchService;
+import com.hankcs.hanlp.HanLP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -78,6 +80,28 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
     @Override
     public List<DocBean> findByMembers(String members) {
         return elasticsearchDao.findByMembers(members, null);
+    }
+
+    @Override
+    public List<String> extractKeyword(String content, int topk) {
+        return HanLP.extractKeyword(content, topk);
+    }
+
+    @Override
+    public List<String> saveReturnKeywords(DocBean docBean, int topK) {
+        String body = docBean.getBody();
+        List<String> hanlp_kws = extractKeyword(body, topK);
+        List<String> kws  = docBean.getKeyWords();
+
+        for (String word: hanlp_kws) {
+                if (!kws.contains(word)){
+                    kws.add(word);
+                }
+        }
+
+        docBean.setKeyWords(kws);
+        elasticsearchDao.save(docBean);
+        return kws.subList(0, topK);
     }
 
     @Override

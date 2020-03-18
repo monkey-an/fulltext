@@ -21,7 +21,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-@Document(indexName = "papers", type = "_doc", shards = 1, replicas = 0)
+@Document(indexName = "book", type = "_doc", shards = 1, replicas = 0)
 public class DocBean {
     @Id
     private String businessId;
