@@ -8,7 +8,7 @@
     <result column="author" jdbcType="VARCHAR" property="author" />
     <result column="summary" jdbcType="VARCHAR" property="summary" />
     <result column="key_words" jdbcType="VARCHAR" property="keyWords" />
-    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -24,7 +24,7 @@
       summary, key_words, status, 
       create_time, update_time)
     values (#{documentId,jdbcType=BIGINT}, #{menuId,jdbcType=BIGINT}, #{author,jdbcType=VARCHAR}, 
-      #{summary,jdbcType=VARCHAR}, #{keyWords,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{summary,jdbcType=VARCHAR}, #{keyWords,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.fulltext.project.entity.DocumentDetail">
@@ -34,7 +34,7 @@
       author = #{author,jdbcType=VARCHAR},
       summary = #{summary,jdbcType=VARCHAR},
       key_words = #{keyWords,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT},
+      status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

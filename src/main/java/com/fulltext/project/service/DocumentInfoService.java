@@ -33,4 +33,6 @@ public interface DocumentInfoService {
     PageInfo<DocumentInfo> selectUserSearchDocumentByPaging(int pageNo, int pageSize, String searchValue, String searchWords);
 
     boolean addDocument(HttpServletRequest request);
+
+    boolean addMenu(HttpServletRequest request);
 }

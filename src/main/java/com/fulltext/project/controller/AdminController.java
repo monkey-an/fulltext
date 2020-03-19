@@ -126,4 +126,10 @@ public class AdminController {
         return documentInfoService.addDocument(request)?"SUCCESS":"ERROR";
     }
 
+    @RequestMapping("/menu_add")
+    @ResponseBody
+    public String menuAdd(HttpServletRequest request) {
+        return documentInfoService.addMenu(request)?"SUCCESS":"ERROR";
+    }
+
 }

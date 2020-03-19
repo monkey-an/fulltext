@@ -354,6 +354,7 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
         DocumentIdSeq idSeq = new DocumentIdSeq();
         documentIdSeqService.insert(idSeq);
 
+        //写documentInfo
         DocumentInfo documentInfo = DocumentInfo.builder()
                 .documentId(idSeq.getId())
                 .documentName(documentName)
@@ -374,7 +375,60 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
                 .status(1)
                 .build();
 
+        //写documentDetail
+        DocumentDetail documentDetail = DocumentDetail.builder()
+                .author(author)
+                .documentId(idSeq.getId())
+                .createTime(new Date())
+                .status(1)
+                .summary(summary)
+                .updateTime(new Date())
+                .build();
+
+        documentDetailService.insert(documentDetail);
+
         int count = insert(documentInfo);
         return count>0;
+    }
+
+    @Override
+    public boolean addMenu(HttpServletRequest request) {
+        String documentId = request.getParameter("documentId");
+        String menuId = request.getParameter("menuId");
+        String documentMenuName = request.getParameter("document-menu-name-input");
+        String documentMenuPage = request.getParameter("document-menu-page-input");
+        String documentMenuAuthor = request.getParameter("document-menu-author-input");
+        String documengMenuSumaary = request.getParameter("document-menu-summary-input");
+        String documentMenuKeywords = request.getParameter("document-menu-keywords-input");
+
+        DocumentInfo documentInfo = selectDocumentInfoByDocumentId(Long.parseLong(documentId));
+        DocumentDetail documentWholeDetail = documentDetailService.selectDocumentDetailByDocumentId(Long.parseLong(documentId));
+
+        //写menu信息
+        DocumentMenu documentMenu = DocumentMenu.builder()
+                .documentId(Long.parseLong(documentId))
+                .parentMenuId(!"null".equals(menuId)?Long.parseLong(menuId):null)
+                .createTime(new Date())
+                .menuName(documentMenuName)
+                .menuPage(documentMenuPage)
+                .updateTime(new Date())
+                .build();
+
+        int count = documentMenuService.insert(documentMenu);
+
+        //写documentDetail信息
+        DocumentDetail documentDetail = DocumentDetail.builder()
+                .author(StringUtils.isNotEmpty(documentMenuAuthor)?documentMenuAuthor:documentInfo.getDocumentAuthor())
+                .documentId(Long.parseLong(documentId))
+                .createTime(new Date())
+                .status(1)
+                .summary(documengMenuSumaary)
+                .menuId(documentMenu.getId())
+                .keyWords(StringUtils.isNotEmpty(documentMenuKeywords)?documentMenuKeywords:documentWholeDetail.getKeyWords())
+                .updateTime(new Date())
+                .build();
+        count += documentDetailService.insert(documentDetail);
+
+        return count>1;
     }
 }

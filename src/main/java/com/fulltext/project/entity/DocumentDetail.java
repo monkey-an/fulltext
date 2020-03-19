@@ -1,10 +1,16 @@
 package com.fulltext.project.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DocumentDetail {
 
     private Long id;
@@ -25,7 +31,7 @@ public class DocumentDetail {
     private String keyWords;
 
 
-    private Byte status;
+    private Integer status;
 
 
     private Date createTime;

@@ -6,6 +6,7 @@ function pageDivCallBack(){
         url : "/admin/getAllMenuNameMap",
         //请求成功
         success : function(result) {
+            $("#parent_menu").children().remove();
             for(var i=0;i<result.length;i++){
                 var temp = result[i];
                 $("#parent_menu").append("<option documentId='"+temp.documentId+"' menuId='"+temp.menuId+"'>"+temp.menuName+"</option>");
@@ -19,9 +20,15 @@ function pageDivCallBack(){
     });
 
     $("#if_leaf").change(function () {
-        $("#document-menu-author-div").toggle();
-        $("#document-menu-summary-div").toggle();
-        $("#document-menu-keywords-div").toggle();
+        if($("#if_leaf").prop("checked")) {
+            $("#document-menu-author-div").show();
+            $("#document-menu-summary-div").show();
+            $("#document-menu-keywords-div").show();
+        }else{
+            $("#document-menu-author-div").hide();
+            $("#document-menu-summary-div").hide();
+            $("#document-menu-keywords-div").hide();
+        }
     });
 }
 
