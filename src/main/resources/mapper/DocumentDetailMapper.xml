@@ -6,6 +6,8 @@
     <result column="document_id" jdbcType="BIGINT" property="documentId" />
     <result column="menu_id" jdbcType="BIGINT" property="menuId" />
     <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="completion_unit" jdbcType="VARCHAR" property="completionUnit" />
+    <result column="members" jdbcType="VARCHAR" property="members" />
     <result column="summary" jdbcType="VARCHAR" property="summary" />
     <result column="key_words" jdbcType="VARCHAR" property="keyWords" />
     <result column="status" jdbcType="INTEGER" property="status" />
@@ -22,10 +24,10 @@
     </selectKey>
     insert into document_detail (document_id, menu_id, author, 
       summary, key_words, status, 
-      create_time, update_time)
+      create_time, update_time, completion_unit,members)
     values (#{documentId,jdbcType=BIGINT}, #{menuId,jdbcType=BIGINT}, #{author,jdbcType=VARCHAR}, 
       #{summary,jdbcType=VARCHAR}, #{keyWords,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},#{completionUnit,jdbcType=VARCHAR},#{members,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.fulltext.project.entity.DocumentDetail">
     update document_detail
@@ -36,7 +38,9 @@
       key_words = #{keyWords,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      completion_unit = #{completionUnit,jdbcType=VARCHAR},
+      members = #{members,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -47,18 +51,18 @@
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, document_id, menu_id, author, summary, key_words, status, create_time,
-    update_time
+    update_time,completion_unit,members
     from document_detail
   </select>
   <select id="selectDocumentDetailByDocumentAndMenuId" resultMap="BaseResultMap">
     select id, document_id, menu_id, author, summary, key_words, status, create_time,
-    update_time
+    update_time,completion_unit,members
     from document_detail
     where document_id=#{documentId} and menu_id=#{menuId}
   </select>
   <select id="selectDocumentDetailByDocumentId" resultMap="BaseResultMap">
     select id, document_id, menu_id, author, summary, key_words, status, create_time,
-    update_time
+    update_time,completion_unit,members
     from document_detail
     where document_id=#{documentId} and menu_id is null;
   </select>

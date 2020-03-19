@@ -405,6 +405,8 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
         String documentMenuAuthor = request.getParameter("document-menu-author-input");
         String documengMenuSumaary = request.getParameter("document-menu-summary-input");
         String documentMenuKeywords = request.getParameter("document-menu-keywords-input");
+        String documentMembers = request.getParameter("document-menu-members-input");
+        String documentCompletionUnit = request.getParameter("document-menu-completion-unit-input");
 
         DocumentInfo documentInfo = selectDocumentInfoByDocumentId(Long.parseLong(documentId));
         DocumentDetail documentWholeDetail = documentDetailService.selectDocumentDetailByDocumentId(Long.parseLong(documentId));
@@ -429,6 +431,8 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
                 .status(1)
                 .summary(documengMenuSumaary)
                 .menuId(documentMenu.getId())
+                .completionUnit(documentMembers)
+                .members(documentMembers)
                 .keyWords(StringUtils.isNotEmpty(documentMenuKeywords)?documentMenuKeywords:documentWholeDetail.getKeyWords())
                 .updateTime(new Date())
                 .build();

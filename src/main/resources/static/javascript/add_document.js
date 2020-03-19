@@ -24,10 +24,14 @@ function pageDivCallBack(){
             $("#document-menu-author-div").show();
             $("#document-menu-summary-div").show();
             $("#document-menu-keywords-div").show();
+            $("#document-menu-completion-unit-div").show();
+            $("#document-menu-members-div").show();
         }else{
             $("#document-menu-author-div").hide();
             $("#document-menu-summary-div").hide();
             $("#document-menu-keywords-div").hide();
+            $("#document-menu-completion-unit-div").hide();
+            $("#document-menu-members-div").hide();
         }
     });
 }
