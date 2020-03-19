@@ -58,7 +58,7 @@ $("#document-add-button").on("click",function () {
                     $(val).val("");
                 });
             }else{
-                alert("添加失败，请检查文档信息并重试");
+                alert("添加失败，请检查图书信息并重试");
             }
         }
     })
@@ -95,7 +95,7 @@ $("#document-menu-add-button").on("click",function () {
                     $(val).val("");
                 });
             }else{
-                alert("添加失败，请检查文档信息并重试");
+                alert("添加失败，请检查图书信息并重试");
             }
         }
     })

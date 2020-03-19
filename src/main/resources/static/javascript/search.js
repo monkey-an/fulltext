@@ -62,7 +62,7 @@ function initData(){
                 title: '系列名称',
             }, {
                 field: 'documentName',
-                title: '文档名称',
+                title: '图书名称',
             },{
                 field: 'documentAuthor',
                 title: '作者',

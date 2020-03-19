@@ -34,6 +34,11 @@ public class DocumentDetail {
     private Integer status;
 
 
+    private String completionUnit;
+
+    private String members;
+
+
     private Date createTime;
 
 

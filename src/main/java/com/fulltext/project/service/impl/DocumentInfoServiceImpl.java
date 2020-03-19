@@ -94,7 +94,7 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
 
     @Override
     public List<DocumentSerialDetailBO> loadDocumentInfoBySerialName(String serialName) {
-        //根据系列名找出所有文档documentInfo
+        //根据系列名找出所有图书documentInfo
         //documentInfo按年份排序倒序
         //遍历，查询目录，加载目录
         //返回
@@ -248,7 +248,12 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
         members.add("孙燕");
         members.add("吴承恩");
 
-        List<String> keyWords = new ArrayList<>(Arrays.asList(documentDetail.getKeyWords().split(",")));
+        List<String> keyWords = null;
+        if(StringUtils.isNotEmpty(documentDetail.getKeyWords())) {
+            keyWords = new ArrayList<>(Arrays.asList(documentDetail.getKeyWords().split(",")));
+        }else{
+            keyWords = new ArrayList<>();
+        }
 
         DocBean docBean = DocBean.builder()
                 .author(documentDetail.getAuthor())
