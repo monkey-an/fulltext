@@ -9,12 +9,64 @@
 </head>
 <body>
 <div class="container-fluid">
-    搜索结果
+    <div th:replace="common/page_header :: page_header"></div>
+
+    <input type="hidden" id="searchWordsInput" th:value="${searchWords}">
+    <input type="hidden" id="searchKeyInput" th:value="${searchKey}">
+    <input type="hidden" id="searchValueInput" th:value="${searchValue}">
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+
+            <div class="row" th:each="document : ${pageBean.getRows()}">
+                <p class="lead"><a href="#" th:text="${document.getDocumentName()}+'-'+${document.getDocumentYear()}+'-'+${document.getDocumentMenuName()}"></a></p>
+                <p class="text-success" th:text="${document.getPublisherDesc()}"></p>
+                <p th:text="${document.getSummaryDesc()}"></p>
+                <p th:text="${document.getKeyWords()}"></p>
+                <p class="text-right">下载频次 3</p>
+                <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
+            </div>
+
+            <div class="row text-right">
+                <p>
+                    <span th:text="'一共'+${pageBean.getTotalPage()}+'页'"></span>
+                    <span th:text="'一共'+${pageBean.getTotal()}+'条'"></span>
+                </p>
+                <ul id="example"></ul>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="common/page_footer :: page_footer"></div>
 </div>
 <script src="/static/javascript/jquery-3.4.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
-<script src="/static/javascript/hello.js"></script>
+<script src="/static/javascript/search.js"></script>
+<script src="/static/javascript/page_header.js"></script>
+<script src="/static/bootstrap/bootstrap-paginator.min.js"></script>
+
+<script type='text/javascript' th:inline="javascript">
+    var options = {
+        currentPage: [[${pageBean.getCurrentPage()}]],
+        totalPages: [[${pageBean.getTotalPage()}]],
+        bootstrapMajorVersion :3,
+        useBootstrapTooltip:true,
+        size:"small",
+        onPageClicked:function(e,originalEvent,type,page){
+            var path = window.location.pathname;
+            var searchWords = $("#searchWordsInput").val();
+            var searchKey = $("#searchKeyInput").val();
+            var searchValue = $("#searchValueInput").val();
+            path = path + "?searchWords="+searchWords+"&searchKey="+searchKey+"&searchValue="+searchValue;
+            path = path + "&pageNo="+page;
+            // alert(path);
+            window.location = path;
+        }
+    };
+
+    $('#example').bootstrapPaginator(options);
+</script>
 </body>
 </html>

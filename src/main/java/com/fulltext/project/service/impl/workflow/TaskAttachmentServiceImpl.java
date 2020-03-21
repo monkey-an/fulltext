@@ -1,4 +1,4 @@
-package com.fulltext.project.service.impl;
+package com.fulltext.project.service.impl.workflow;
 
 import com.fulltext.project.dao.TaskAttachmentMapper;
 import com.fulltext.project.entity.TaskAttachment;
@@ -11,7 +11,7 @@ import java.util.List;
 
 
 /**
- * Created by CodeGenerator on 2020/03/06.
+ * Created by CodeGenerator on 2020/03/14.
  */
 @Service
 @Transactional
@@ -31,11 +31,16 @@ public class TaskAttachmentServiceImpl implements TaskAttachmentService {
 
     @Override
     public int insert(TaskAttachment entity) {
-        return 0;
+        return taskAttachmentMapper.insert(entity);
     }
 
     @Override
     public int update(TaskAttachment entity) {
         return 0;
+    }
+
+    @Override
+    public List<TaskAttachment> selectTaskAttachmentListByTaskId(Long taskId) {
+        return taskAttachmentMapper.selectTaskAttachmentListByTaskId(taskId);
     }
 }

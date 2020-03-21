@@ -13,7 +13,7 @@ public interface UserMapper {
     int insert(User record);
 
 
-    User selectByPrimaryKey(Long id);
+    User selectByPrimaryKey(@Param("id") Long id);
 
 
     List<User> selectAll(@Param("nickName") String nickName,@Param("email")String email);
@@ -22,4 +22,6 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     User selectOneByLoginName(@Param("loginName") String loginName);
+
+    List<User> selectByPrimaryKeyList(@Param("idList") List<Long> idList);
 }

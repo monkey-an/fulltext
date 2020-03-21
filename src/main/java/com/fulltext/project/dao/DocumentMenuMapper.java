@@ -22,4 +22,5 @@ public interface DocumentMenuMapper {
     int updateByPrimaryKey(DocumentMenu record);
 
     List<DocumentMenu> selectByDocumentId(@Param("documentId") Long documentId);
+
 }

@@ -21,7 +21,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department selectDepartmentById(Long id) {
-        return null;
+        return departmentMapper.selectByPrimaryKey(id);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.fulltext.project.service.impl;
+package com.fulltext.project.service.impl.workflow;
 
 import com.fulltext.project.dao.TaskDesignDetailMapper;
 import com.fulltext.project.entity.TaskDesignDetail;

@@ -1,6 +1,8 @@
 package com.fulltext.project.dao;
 
 import com.fulltext.project.entity.Department;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface DepartmentMapper {
@@ -11,7 +13,7 @@ public interface DepartmentMapper {
     int insert(Department record);
 
 
-    Department selectByPrimaryKey(Long id);
+    Department selectByPrimaryKey(@Param("id") Long id);
 
 
     List<Department> selectAll();

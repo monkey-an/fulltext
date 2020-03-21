@@ -24,4 +24,6 @@ public interface DocumentInfoMapper {
     List<DocumentInfo> selectBySerialNameList(@Param("serialNameList") List<String> serialNameList);
 
     DocumentInfo selectByDocumentId(@Param("documentId")Long documentId);
+
+    List<DocumentInfo> selectDocumentInfoListByDocumentIdList(@Param("documentIdList") List<Long> documentIdList);
 }
