@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Description
@@ -85,10 +86,22 @@ public class UserController {
     }
 
     @RequestMapping("doRegist")
-    public String doRegist(){
-        //解析参数，写入User表
-        userService.insert(User.builder().build());
-        return "regist";
+    public String doRegist(HttpServletRequest request,HttpServletResponse response){
+        Map<String, String[]> parameterMap =  request.getParameterMap();
+        String name = parameterMap.get("user-name-input")[0];
+        String pwd = parameterMap.get("user-name-input")[0];
+        String confirm_pwd = parameterMap.get("user-name-input")[0];
+        String email = parameterMap.get("user-name-input")[0];
+        String phone = parameterMap.get("user-name-input")[0];
+
+        if(!pwd.equals(confirm_pwd)){
+            return "输入密码不一致";
+        }
+        User entity = User.builder().loginName(name).password(pwd).email(email).phone(phone).build();
+        if(userService.insert(entity) == 0){
+            return "用户已经存在";
+        }
+        return "注册成功";
     }
 
 }
