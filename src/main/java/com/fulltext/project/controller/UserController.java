@@ -80,8 +80,13 @@ public class UserController {
     }
 
     @RequestMapping("regist")
-    public String regist(){
-        return "regist";
+    public String regist(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        if(request.getSession().getAttribute(ConstantValue.USER_SESSION_KEY)!=null){
+            response.sendRedirect("/");
+            return "regist1";
+        }else{
+            return "regist2";
+        }
     }
 
 }
