@@ -1,15 +1,15 @@
 package com.fulltext.project.controller;
 
-import com.fulltext.project.bo.DocumentMenuNode;
-import com.fulltext.project.bo.DocumentSerialBO;
-import com.fulltext.project.bo.DocumentSerialDetailBO;
+import com.fulltext.project.bo.*;
 import com.fulltext.project.constants.ConstantValue;
 import com.fulltext.project.constants.ElementTypeEnum;
+import com.fulltext.project.elastic.entity.DocBean;
+import com.fulltext.project.elastic.service.ElasticsearchService;
 import com.fulltext.project.entity.*;
-import com.fulltext.project.service.DocumentInfoService;
-import com.fulltext.project.service.DocumentMenuService;
-import com.fulltext.project.service.DocumentStorageService;
+import com.fulltext.project.service.*;
 import com.fulltext.project.util.FileUtil;
+import com.fulltext.project.util.PageVoUtils;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -28,9 +30,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Description
@@ -44,7 +45,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/")
 @Slf4j
-public class TestPageController {
+public class PageController {
 
     @Autowired
     private DocumentInfoService documentInfoService;
@@ -54,6 +55,18 @@ public class TestPageController {
 
     @Autowired
     private DocumentStorageService documentStorageService;
+
+    @Autowired
+    private DocumentDetailService documentDetailService;
+
+    @Autowired
+    private NoticeService noticeService;
+
+    @Autowired
+    private NoticeFlowService noticeFlowService;
+
+    @Autowired
+    private ElasticsearchService elasticsearchService;
 
     @RequestMapping("")
     public String helloPage(HttpServletRequest request,Model model){
@@ -70,6 +83,24 @@ public class TestPageController {
         model.addAttribute("user", user);
         model.addAttribute("userRole", userRole);
 
+        List<NoticeFlow> noticeFlowList = null;
+        List<Notice> noticeList = null;
+        if(user!=null) {
+            noticeFlowList = noticeFlowService.selectNoticeFlowByTargetUserId(user.getId());
+            if(!CollectionUtils.isEmpty(noticeFlowList)){
+                List<Long> noticeIdList = noticeFlowList.stream().map(NoticeFlow::getNoticeId).collect(Collectors.toList());
+                noticeList = noticeService.selectNoticeListByIdList(noticeIdList);
+            }
+        }else{
+            noticeList = noticeService.selectNoticeInnerOneMonth();
+        }
+
+        if(noticeList!=null && noticeList.size()>6){
+            noticeList = noticeList.subList(0,6);
+        }
+
+        model.addAttribute("noticeList",noticeList);
+
         return "hello";
     }
 
@@ -80,7 +111,6 @@ public class TestPageController {
 
         List<DocumentSerialDetailBO> documentSerialDetailBOList = documentInfoService.loadDocumentInfoBySerialName(serialName);
         model.addAttribute("boList",documentSerialDetailBOList);
-
         List<DocumentMenuNode> rootMenuNodeList = new ArrayList<>();
         documentSerialDetailBOList.forEach(documentSerialDetailBO -> rootMenuNodeList.addAll(documentSerialDetailBO.getDocumentMenuList()));
         Map<String,List<DocumentMenu>> flatMenuMap = documentInfoService.flatRootMenuToMap(rootMenuNodeList);
@@ -106,19 +136,24 @@ public class TestPageController {
         }
 
         DocumentInfo documentInfo = null;
+        DocumentDetail documentDetail = null;
         String documentBookImage = "";
         if(!StringUtils.isEmpty(documentIdStr) && !StringUtils.isEmpty(menuIdStr)){
             //说明是两个参数都有，要下载章节内容
             documentInfo = documentInfoService.selectDocumentInfoByDocumentId(Long.parseLong(documentIdStr));
+            documentDetail = documentDetailService.selectDocumentDetailByDocumentAndMenuId(Long.parseLong(documentIdStr),Long.parseLong(menuIdStr));
         }else if (!StringUtils.isEmpty(documentIdStr) && StringUtils.isEmpty(menuIdStr)){
             //说明是要下载整篇文章
             documentInfo = documentInfoService.selectDocumentInfoByDocumentId(Long.parseLong(documentIdStr));
+            documentDetail = documentDetailService.selectDocumentDetailByDocumentId(Long.parseLong(documentIdStr));
         }
+
 
         DocumentStorage documentStorage = documentStorageService.getDocumentStorageByDocumentIdAndElementType(Long.parseLong(documentIdStr), ElementTypeEnum.BOOK_IMAGE.value);
         documentBookImage = documentStorage.getElementPath();
 
         model.addAttribute("documentInfo",documentInfo);
+        model.addAttribute("documentDetail",documentDetail);
         model.addAttribute("documentBookImage",documentBookImage);
         model.addAttribute("documentIdStr",documentIdStr);
         model.addAttribute("menuIdStr",menuIdStr);
@@ -150,7 +185,24 @@ public class TestPageController {
     }
 
     @RequestMapping("search")
-    public String search(){
+    public String search(HttpServletRequest request,Model model,@RequestParam(value = "pageNo", required = true, defaultValue = "1") int pageNo,
+                         @RequestParam(value = "pageSize", required = true, defaultValue = "5") int pageSize,
+                         @RequestParam(value = "searchKey", required = false) String searchKey,
+                         @RequestParam(value = "searchValue", required = false) String searchValue,
+                         @RequestParam(value = "searchWords", required = false) String searchWords){
+
+        model.addAttribute("searchWords",searchWords);
+        model.addAttribute("searchKey",searchKey);
+        model.addAttribute("searchValue",searchValue);
+
+        PageInfo<DocumentDetail> pageInfo = documentInfoService.selectUserSearchDocumentByPaging(pageNo, pageSize, searchKey, searchValue, searchWords);
+        PageBean<DocumentDetail> pageBean = PageVoUtils.convertTopageVo(pageInfo);
+        documentInfoService.addDocumentInfo(pageBean.getRows());
+        pageBean.setCurrentPage(pageNo);
+        pageBean.setPageSize(pageSize);
+
+        model.addAttribute("pageBean",pageBean);
+
         return "search_result";
     }
 

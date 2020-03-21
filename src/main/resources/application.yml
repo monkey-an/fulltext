@@ -16,7 +16,7 @@ spring:
     fulltext:
       jdbc-url: jdbc:mysql://localhost:3306/full_text?useUnicode=true
       username: root
-      password: root123
+      password:
       driver-class-name: com.mysql.jdbc.Driver
       filters: stat
       maxActive: 20

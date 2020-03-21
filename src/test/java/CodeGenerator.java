@@ -46,11 +46,13 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy/MM/dd").format(new Date());//@date
 
     public static void main(String[] args) {
-        genCode("company","department","document_detail","document_id_seq",
-                "document_info","document_menu","document_storage","document_type","order",
-                "order_detail","order_id_seq","payment","role","should_payment","task",
-                "task_attachment","task_design","task_design_detail","task_id_seq",
-                "user","user_role","work_group");
+//        genCode("company","department","document_detail","document_id_seq",
+//                "document_info","document_menu","document_storage","document_type","order",
+//                "order_detail","order_id_seq","payment","role","should_payment","task",
+//                "task_attachment","task_design","task_design_detail","task_id_seq",
+//                "user","user_role","work_group");
+//        genCode("task","task_form_html","task_detail","task_attachment");
+        genCode("notice_flow");
         //genCodeByCustomModelName("输入表名","输入自定义Model名称");
     }
 
@@ -72,7 +74,7 @@ public class CodeGenerator {
      * @param modelName 自定义的 Model 名称
      */
     public static void genCodeByCustomModelName(String tableName, String modelName) {
-//        genModelAndMapper(tableName, modelName);
+        genModelAndMapper(tableName, modelName);
         genService(tableName, modelName);
 //        genController(tableName, modelName);
     }

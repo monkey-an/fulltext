@@ -6,6 +6,7 @@ import com.fulltext.project.elastic.service.ElasticsearchService;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.NotionalTokenizer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
  * @author anlu.
  */
 @Service("ElasticsearchService")
+@Slf4j
 public class ElasticsearchServiceImpl implements ElasticsearchService {
 
     @Autowired

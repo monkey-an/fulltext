@@ -116,6 +116,20 @@ public class AdminController {
     @ResponseBody
     public String createDocumentSearch(@RequestParam(value = "document_menu_id", required = true) String documentMenuId,
                                        @RequestParam(value = "content", required = true) String content) {
+        documentInfoService.createDocumentSearch(documentMenuId,content);
         return "";
     }
+
+    @RequestMapping("/document_add")
+    @ResponseBody
+    public String documentAdd(HttpServletRequest request) {
+        return documentInfoService.addDocument(request)?"SUCCESS":"ERROR";
+    }
+
+    @RequestMapping("/menu_add")
+    @ResponseBody
+    public String menuAdd(HttpServletRequest request) {
+        return documentInfoService.addMenu(request)?"SUCCESS":"ERROR";
+    }
+
 }

@@ -13,8 +13,10 @@
     <div class="row">
         <div class="panel panel-default col-md-8 col-md-offset-2">
             <div class="panel-body">
-                <div class="row bg-info">
-                    <p style="margin-left: 10px;margin-top: 10px;margin-bottom: 10px;">网络首发时间：<span th:text="${documentInfo.getCreateTime()}"></span></p>
+                <div class="row text-right">
+                    <a href="#" th:data="@{/downLoad(documentId=${documentIdStr},downLoadType='pdf')}" id="wholeDownLoad">整本下载<span class="glyphicon glyphicon-cloud-download"></span></a>
+                    <a href="#" style="margin-left: 15px;" th:data="@{/downLoad(documentId=${documentIdStr},menuId=${menuIdStr},downLoadType='pdf')}" id="downLoadPdf">PDF下载<span class="glyphicon glyphicon-cloud-download"></span></a>
+                    <a href="#" style="margin-left: 15px;" th:data="@{/downLoad(documentId=${documentIdStr},menuId=${menuIdStr},downLoadType='word')}" id="downLoadWord">WORD下载<span class="glyphicon glyphicon-cloud-download"></span></a>
                 </div>
                 <div class="row">
                     <h3 class="text-center" th:text="${documentInfo.getDocumentName()}"></h3>
@@ -26,7 +28,7 @@
                     <div class="col-md-9">
                         <div class="row">
                             <span class="label label-default">摘要：</span>
-                            <span th:text="${documentInfo.getDocumentSummary()}"></span>
+                            <span th:text="${documentDetail.getSummary()}"></span>
                         </div>
                         <div class="row" style="margin-top: 10px;">
                             <span class="label label-default">简介：</span>
@@ -34,7 +36,7 @@
                         </div>
                         <div class="row" style="margin-top: 10px;">
                             <span class="label label-default">关键词：</span>
-                            <span th:text="${documentInfo.getDocumentDesc()}"></span>
+                            <span th:text="${documentDetail.getKeyWords()}"></span>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -48,12 +50,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-                    <a href="charge">充值</a>
-                    <a th:href="@{/downLoad(documentId=${documentIdStr},menuId=${menuIdStr},downLoadType='pdf')}" target="_blank">PDF下载</a>
-                    <a th:href="@{/downLoad(documentId=${documentIdStr},menuId=${menuIdStr},downLoadType='word')}" target="_blank">WORD下载</a>
-                </div>
+
             </div>
         </div>
     </div>
@@ -65,6 +62,7 @@
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 <script src="/static/javascript/hello.js"></script>
+<script src="/static/javascript/page_header.js"></script>
 <script src="/static/javascript/downLoad.js"></script>
 </body>
 </html>

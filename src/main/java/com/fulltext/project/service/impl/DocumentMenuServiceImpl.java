@@ -34,7 +34,7 @@ public class DocumentMenuServiceImpl implements DocumentMenuService {
 
     @Override
     public int insert(DocumentMenu entity) {
-        return 0;
+        return documentMenuMapper.insert(entity);
     }
 
     @Override

@@ -69,8 +69,10 @@ public class DocumentStorageServiceImpl implements DocumentStorageService {
         }
 
         if(StringUtils.isNotEmpty(menuIdStr)) {
+            //章节下载
             documentStorage = getDocumentStorageByDocumentIdAndMenuIdAndElementType(Long.parseLong(documentIdStr),Long.parseLong(menuIdStr),targetType.value);
         }else{
+            //整本下载
             documentStorage = getDocumentStorageByDocumentIdAndElementType(Long.parseLong(documentIdStr),targetType.value);
         }
 

@@ -25,49 +25,20 @@
         </div>
         <div class="row col-md-3 " style="margin-top: 50px; color:#D3D3D3;">
             <div class="col-md-10  col-md-offset-2">
-                <div class="media">
+                <div class="media" th:unless="${noticeList==null}" th:each="notice : ${noticeList}">
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object" style="width: 50px;height: 50px;" src="/static/img/logo.jpg" alt="...">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading">Media heading</h4>
-                        这里是新闻简介新闻简介新闻简介新闻简介新闻简介新闻简介新闻简介
+                        <h4 class="media-heading" th:text="${notice.getNoticeTitle()}">Media heading</h4>
+                        <p th:text="${notice.getSummaryDesc()}"></p>
                     </div>
                 </div>
-                <div class="media">
-                    <div class="media-left">
-                        <a href="#">
-                            <img class="media-object" style="width: 50px;height: 50px;" src="/static/img/logo.jpg" alt="...">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">Media heading</h4>
-                        这里是新闻简介新闻简介新闻简介新闻简介新闻简介新闻简介新闻简介
-                    </div>
-                </div>
-                <div class="media">
-                    <div class="media-left">
-                        <a href="#">
-                            <img class="media-object" style="width: 50px;height: 50px;" src="/static/img/logo.jpg" alt="...">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">Media heading</h4>
-                        这里是新闻简介新闻简介新闻简介新闻简介新闻简介新闻简介新闻简介
-                    </div>
-                </div>
-                <div class="media">
-                    <div class="media-left">
-                        <a href="#">
-                            <img class="media-object" style="width: 50px;height: 50px;" src="/static/img/logo.jpg" alt="...">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">Media heading</h4>
-                        这里是新闻简介新闻简介新闻简介新闻简介新闻简介新闻简介新闻简介
-                    </div>
+                <div style="text-align: center;">
+                <img src="/static/img/emptytask.png" style="margin: 0 auto;">
+                <p style="margin-top:25px;color: gray">暂无新闻</p>
                 </div>
             </div>
         </div>
@@ -80,5 +51,6 @@
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 <script src="/static/javascript/hello.js"></script>
+<script src="/static/javascript/page_header.js"></script>
 </body>
 </html>

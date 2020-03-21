@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+    /* 表格样式 */
+    .table>tbody>tr>td {
+        text-align: center;
+        vertical-align: middle;
+        height: 30px;
+    }
+</style>
+<div class="col-md-12" style="margin-left: 10px; margin-top: 10px;">
+    <h4>软科学课题申报</h4>
+    <h6 style="color: gray">单击单元格填表</h6>
+    <table class="table table-condensed table-bordered" id="form-1-1" form-type="need" data-mobile-responsive="true" style="table-layout: fixed;white-space:nowrap;overflow:hidden;">
+        <tr>
+            <td>申报单位</td>
+            <td colspan="4"></td>
+        </tr>
+        <tr>
+            <td>课题名称</td>
+            <td colspan="4"></td>
+        </tr>
+        <tr>
+            <td rowspan="2">课题负责人</td>
+            <td>姓名</td>
+            <td></td>
+            <td>职称及职务</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>单位</td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td rowspan="2">课题联络人</td>
+            <td>姓名</td>
+            <td></td>
+            <td>职称及职务</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>办公电话/传真</td>
+            <td></td>
+            <td>手机</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td rowspan="11">课题组成员</td>
+            <td>姓名</td>
+            <td>职称/职务</td>
+            <td colspan="2">工作单位</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td colspan="5">课题经费接受信息</td>
+        </tr>
+        <tr>
+            <td colspan="2">开户银行及名称</td>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <td colspan="2">银行账号</td>
+            <td colspan="3"></td>
+        </tr>
+        <tr height="150px;">
+            <td>研究核心内容</td>
+            <td colspan="4"></td>
+        </tr>
+        <tr height="150px;">
+            <td>研究提纲及进度安排</td>
+            <td colspan="4"></td>
+        </tr>
+    </table>
+    <div th:unless="${rootNode.getAttachmentNameList()==null}">
+        <p>所需附件如下：</p>
+        <p th:each="attachName,attachNameStat : ${rootNode.getAttachmentNameList()}">
+            <span th:text="${attachName}"></span><input type="file" th:name="'attach-'+${attachName}" th:id="'upload-attach-'+${attachNameStat.index}" style="margin-left: 10px;display: inline;"/>
+        </p>
+    </div>
+    <div class="form-group" id="document-menu-summary-div">
+        <input type="hidden" id="flow-no" th:data="${rootNode.getFlowNo()}">
+        <input type="hidden" id="flow-name" th:data="${rootNode.getFlowName()}">
+        <button type="button" class="btn btn-success" id="save">保存</button>
+        <button type="button" class="btn btn-danger" id="commit" disabled="disabled">提交</button>
+    </div>
+</div>
+</html>
+<script>
+    function pageDivCallBack() {
+        $("td").on("click",function() {
+            if($(this).html()=='') {
+                var inputHtml = "<input type='text' style='width: 95%;'/>";
+                var inputAera = "<textarea style='width: 95%;' rows='8'>";
+                if($(this).height()<40) {
+                    $(this).html(inputHtml);
+                    $(this).find("input").focus();
+                }else{
+                    $(this).html(inputAera);
+                    $(this).find("textarea").focus();
+                }
+            }
+        })
+
+        $("#save").on("click",function() {
+            $.each($("td input"), function (i, val) {
+                var temp = $(val).val();
+                $(val).parent().html(temp);
+            });
+            $.each($("td textarea"), function (i, val) {
+                var temp = $(val).val().replace(/\n/g,"<br/>");
+                $(val).parent().html(temp);
+            });
+            $("#commit").removeAttr("disabled");
+        })
+
+        $("#commit").on("click",function(){
+            var flowNo = $("#flow-no").attr("data");
+            var flowName = $("#flow-name").attr("data");
+
+            var formData = new FormData();
+            formData.append("flow-no",flowNo);
+            formData.append("flow-name",flowName);
+
+            $.each($("input[type='file']") ,function (i, val) {
+                var tempFile = $(val)[0].files[0];
+                var name = $(val).attr("name");
+                formData.append(name,tempFile);
+            });
+
+            $.each($("table") ,function (i, val) {
+                if("need"==$(val).attr("form-type")) {
+                    var formId = $(val).prop("id");
+                    var tableHtml = $(val).prop("outerHTML");
+                    formData.append(formId, tableHtml);
+                }
+            });
+
+            $.ajax({
+                url:"/workflow/commitFlow",
+                type:'post',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success:function(result){
+                    if("SUCCESS"==result){
+                        alert("提交成功了，请后续在工作台中查看");
+                        if($("#work-mywork-input").length>0){
+                            $("#work-mywork-input").click();
+                        }
+                    }else{
+                        alert("提交失败，请检查表单并重试");
+                    }
+                }
+            })
+        })
+    }
+</script>

@@ -84,4 +84,11 @@ public class UserController {
         return "regist";
     }
 
+    @RequestMapping("doRegist")
+    public String doRegist(){
+        //解析参数，写入User表
+        userService.insert(User.builder().build());
+        return "regist";
+    }
+
 }

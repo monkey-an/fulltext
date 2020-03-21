@@ -1,4 +1,4 @@
-package com.fulltext.project.service.impl;
+package com.fulltext.project.service.impl.workflow;
 
 import com.fulltext.project.dao.TaskIdSeqMapper;
 import com.fulltext.project.entity.TaskIdSeq;
@@ -20,22 +20,7 @@ public class TaskIdSeqServiceImpl implements TaskIdSeqService {
     private TaskIdSeqMapper taskIdSeqMapper;
 
     @Override
-    public TaskIdSeq selectTaskIdSeqById(Long id) {
-        return null;
-    }
-
-    @Override
-    public List<TaskIdSeq> selectTaskIdSeqListByIdList(List<Long> idList) {
-        return null;
-    }
-
-    @Override
     public int insert(TaskIdSeq entity) {
-        return 0;
-    }
-
-    @Override
-    public int update(TaskIdSeq entity) {
-        return 0;
+        return taskIdSeqMapper.insert(entity);
     }
 }

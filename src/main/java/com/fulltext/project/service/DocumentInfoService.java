@@ -3,11 +3,13 @@ import com.fulltext.project.bo.DocumentMenuNode;
 import com.fulltext.project.bo.DocumentSearchBO;
 import com.fulltext.project.bo.DocumentSerialBO;
 import com.fulltext.project.bo.DocumentSerialDetailBO;
+import com.fulltext.project.entity.DocumentDetail;
 import com.fulltext.project.entity.DocumentInfo;
 import com.fulltext.project.entity.DocumentMenu;
 import com.fulltext.project.entity.User;
 import com.github.pagehelper.PageInfo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +18,7 @@ import java.util.Map;
  */
 public interface DocumentInfoService {
     DocumentInfo selectDocumentInfoByDocumentId(Long documentId);
-    List<DocumentInfo> selectDocumentInfoListByIdList(List<Long> idList);
+    List<DocumentInfo> selectDocumentInfoListByDocumentIdList(List<Long> docuemntIdList);
     int insert(DocumentInfo entity);
     int update(DocumentInfo entity);
 
@@ -28,4 +30,12 @@ public interface DocumentInfoService {
     List<Map<String,Object>> getAllMenuNameMap();
 
     void createDocumentSearch(String documentMenuId,String content);
+
+    PageInfo<DocumentDetail> selectUserSearchDocumentByPaging(int pageNo, int pageSize,String searchKey, String searchValue, String searchWords);
+
+    boolean addDocument(HttpServletRequest request);
+
+    boolean addMenu(HttpServletRequest request);
+
+    void addDocumentInfo(List<DocumentDetail> documentDetailList);
 }

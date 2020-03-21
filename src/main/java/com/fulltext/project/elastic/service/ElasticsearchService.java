@@ -37,5 +37,5 @@ public interface ElasticsearchService {
 
     List<DocBean> findByMembers(String members);
     List<String> extractKeyword(String content, int topk);
-    List<String> saveReturnKeywords(DocBean docBean, int topK);
+    List<String> saveReturnKeywords(DocBean docBean, int topKey);
 }

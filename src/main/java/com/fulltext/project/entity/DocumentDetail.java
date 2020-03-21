@@ -1,36 +1,65 @@
 package com.fulltext.project.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DocumentDetail {
 
     private Long id;
-
-
     private Long documentId;
-
-
     private Long menuId;
-
-
+    private String completionUnit;
     private String author;
-
-
+    private String members;
     private String summary;
-
-
     private String keyWords;
-
-
-    private Byte status;
-
-
+    private Integer status;
     private Date createTime;
-
-
     private Date updateTime;
+
+    private String documentPublisher;
+    private String documentName;
+    private String documentYear;
+
+    private String documentMenuName;
+
+    public String getPublisherDesc(){
+        StringBuilder sb = new StringBuilder();
+        if(StringUtils.isNotEmpty(author)){
+            sb.append(author+";  ");
+        }
+        if(StringUtils.isNotEmpty(members)){
+            sb.append(members+";  ");
+        }
+        if(StringUtils.isNotEmpty(documentPublisher)){
+            sb.append(documentPublisher+";  ");
+        }
+        if(StringUtils.isNotEmpty(completionUnit)){
+            sb.append(completionUnit+";  ");
+        }
+
+        if(sb.length()>50){
+            return sb.toString().substring(0,47)+"...";
+        }else{
+            return sb.toString();
+        }
+    }
+
+    public String getSummaryDesc(){
+        if(summary.length()>100){
+            return summary.substring(0,97)+"...";
+        }else{
+            return summary;
+        }
+    }
 
 }

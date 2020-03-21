@@ -19,9 +19,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/")
-                .excludePathPatterns("/admin")
-                .excludePathPatterns("/admin/**")
+//                .addPathPatterns("/")
                 .excludePathPatterns("/user/login")
                 .excludePathPatterns("/user/doLogin")
                 .excludePathPatterns("/user/regist")
