@@ -1,0 +1,31 @@
+<div class="row" style="margin-left: 10px;">
+    <div class="row col-md-12">
+        <h4>通知发布</h4>
+        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
+        <form style="margin:10px 10px 10px 10px;" id="form_add_menu">
+            <div class="form-group">
+                <label for="document-menu-name-input">通知标题</label>
+                <input type="text" class="form-control" id="document-menu-name-input" placeholder="请输入目录名称">
+            </div>
+            <div class="form-group">
+                <label for="document-menu-name-input">内部发布</label>
+                <input type="checkbox" id="if_inner_notice">
+            </div>
+            <div class="form-group" id="document-menu-author-div">
+                <label for="document-menu-author-input">发布作者</label>
+                <input type="text" class="form-control" id="document-menu-author-input"
+                       placeholder="新闻以谁的名义发出">
+            </div>
+            <div class="form-group">
+                <label for="document-menu-author-input">内容</label>
+                <div id="notice_content">
+
+                </div>
+            </div>
+            <button type="button" class="btn btn-default">添加一个附件</button>
+
+            <button type="button" class="btn btn-default" id="notice-add-button">发布</button>
+        </form>
+    </div>
+</div>
+<script src="/static/javascript/add_notice.js"></script>

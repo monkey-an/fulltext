@@ -18,10 +18,16 @@
                     <a href="#" style="margin-left: 15px;" th:data="@{/downLoad(documentId=${documentIdStr},menuId=${menuIdStr},downLoadType='pdf')}" id="downLoadPdf">PDF下载<span class="glyphicon glyphicon-cloud-download"></span></a>
                     <a href="#" style="margin-left: 15px;" th:data="@{/downLoad(documentId=${documentIdStr},menuId=${menuIdStr},downLoadType='word')}" id="downLoadWord">WORD下载<span class="glyphicon glyphicon-cloud-download"></span></a>
                 </div>
-                <div class="row">
+                <div class="row" th:unless="${documentMenu==null}">
+                    <h3 class="text-center" th:text="${documentMenu.getMenuName()}"></h3>
+                    <P class="text-center" th:text="${documentDetail.getAuthor()}"></P>
+                    <P class="text-center" th:text="${documentDetail.getCompletionUnit()}"></P>
+                    <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+                </div>
+                <div class="row" th:if="${documentMenu==null}">
                     <h3 class="text-center" th:text="${documentInfo.getDocumentName()}"></h3>
                     <P class="text-center" th:text="${documentInfo.getDocumentAuthor()}"></P>
-                    <P class="text-center" th:text="${documentInfo.getDocumentAuthor()}"></P>
+                    <P class="text-center" th:text="${documentInfo.getDocumentPublisher()}"></P>
                     <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
                 </div>
                 <div class="row">

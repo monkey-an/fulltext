@@ -124,12 +124,13 @@ public class PageController {
         Map<String,String[]> paramMap = request.getParameterMap();
         String documentIdStr = "";
         String menuIdStr = "";
+        DocumentMenu documentMenu = null;
 
         if(paramMap.containsKey("documentId")){
             documentIdStr = paramMap.get("documentId")[0];
         }else if(paramMap.containsKey("menuId")){
             menuIdStr = paramMap.get("menuId")[0];
-            DocumentMenu documentMenu = documentMenuService.selectDocumentMenuById(Long.parseLong(menuIdStr));
+            documentMenu = documentMenuService.selectDocumentMenuById(Long.parseLong(menuIdStr));
             if(documentMenu!=null){
                 documentIdStr = documentMenu.getDocumentId()+"";
             }
@@ -157,6 +158,8 @@ public class PageController {
         model.addAttribute("documentBookImage",documentBookImage);
         model.addAttribute("documentIdStr",documentIdStr);
         model.addAttribute("menuIdStr",menuIdStr);
+        model.addAttribute("documentMenu",documentMenu);
+
 
         return "down_load";
     }
