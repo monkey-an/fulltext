@@ -66,4 +66,14 @@
     from document_detail
     where document_id=#{documentId} and menu_id is null;
   </select>
+
+  <select id="selectDocumentDetailByMenuIdOrDocumentId" resultMap="BaseResultMap">
+    select id, document_id, menu_id, author, summary, key_words, status, create_time,
+    update_time,completion_unit,members
+    from document_detail
+    where
+    (menu_id in <foreach collection="menuIdList" item="menuId" separator="," close=")" open="(">#{menuId}</foreach>)
+    or
+    (document_id in <foreach collection="documentIdList" item="documentId" separator="," close=")" open="(">#{documentId}</foreach> and menu_id is null)
+  </select>
 </mapper>

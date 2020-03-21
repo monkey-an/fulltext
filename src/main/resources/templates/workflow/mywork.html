@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<div class="col-md-7" style="margin-top: 10px;">
+<div class="col-md-4" style="margin-top: 10px;">
     <div class="col-md-12" style="margin-top: 10px;">
         我的待办
         <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
@@ -19,7 +19,28 @@
         </div>
     </div>
 </div>
-<div class="col-md-5" style="margin-top: 10px;">
+
+<div class="col-md-4" style="margin-top: 10px;">
+    <div class="col-md-12" style="margin-top: 10px;">
+        我的已办
+        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
+    </div>
+
+    <div class="col-md-12">
+        <ul class="list-group" th:unless="${myApprovalTask==null}">
+            <li class="list-group-item" th:each="task,taskStat : ${myApprovalTask}">
+                <span class="badge" th:text="${task.getStatusDesc()}"></span>
+                <a target="_blank" th:href="@{/workflow/myApprovalFlowDetail(taskId=${task.getTaskId()})}" th:text="${task.getTaskName()}+'-'+${task.getCommitUserName()}+'-'+${task.getCreateDateDesc()}"></a>
+            </li>
+        </ul>
+        <div style="text-align: center;" th:if="${myApprovalTask==null}">
+            <img src="/static/img/emptytask.png" style="margin: 0 auto;">
+            <p style="color: gray">暂无已提交事项</p>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-4" style="margin-top: 10px;">
     <div class="col-md-12" style="margin-top: 10px;">
         我的流程
         <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>

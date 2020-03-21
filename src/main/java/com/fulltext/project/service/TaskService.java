@@ -21,4 +21,8 @@ public interface TaskService {
 
     String initTaskDetail(User user, Long taskId, Model model);
     String initMyTaskDetail(User user, Long taskId, Model model);
+
+    List<Task> selectByApprovalUserid(Long id);
+
+    String initMyApprovalTaskDetail(User user, Long taskId, Model model);
 }

@@ -62,4 +62,9 @@
         from task_detail
         where task_id=#{taskId} and oper_node_no=#{formNo}
     </select>
+    <select id="selectTaskIdByOperUserId" resultType="java.lang.Long">
+        select distinct task_id
+        from task_detail
+        where oper_user_id=#{userId}
+    </select>
 </mapper>

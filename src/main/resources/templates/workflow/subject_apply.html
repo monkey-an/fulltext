@@ -10,7 +10,7 @@
 </style>
 <div class="col-md-12" style="margin-left: 10px; margin-top: 10px;">
     <h4>软科学课题申报</h4>
-    <h6 style="color: gray">双击单元格填表</h6>
+    <h6 style="color: gray">单击单元格填表</h6>
     <table class="table table-condensed table-bordered" id="form-1-1" form-type="need" data-mobile-responsive="true" style="table-layout: fixed;white-space:nowrap;overflow:hidden;">
         <tr>
             <td>申报单位</td>
@@ -136,7 +136,7 @@
 </html>
 <script>
     function pageDivCallBack() {
-        $("td").on("dblclick",function() {
+        $("td").on("click",function() {
             if($(this).html()=='') {
                 var inputHtml = "<input type='text' style='width: 95%;'/>";
                 var inputAera = "<textarea style='width: 95%;' rows='8'>";

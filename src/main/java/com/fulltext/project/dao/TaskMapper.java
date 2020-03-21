@@ -26,4 +26,6 @@ public interface TaskMapper {
     List<Task> selectByCommitUserId(@Param("userId") Long userId);
 
     List<Task> selectByCurrentUserId(@Param("userId")String userId);
+
+    List<Task> selectTaskListByTaskIdList(@Param("taskIdList") List<Long> taskIdList);
 }

@@ -48,4 +48,9 @@ public class TaskDetailServiceImpl implements TaskDetailService {
     public List<TaskDetail> selectTaskDetailByTaskIdAndOperNodeNo(Long taskId, String formNo) {
         return taskDetailMapper.selectTaskDetailByTaskIdAndOperNodeNo(taskId ,formNo);
     }
+
+    @Override
+    public List<Long> selectTaskIdByOperUserId(Long userId) {
+        return taskDetailMapper.selectTaskIdByOperUserId(userId);
+    }
 }

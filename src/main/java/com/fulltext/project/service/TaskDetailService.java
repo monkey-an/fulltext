@@ -14,4 +14,6 @@ public interface TaskDetailService {
     List<TaskDetail> selectTaskDetailByTaskId(Long taskId);
 
     List<TaskDetail> selectTaskDetailByTaskIdAndOperNodeNo(Long taskId, String formNo);
+
+    List<Long> selectTaskIdByOperUserId(Long userId);
 }

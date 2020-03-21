@@ -69,6 +69,10 @@ public class TaskServiceImpl implements TaskService {
         return null;
     }
 
+    private List<Task> selectTaskListByTaskIdList(List<Long> taskIdList) {
+        return taskMapper.selectTaskListByTaskIdList(taskIdList);
+    }
+
     @Override
     public int insert(Task entity) {
         return taskMapper.insert(entity);
@@ -225,6 +229,68 @@ public class TaskServiceImpl implements TaskService {
 
         //取出taskDetail，装进model
         List<TaskDetail> taskDetailList = taskDetailService.selectTaskDetailByTaskId(task.getTaskId());
+        model.addAttribute("taskDetailList",taskDetailList);
+
+        //取出附件下载链接,装进model
+        List<TaskAttachment> taskAttachmentList = taskAttachmentService.selectTaskAttachmentListByTaskId(task.getTaskId());
+        if(taskAttachmentList!=null&&taskAttachmentList.size()>0) {
+            model.addAttribute("taskAttachmentList", taskAttachmentList);
+        }
+
+        //取出表单
+        List<TaskFormHtml> taskFormHtmlList = taskFormHtmlService.selectTaskFormHtmlByTaskId(task.getTaskId());
+        if (taskAttachmentList != null && taskAttachmentList.size() > 0) {
+            taskFormHtmlList = taskFormHtmlList.subList(0, 1);
+            //装进model
+            model.addAttribute("taskFormHtmlList", taskFormHtmlList);
+        }
+
+        //返回success
+        return "SUCCESS";
+    }
+
+    @Override
+    public List<Task> selectByApprovalUserid(Long id) {
+        List<Long> taskIdList = taskDetailService.selectTaskIdByOperUserId(id);
+        List<Task> taskList = selectTaskListByTaskIdList(taskIdList);
+        return taskList;
+    }
+
+    @Override
+    public String initMyApprovalTaskDetail(User user, Long taskId, Model model) {
+        //读取当前task详情，DOING状态
+        Task task = selectTaskByTaskId(taskId);
+
+        List<TaskDetail> taskDetailList = taskDetailService.selectTaskDetailByTaskId(taskId);
+
+        //判断当前登录用户是不是操作人
+        //如果不是，返回error，无权查看
+        if(taskDetailList.stream().noneMatch(taskDetail -> taskDetail.getOperUserId().equals(user.getId()))){
+            return "ERROR";
+        }
+
+        //task装进model
+        model.addAttribute("task",task);
+
+        WorkFlowNode rootNode = getRootNode(task.getTaskName());
+        WorkFlowNode currentNode = null;
+        while (rootNode != null) {
+            if (rootNode.getFlowNo().equals(task.getCurrentNodeNo())) {
+                currentNode = rootNode;
+                break;
+            } else {
+                rootNode = rootNode.getNextFlow();
+            }
+        }
+
+        if (currentNode == null) {
+            log.info("找不到当前节点的位置,task:" + task.toString());
+            return "ERROR";
+        }
+
+        model.addAttribute("currentNode",currentNode);
+
+        //取出taskDetail，装进model
         model.addAttribute("taskDetailList",taskDetailList);
 
         //取出附件下载链接,装进model

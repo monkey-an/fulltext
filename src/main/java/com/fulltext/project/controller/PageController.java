@@ -185,28 +185,25 @@ public class PageController {
     }
 
     @RequestMapping("search")
-    public String search(HttpServletRequest request,Model model){
-        String searchWords = request.getParameter("search_words");
-        String searchKey = request.getParameter("searchKey");
-        String searchValue = request.getParameter("searchValue");
+    public String search(HttpServletRequest request,Model model,@RequestParam(value = "pageNo", required = true, defaultValue = "1") int pageNo,
+                         @RequestParam(value = "pageSize", required = true, defaultValue = "5") int pageSize,
+                         @RequestParam(value = "searchKey", required = false) String searchKey,
+                         @RequestParam(value = "searchValue", required = false) String searchValue,
+                         @RequestParam(value = "searchWords", required = false) String searchWords){
 
         model.addAttribute("searchWords",searchWords);
         model.addAttribute("searchKey",searchKey);
         model.addAttribute("searchValue",searchValue);
 
+        PageInfo<DocumentDetail> pageInfo = documentInfoService.selectUserSearchDocumentByPaging(pageNo, pageSize, searchKey, searchValue, searchWords);
+        PageBean<DocumentDetail> pageBean = PageVoUtils.convertTopageVo(pageInfo);
+        documentInfoService.addDocumentInfo(pageBean.getRows());
+        pageBean.setCurrentPage(pageNo);
+        pageBean.setPageSize(pageSize);
+
+        model.addAttribute("pageBean",pageBean);
+
         return "search_result";
-    }
-
-    @RequestMapping("/realSearch")
-    @ResponseBody
-    public PageBean<DocumentInfo> getAllSearchDocumentByPaging(@RequestParam(value = "pageNo", required = true, defaultValue = "1") int pageNo,
-                                                                   @RequestParam(value = "pageSize", required = true, defaultValue = "10") int pageSize,
-                                                                   @RequestParam(value = "searchValue", required = true) String searchValue,
-                                                                   @RequestParam(value = "searchWords", required = true) String searchWords) {
-
-        PageInfo<DocumentInfo> pageInfo = documentInfoService.selectUserSearchDocumentByPaging(pageNo, pageSize, searchValue, searchWords);
-        PageBean<DocumentInfo> pageBean = PageVoUtils.convertTopageVo(pageInfo);
-        return pageBean;
     }
 
     @RequestMapping("charge")

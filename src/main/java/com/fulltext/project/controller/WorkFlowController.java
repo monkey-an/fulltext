@@ -51,11 +51,15 @@ public class WorkFlowController {
                 case "work-mywork-input":
                     List<Task> myTask = taskService.selectByCommitUserId(user.getId());
                     List<Task> toMeTask = taskService.selectByCurrentUserId(user.getId());
+                    List<Task> myApprovalTask = taskService.selectByApprovalUserid(user.getId());
                     if(myTask!=null && myTask.size()>0) {
                         model.addAttribute("myTask", myTask);
                     }
                     if(toMeTask!=null && toMeTask.size()>0) {
                         model.addAttribute("toMeTask", toMeTask);
+                    }
+                    if(myApprovalTask!=null && myApprovalTask.size()>0){
+                        model.addAttribute("myApprovalTask",myApprovalTask);
                     }
                     resultView = "workflow/mywork";
                     break;
@@ -129,4 +133,18 @@ public class WorkFlowController {
             return "workflow/flow_error";
         }
     }
+
+    @RequestMapping("/myApprovalFlowDetail")
+    public String myApprovalFlowDetail(HttpServletRequest request,Model model) {
+        User user = (User) request.getSession().getAttribute(ConstantValue.USER_SESSION_KEY);
+        Long taskId = Long.parseLong(request.getParameter("taskId"));
+        String initResult = taskService.initMyApprovalTaskDetail(user,taskId,model);
+        if("SUCCESS".equals(initResult)){
+            return "workflow/my_approval_task_detail";
+        }else{
+            return "workflow/flow_error";
+        }
+    }
+
+
 }

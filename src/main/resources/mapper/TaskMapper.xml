@@ -82,4 +82,9 @@
         from task
         where current_approval_user_id=#{userId} or current_approval_user_id like '%,${userId},%';
     </select>
+    <select id="selectTaskListByTaskIdList" resultMap="BaseResultMap">
+        select <include refid="BaseCol"></include>
+        from task
+        where task_id in <foreach collection="taskIdList" item="taskId" open="(" close=")" separator=",">#{taskId}</foreach>
+    </select>
 </mapper>

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,6 +41,11 @@ public class DocumentDetailServiceImpl implements DocumentDetailService {
     }
 
     @Override
+    public List<DocumentDetail> selectAll() {
+        return documentDetailMapper.selectAll();
+    }
+
+    @Override
     public DocumentDetail selectDocumentDetailByDocumentAndMenuId(long documentId, long menuId) {
         return documentDetailMapper.selectDocumentDetailByDocumentAndMenuId(documentId,menuId);
     }
@@ -47,5 +53,10 @@ public class DocumentDetailServiceImpl implements DocumentDetailService {
     @Override
     public DocumentDetail selectDocumentDetailByDocumentId(long documentId) {
         return documentDetailMapper.selectDocumentDetailByDocumentId(documentId);
+    }
+
+    @Override
+    public List<DocumentDetail> selectDocumentDetailByMenuIdOrDocumentId(ArrayList<Long> menuIdList, ArrayList<Long> documentIdList) {
+        return documentDetailMapper.selectDocumentDetailByMenuIdOrDocumentId(menuIdList,documentIdList);
     }
 }

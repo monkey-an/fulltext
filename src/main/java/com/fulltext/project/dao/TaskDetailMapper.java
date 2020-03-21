@@ -24,4 +24,6 @@ public interface TaskDetailMapper {
     List<TaskDetail> selectTaskDetailByTaskId(@Param("taskId") Long taskId);
 
     List<TaskDetail> selectTaskDetailByTaskIdAndOperNodeNo(@Param("taskId") Long taskId, @Param("formNo")String formNo);
+
+    List<Long> selectTaskIdByOperUserId(@Param("userId") Long userId);
 }

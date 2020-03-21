@@ -13,6 +13,9 @@ import java.util.List;
  */
 public class PageBean<T> implements Serializable {
     private Long total;//满足条件的总记录数
+    private Integer currentPage;
+    private Integer pageSize;
+    private Integer totalPage;
     private List<T> rows;//所请求的当前页的数据集合
 
     public Long getTotal() {
@@ -29,5 +32,33 @@ public class PageBean<T> implements Serializable {
 
     public void setRows(List<T> rows) {
         this.rows = rows;
+    }
+
+    public Integer getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Integer getTotalPage() {
+        if(total%pageSize==0){
+            return (int)(total/pageSize);
+        }else{
+            return (int)(total/pageSize)+1;
+        }
+    }
+
+    public void setTotalPage(Integer totalPage) {
+        this.totalPage = totalPage;
     }
 }

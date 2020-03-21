@@ -3,6 +3,7 @@ import com.fulltext.project.bo.DocumentMenuNode;
 import com.fulltext.project.bo.DocumentSearchBO;
 import com.fulltext.project.bo.DocumentSerialBO;
 import com.fulltext.project.bo.DocumentSerialDetailBO;
+import com.fulltext.project.entity.DocumentDetail;
 import com.fulltext.project.entity.DocumentInfo;
 import com.fulltext.project.entity.DocumentMenu;
 import com.fulltext.project.entity.User;
@@ -30,9 +31,11 @@ public interface DocumentInfoService {
 
     void createDocumentSearch(String documentMenuId,String content);
 
-    PageInfo<DocumentInfo> selectUserSearchDocumentByPaging(int pageNo, int pageSize, String searchValue, String searchWords);
+    PageInfo<DocumentDetail> selectUserSearchDocumentByPaging(int pageNo, int pageSize,String searchKey, String searchValue, String searchWords);
 
     boolean addDocument(HttpServletRequest request);
 
     boolean addMenu(HttpServletRequest request);
+
+    void addDocumentInfo(List<DocumentDetail> documentDetailList);
 }

@@ -276,7 +276,13 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
     }
 
     @Override
-    public PageInfo<DocumentInfo> selectUserSearchDocumentByPaging(int pageNo, int pageSize, String searchValue, String searchWords) {
+    public PageInfo<DocumentDetail> selectUserSearchDocumentByPaging(int pageNo, int pageSize, String searchKey, String searchValue, String searchWords) {
+        if(StringUtils.isEmpty(searchKey)||StringUtils.isEmpty(searchValue)||StringUtils.isEmpty(searchWords)){
+            PageHelper.startPage(pageNo, pageSize);
+            List<DocumentDetail> documentDetailList = documentDetailService.selectAll();
+            return new PageInfo<>(documentDetailList);
+        }
+
         List<DocBean> docBeanList = null;
 
         switch (searchValue){
@@ -317,24 +323,9 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
                 }
             });
 
-            List<DocumentMenu> menuList = documentMenuService.selectDocumentMenuListByIdList(new ArrayList<>(menuIdSet));
-            if(menuList!=null && menuList.size()>0){
-                documentIdSet.addAll(menuList.stream().map(DocumentMenu::getDocumentId).collect(Collectors.toList()));
-            }
-
-            List<DocumentInfo> documentInfoList = selectDocumentInfoListByDocumentIdList(new ArrayList<>(documentIdSet));
-
-
-            List<DocumentInfo> resultList = new ArrayList<>();
-            for(int i=(pageNo-1)*pageSize;i<(pageNo)*pageSize;++i){
-                if(documentInfoList.size()>i) {
-                    resultList.add(documentInfoList.get(i));
-                }else{
-                    break;
-                }
-            }
-            PageInfo<DocumentInfo> info=new PageInfo<>(resultList);
-            info.setTotal(documentInfoList.size());
+            PageHelper.startPage(pageNo, pageSize);
+            List<DocumentDetail> documentDetailList = documentDetailService.selectDocumentDetailByMenuIdOrDocumentId(new ArrayList<>(menuIdSet),new ArrayList<>(documentIdSet));
+            PageInfo<DocumentDetail> info=new PageInfo<>(documentDetailList);
             return info;
         }
         return new PageInfo<>();
@@ -403,7 +394,7 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
         String documentMenuName = request.getParameter("document-menu-name-input");
         String documentMenuPage = request.getParameter("document-menu-page-input");
         String documentMenuAuthor = request.getParameter("document-menu-author-input");
-        String documengMenuSumaary = request.getParameter("document-menu-summary-input");
+        String documengMenuSumary = request.getParameter("document-menu-summary-input");
         String documentMenuKeywords = request.getParameter("document-menu-keywords-input");
         String documentMembers = request.getParameter("document-menu-members-input");
         String documentCompletionUnit = request.getParameter("document-menu-completion-unit-input");
@@ -429,7 +420,7 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
                 .documentId(Long.parseLong(documentId))
                 .createTime(new Date())
                 .status(1)
-                .summary(documengMenuSumaary)
+                .summary(documengMenuSumary)
                 .menuId(documentMenu.getId())
                 .completionUnit(documentMembers)
                 .members(documentMembers)
@@ -439,5 +430,24 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
         count += documentDetailService.insert(documentDetail);
 
         return count>1;
+    }
+
+    @Override
+    public void addDocumentInfo(List<DocumentDetail> documentDetailList) {
+        for (DocumentDetail documentDetail : documentDetailList) {
+            DocumentInfo documentInfo = selectDocumentInfoByDocumentId(documentDetail.getDocumentId());
+            if(documentInfo!=null){
+                documentDetail.setDocumentPublisher(documentInfo.getDocumentPublisher());
+                documentDetail.setDocumentName(documentInfo.getDocumentName());
+                documentDetail.setDocumentYear(documentInfo.getDocumentYear());
+            }
+
+            if(documentDetail.getMenuId()!=null) {
+                DocumentMenu documentMenu = documentMenuService.selectDocumentMenuById(documentDetail.getMenuId());
+                if(documentMenu!=null) {
+                    documentDetail.setDocumentMenuName(documentMenu.getMenuName());
+                }
+            }
+        }
     }
 }

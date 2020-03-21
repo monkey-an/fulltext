@@ -289,7 +289,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
                 Document tableDoc = Jsoup.parse(form11Html);
                 Elements lastTrTds = tableDoc.select("tr").select("td");
                 String approvalResult = lastTrTds.get(lastTrTds.size()-2).html();
-                if (approvalResult.contains("同意")) {
+                if (!approvalResult.contains("不同意")) {
                     nextNode = currentNode.getNextFlow();
                 }else{
                     nextNode = null;
