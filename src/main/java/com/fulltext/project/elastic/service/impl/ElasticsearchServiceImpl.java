@@ -6,10 +6,15 @@ import com.fulltext.project.elastic.service.ElasticsearchService;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.NotionalTokenizer;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -107,6 +112,19 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
         docBean.setKeyWords(kws);
         elasticsearchDao.save(docBean);
         return kws.subList(0, topK);
+    }
+
+    @Override
+    public List<DocBean> matchQuery(String query, String field) {
+
+        QueryBuilder queryBuilder = QueryBuilders.matchQuery(field, query).analyzer("ik_max_word");
+
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(queryBuilder).build();
+
+        List<DocBean> rs = elasticsearchRestTemplate.queryForList(searchQuery, DocBean.class);
+
+        return rs;
     }
 
     @Override

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Description
@@ -80,13 +81,27 @@ public class UserController {
     }
 
     @RequestMapping("regist")
-    public String regist(HttpServletRequest request,HttpServletResponse response) throws IOException {
-        if(request.getSession().getAttribute(ConstantValue.USER_SESSION_KEY)!=null){
-            response.sendRedirect("/");
-            return "regist1";
-        }else{
-            return "regist2";
+    public String regist(){
+        return "regist";
+    }
+
+    @RequestMapping("doRegist")
+    public String doRegist(HttpServletRequest request,HttpServletResponse response){
+        Map<String, String[]> parameterMap =  request.getParameterMap();
+        String name = parameterMap.get("user-name-input")[0];
+        String pwd = parameterMap.get("user-name-input")[0];
+        String confirm_pwd = parameterMap.get("user-name-input")[0];
+        String email = parameterMap.get("user-name-input")[0];
+        String phone = parameterMap.get("user-name-input")[0];
+
+        if(!pwd.equals(confirm_pwd)){
+            return "输入密码不一致";
         }
+        User entity = User.builder().loginName(name).password(pwd).email(email).phone(phone).build();
+        if(userService.insert(entity) == 0){
+            return "用户已经存在";
+        }
+        return "注册成功";
     }
 
 }

@@ -68,4 +68,10 @@ public class ElasticController {
         return elasticService.findByTitle(word);
     }
 
+    @GetMapping("/matchQuery")
+    public List<DocBean> matchQuery(@RequestParam(value = "query", defaultValue = "改革")  String query,
+                                    @RequestParam(value = "field", defaultValue = "title") String field){
+        return elasticService.matchQuery(query, field);
+    }
+
 }
