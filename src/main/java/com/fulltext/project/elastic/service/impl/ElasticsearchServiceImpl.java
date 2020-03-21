@@ -9,6 +9,9 @@ import com.hankcs.hanlp.tokenizer.NotionalTokenizer;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -119,10 +122,11 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
     @Override
     public List<DocBean> matchQuery(String query, String field) {
 
-        QueryBuilder queryBuilder = QueryBuilders.matchQuery(field, query).analyzer("ik_max_word");
+        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery(
+                QueryBuilders.matchQuery(field, query).analyzer("ik_max_word"));
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(queryBuilder).build();
+                .withQuery(functionScoreQueryBuilder).withSort(SortBuilders.scoreSort()).build();
 
         List<DocBean> rs = elasticsearchRestTemplate.queryForList(searchQuery, DocBean.class);
 
