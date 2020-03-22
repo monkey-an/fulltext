@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulltext.project.dao.NoticeAttachmentMapper">
+  <resultMap id="BaseResultMap" type="com.fulltext.project.entity.NoticeAttachment">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="notice_id" jdbcType="BIGINT" property="noticeId" />
+    <result column="attachment_name" jdbcType="VARCHAR" property="attachmentName" />
+    <result column="attachment_url" jdbcType="VARCHAR" property="attachmentUrl" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <insert id="insert" parameterType="com.fulltext.project.entity.NoticeAttachment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into notice_attachment (notice_id, attachment_name, attachment_url, 
+      create_time, update_time)
+    values (#{noticeId,jdbcType=BIGINT}, #{attachmentName,jdbcType=VARCHAR}, #{attachmentUrl,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.fulltext.project.entity.NoticeAttachment">
+    update notice_attachment
+    set notice_id = #{noticeId,jdbcType=BIGINT},
+      attachment_name = #{attachmentName,jdbcType=VARCHAR},
+      attachment_url = #{attachmentUrl,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, notice_id, attachment_name, attachment_url, create_time, update_time
+    from notice_attachment
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, notice_id, attachment_name, attachment_url, create_time, update_time
+    from notice_attachment
+  </select>
+  <select id="selectByNoticeId" resultMap="BaseResultMap">
+    select id, notice_id, attachment_name, attachment_url, create_time, update_time
+    from notice_attachment
+    where notice_id=#{noticeId};
+  </select>
+</mapper>

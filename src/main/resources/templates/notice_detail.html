@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>通知查看</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/css/common.css">
+</head>
+<body>
+
+<div class="container-fluid">
+    <div th:replace="common/page_header :: page_header"></div>
+
+    <div class="row" th:unless="${notice==null}">
+        <div class="col-md-8 col-md-offset-2" style="margin-top: 50px;">
+            <div class="row">
+                <h3 class="text-center" th:text="${notice.getNoticeTitle()}"></h3>
+                <p class="text-right"><small th:text="${notice.getNoticeAuthor()}"></small></p>
+                <p class="text-right"><small th:text="${notice.getCreateTime()}"></small></p>
+                <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2" th:utext="${notice.getNoticeContent()}"></div>
+            </div>
+            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
+            <div class="row" th:unless="${attachmentList==null}">
+                <div class="col-md-8 col-md-offset-2">
+                    <p th:each="attachment : ${attachmentList}">
+                        <a th:href="@{/noticeAttachmentDownload(attachmentId=${attachment.getId()})}"
+                           th:text="${attachment.getAttachmentName()}"></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" th:if="${notice==null}">
+        此通知你无权限查看或请登录
+    </div>
+
+    <div th:replace="common/page_footer :: page_footer"></div>
+</div>
+
+
+<script src="/static/javascript/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<script src="/static/javascript/page_header.js"></script>
+</body>
+</html>
