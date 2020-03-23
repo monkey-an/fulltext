@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Score;
 
 import java.util.List;
 
@@ -37,13 +38,13 @@ public class DocBean {
     @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private String body;
 
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private List<String> keyWords;
 
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private String author;
 
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private List<String> members;
 
 

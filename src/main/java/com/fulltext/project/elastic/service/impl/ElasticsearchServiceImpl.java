@@ -116,6 +116,11 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
 
         docBean.setKeyWords(kws);
         elasticsearchDao.save(docBean);
+
+        int kwsSize = kws.size();
+        if(kwsSize < 10){
+            topK = kwsSize;
+        }
         return kws.subList(0, topK);
     }
 
@@ -127,6 +132,11 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(functionScoreQueryBuilder).withSort(SortBuilders.scoreSort()).build();
+
+
+//        QueryBuilder queryBuilder = QueryBuilders.matchQuery(field, query).analyzer("ik_max_word");
+//        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+//                .withQuery(queryBuilder).build();
 
         List<DocBean> rs = elasticsearchRestTemplate.queryForList(searchQuery, DocBean.class);
 
