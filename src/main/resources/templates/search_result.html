@@ -21,8 +21,8 @@
             <div class="row" th:each="document : ${pageBean.getRows()}">
                 <p class="lead"><a th:href="'/downLoadPage?documentId='+${document.getDocumentId()}+'&menuId='+${document.getMenuId()}" th:text="${document.getDocumentName()}+'-'+${document.getDocumentYear()}+'-'+${document.getDocumentMenuName()}"></a></p>
                 <p class="text-success" th:utext="${document.getPublisherDesc()}"></p>
+                <p th:text="'关键字：'+${document.getKeyWords()}"></p>
                 <p th:text="${document.getSummaryDesc()}"></p>
-                <p th:text="${document.getKeyWords()}"></p>
                 <p class="text-right">下载频次 3</p>
                 <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
             </div>

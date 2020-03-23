@@ -183,7 +183,9 @@ public class PageController {
         String menuIdStr = "";
         DocumentMenu documentMenu = null;
 
-        documentIdStr = paramMap.get("documentId")[0];
+        if(paramMap.containsKey("documentId")) {
+            documentIdStr = paramMap.get("documentId")[0];
+        }
 
         if (paramMap.containsKey("menuId")) {
             menuIdStr = paramMap.get("menuId")[0];

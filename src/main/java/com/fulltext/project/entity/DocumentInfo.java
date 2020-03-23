@@ -43,8 +43,8 @@ public class DocumentInfo {
     private Date updateTime;
 
     public String getDocumentSummaryDesc(){
-        if(documentSummary.length()>60){
-            return documentSummary.substring(0,57)+"<abbr title='"+documentSummary.substring(57)+"'>...</abbr>";
+        if(documentSummary.length()>15){
+            return documentSummary.substring(0,12)+"<abbr title='"+documentSummary.substring(12)+"'>...</abbr>";
         }
         return documentSummary;
     }
