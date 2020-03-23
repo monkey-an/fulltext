@@ -17,7 +17,7 @@
                     <img class="shadow-box" style="width: 300px;height: 300px" th:src="${documentSerial.documentImagePath}" alt="...">
                     <div class="caption">
                         <h3 th:text="${documentSerial.serialName}"></h3>
-                        <p th:text="${documentSerial.getDocumentSummaryDesc()}"></p>
+                        <p th:utext="${documentSerial.getDocumentSummaryDesc()}"></p>
                         <p><a th:href="@{/detail(serial=${documentSerial.serialName})}" class="btn btn-default" role="button">详情</a></p>
                     </div>
                 </div>

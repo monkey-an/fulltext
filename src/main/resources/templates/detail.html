@@ -23,7 +23,7 @@
                         <p class="row">
                             <span class="col-md-4"><label><strong>年份：</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentYear()}"></span></span>
                             <span class="col-md-4"><label><strong>页数：</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentTotalPage()}"></span></span>
-                            <span class="col-md-4"><label><strong>内容简介：</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentSummaryDesc()}"></span></span>
+                            <span class="col-md-4"><label><strong>内容简介：</strong></label><span th:utext="${boList.get(0).getDocumentInfo().getDocumentSummaryDesc()}"></span></span>
                         </p>
                         <p class="row">
                             <span class="col-md-4"><label><strong>ISBN：</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentIsbn()}"></span></span>

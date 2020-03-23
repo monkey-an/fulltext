@@ -44,6 +44,9 @@
                             <span class="label label-default">关键词：</span>
                             <span th:text="${documentDetail.getKeyWords()}"></span>
                         </div>
+                        <div  class="row" style="margin-top: 10px;" align="center">
+                            <img class="shadow-box" style="width: 40%;height: 40%;" alt="缩略图加载失败" th:src="'/getPdfPreview?documentIdInfo='+${documentIdStr}+'-'+${menuIdStr}">
+                        </div>
                     </div>
                     <div class="col-md-3">
                         <div class="thumbnail">

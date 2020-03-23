@@ -22,7 +22,7 @@ public class DocumentSerialBO {
 
     public String getDocumentSummaryDesc(){
         if(documentSummary.length()>48){
-            return documentSummary.substring(0,44)+"...";
+            return documentSummary.substring(0,44)+"<abbr title='"+documentSummary.substring(44)+"'>...</abbr>";
         }
         return documentSummary;
     }

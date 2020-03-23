@@ -44,7 +44,7 @@ public class DocumentInfo {
 
     public String getDocumentSummaryDesc(){
         if(documentSummary.length()>60){
-            return documentSummary.substring(0,57)+"...";
+            return documentSummary.substring(0,57)+"<abbr title='"+documentSummary.substring(57)+"'>...</abbr>";
         }
         return documentSummary;
     }
