@@ -42,8 +42,11 @@ public class DocumentSerialDetailBO {
             boolean hasSub = menuNode.getSubNodeList() != null && menuNode.getSubNodeList().size() > 0;
 
             sb.append("<p selfMenu='"+menuNode.getNode().getId()+"' parentMenu='"+parent+"'><span class='glyphicon glyphicon-" + (hasSub ? minusClass : tagsClass) + " col-md-offset-" + (level * 1) + "'>  "
-                        + (hasSub ? menuNode.getNode().getMenuName()+"------------------------"+menuNode.getNode().getMenuPage() : "<a href='downLoadPage?menuId="+menuNode.getNode().getId()+"'>"+menuNode.getNode().getMenuName()+"------------------------"+menuNode.getNode().getMenuPage()+"</a>") +
-                        "</span></p>");
+                        + (hasSub ?
+                                menuNode.getNode().getMenuName() :
+                                "<a href='downLoadPage?menuId="+menuNode.getNode().getId()+"'>"+menuNode.getNode().getMenuName()+"</a>") +
+                        "</span>" +"<span style='float:right;'>"+menuNode.getNode().getMenuPage()+"</span>"+
+                    "</p>");
             if (hasSub) {
                 ++level;
                 for (DocumentMenuNode documentMenuNode : menuNode.getSubNodeList()) {

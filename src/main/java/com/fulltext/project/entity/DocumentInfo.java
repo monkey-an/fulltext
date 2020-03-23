@@ -41,4 +41,11 @@ public class DocumentInfo {
     private Integer status;
     private Date createTime;
     private Date updateTime;
+
+    public String getDocumentSummaryDesc(){
+        if(documentSummary.length()>15){
+            return documentSummary.substring(0,12)+"<abbr title='"+documentSummary.substring(12)+"'>...</abbr>";
+        }
+        return documentSummary;
+    }
 }

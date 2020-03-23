@@ -287,19 +287,19 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
 
         switch (searchValue){
             case "全文":
-                docBeanList = elasticsearchService.findByBody(searchWords);
+                docBeanList = elasticsearchService.matchQuery(searchWords,"body");
                 break;
             case "标题":
-                docBeanList = elasticsearchService.findByTitle(searchWords);
+                docBeanList = elasticsearchService.matchQuery(searchWords,"title");
                 break;
             case "关键字":
-                docBeanList = elasticsearchService.findByKeyWords(searchWords);
+                docBeanList = elasticsearchService.matchQuery(searchWords,"keyWords");
                 break;
             case "第一作者":
-                docBeanList = elasticsearchService.findByAuthor(searchWords);
+                docBeanList = elasticsearchService.matchQuery(searchWords,"author");
                 break;
             case "第二作者":
-                docBeanList = elasticsearchService.findByMembers(searchWords);
+                docBeanList = elasticsearchService.matchQuery(searchWords,"members");
                 break;
             default:
                 break;

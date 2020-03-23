@@ -52,7 +52,7 @@ public class CodeGenerator {
 //                "task_attachment","task_design","task_design_detail","task_id_seq",
 //                "user","user_role","work_group");
 //        genCode("task","task_form_html","task_detail","task_attachment");
-        genCode("notice_flow");
+        genCode("notice_attachment");
         //genCodeByCustomModelName("输入表名","输入自定义Model名称");
     }
 

@@ -252,6 +252,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> selectByApprovalUserid(Long id) {
         List<Long> taskIdList = taskDetailService.selectTaskIdByOperUserId(id);
+        if(taskIdList==null || taskIdList.size()==0){
+            return null;
+        }
         List<Task> taskList = selectTaskListByTaskIdList(taskIdList);
         return taskList;
     }
