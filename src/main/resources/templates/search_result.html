@@ -19,7 +19,7 @@
         <div class="col-md-6 col-md-offset-3">
 
             <div class="row" th:each="document : ${pageBean.getRows()}">
-                <p class="lead"><a href="#" th:text="${document.getDocumentName()}+'-'+${document.getDocumentYear()}+'-'+${document.getDocumentMenuName()}"></a></p>
+                <p class="lead"><a th:href="'/downLoadPage?documentId='+${document.getDocumentId()}+'&menuId='+${document.getMenuId()}" th:text="${document.getDocumentName()}+'-'+${document.getDocumentYear()}+'-'+${document.getDocumentMenuName()}"></a></p>
                 <p class="text-success" th:utext="${document.getPublisherDesc()}"></p>
                 <p th:text="${document.getSummaryDesc()}"></p>
                 <p th:text="${document.getKeyWords()}"></p>

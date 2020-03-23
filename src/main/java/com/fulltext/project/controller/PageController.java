@@ -183,13 +183,17 @@ public class PageController {
         String menuIdStr = "";
         DocumentMenu documentMenu = null;
 
-        if (paramMap.containsKey("documentId")) {
-            documentIdStr = paramMap.get("documentId")[0];
-        } else if (paramMap.containsKey("menuId")) {
+        documentIdStr = paramMap.get("documentId")[0];
+
+        if (paramMap.containsKey("menuId")) {
             menuIdStr = paramMap.get("menuId")[0];
-            documentMenu = documentMenuService.selectDocumentMenuById(Long.parseLong(menuIdStr));
-            if (documentMenu != null) {
-                documentIdStr = documentMenu.getDocumentId() + "";
+            if("null".equals(menuIdStr)){
+                menuIdStr = "";
+            }else {
+                documentMenu = documentMenuService.selectDocumentMenuById(Long.parseLong(menuIdStr));
+                if (documentMenu != null) {
+                    documentIdStr = documentMenu.getDocumentId() + "";
+                }
             }
         }
 

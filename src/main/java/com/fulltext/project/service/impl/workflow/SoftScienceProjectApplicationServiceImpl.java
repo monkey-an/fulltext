@@ -141,30 +141,41 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
 
         stepSixNode.setNextFlow(stepSevenNode);
 
-        List<String> stepEightAttachList = new ArrayList<>();
-        stepEightAttachList.add("结题材料电子版");
-        stepEightAttachList.add("结题材料纸质版扫描件");
-
         WorkFlowNode stepEightNode = WorkFlowNode.builder()
                 .flowName(rootNode.getFlowName())
                 .flowNo("1-8")
-                .nodeName("报送研究成果")
-                .needApproval(false)
-                .attachmentNameList(stepEightAttachList)
+                .nodeName("专家结果评估")
+                .needApproval(true)
+                .approvalRole("soft-office-member")
                 .build();
 
         stepSevenNode.setNextFlow(stepEightNode);
 
+
+        List<String> stepNineAttachList = new ArrayList<>();
+        stepNineAttachList.add("结题材料电子版");
+        stepNineAttachList.add("结题材料纸质版扫描件");
+
         WorkFlowNode stepNineNode = WorkFlowNode.builder()
                 .flowName(rootNode.getFlowName())
                 .flowNo("1-9")
-                .nodeName("专家复审")
-                .needApproval(true)
-                .approvalRole("soft-office-expert")
-                .formNo("form-1-9")
+                .nodeName("报送研究成果")
+                .needApproval(false)
+                .attachmentNameList(stepNineAttachList)
                 .build();
 
         stepEightNode.setNextFlow(stepNineNode);
+
+        WorkFlowNode stepTenNode = WorkFlowNode.builder()
+                .flowName(rootNode.getFlowName())
+                .flowNo("1-10")
+                .nodeName("专家复审")
+                .needApproval(true)
+                .approvalRole("soft-office-expert")
+                .formNo("form-1-10")
+                .build();
+
+        stepNineNode.setNextFlow(stepTenNode);
 
 
     }
