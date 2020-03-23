@@ -21,22 +21,19 @@
                         <p class="lead"><strong th:text="${boList.get(0).getDocumentInfo().getDocumentName()}"></strong></p>
                         <blockquote><p>基本信息</p></blockquote>
                         <p class="row">
-                            <span class="col-md-4" th:text="'年份：'+${boList.get(0).getDocumentInfo().getDocumentTypeId()}"></span>
-                            <span class="col-md-4" th:text="'页数：'+${boList.get(0).getDocumentInfo().getDocumentTotalPage()}"></span>
-                            <span class="col-md-4" th:text="'内容简介：'+${boList.get(0).getDocumentInfo().getDocumentSummary()}"></span>
+                            <span class="col-md-4"><label><strong>年份：</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentYear()}"></span></span>
+                            <span class="col-md-4"><label><strong>页数：</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentTotalPage()}"></span></span>
+                            <span class="col-md-4"><label><strong>内容简介：</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentSummaryDesc()}"></span></span>
                         </p>
                         <p class="row">
-                            <span class="col-md-4" th:text="'ISBN：'+${boList.get(0).getDocumentInfo().getDocumentIsbn()}"></span>
-                            <span class="col-md-4" th:text="'字数（千字）：'+${boList.get(0).getDocumentInfo().getDocumentIsbn()}"></span>
-                            <span class="col-md-4" th:text="'主编单位：'+${boList.get(0).getDocumentInfo().getDocumentAuthor()}"></span>
+                            <span class="col-md-4"><label><strong>ISBN：</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentIsbn()}"></span></span>
+                            <span class="col-md-4"><label><strong>字数（千字）：</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentTotalCount()}"></span></span>
+                            <span class="col-md-4"><label><strong>主编单位：</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentPublisher()}"></span></span>
                         </p>
                         <p class="row">
-                            <span class="col-md-4" th:text="'人民币定价（元）：¥'+${boList.get(0).getDocumentInfo().getDocumentPrice()}"></span>
-                            <span class="col-md-4" th:text="'出版者：'+${boList.get(0).getDocumentInfo().getDocumentAuthor()}"></span>
-                            <span class="col-md-4" th:text="'主题词：'+${boList.get(0).getDocumentInfo().getDocumentAuthor()}"></span>
-                        </p>
-                        <p class="row">
-                            <span class="col-md-4" th:text="'出版日期：'+${boList.get(0).getDocumentInfo().getDocumentIsbn()}"></span>
+                            <span class="col-md-4"><label><strong>人民币定价（元）：¥</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentPrice()}"></span></span>
+                            <span class="col-md-4"><label><strong>作者：</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentAuthor()}"></span></span>
+                            <span class="col-md-4"><label><strong>出版日期：</strong></label><span th:text="${boList.get(0).getDocumentInfo().getDocumentYear()}"></span></span>
                         </p>
                         <div class="row" style="padding-top: 30px;">
                             <ul class="nav nav-tabs" role="tablist">
@@ -56,14 +53,14 @@
                                             <a th:href="'#data-'+${bo.getDocumentInfo().getDocumentYear()}" role="tab" data-toggle="tab" th:text="${bo.getDocumentInfo().getDocumentYear()}"></a>
                                         </li>
                                     </ul>
-                                    <div class="tab-content vertical-tab-content col-md-9 col-md-offset-2"
+                                    <div class="tab-content vertical-tab-content col-md-11 col-md-offset-0"
                                          style="padding-top: 10px;">
                                         <div role="tabpanel" th:each="bo,boStat : ${boList}" th:id="'data-'+${bo.getDocumentInfo().getDocumentYear()}" th:class="${boStat.index==0}? 'tab-pane fade active in' : 'tab-pane fade'">
                                             <p style="border-bottom: 1px solid #1b66e6;" th:text="${bo.getDocumentInfo().getDocumentYear()}"></p>
                                             <p class="glyphicon glyphicon-minus"> <a th:href="'downLoadPage?documentId='+${bo.getDocumentInfo().getDocumentId()}+'&year='+${bo.getDocumentInfo().getDocumentYear()}" th:text="${bo.getDocumentInfo().getDocumentName()}"></a> </p>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <div class="col-md-10 col-md-offset-0" th:utext="${bo.createMenuHtml()}">
+                                                    <div class="col-md-12 col-md-offset-0" th:utext="${bo.createMenuHtml()}">
                                                     </div>
                                                 </div>
                                             </div>

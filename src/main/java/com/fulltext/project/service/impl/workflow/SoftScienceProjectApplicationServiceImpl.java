@@ -7,12 +7,8 @@ import com.fulltext.project.service.*;
 import com.fulltext.project.util.FileUploadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -254,7 +249,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
 
             //当前节点需要处理的附件，存起来
             if (!CollectionUtils.isEmpty(currentNode.getAttachmentNameList())) {
-                String filePath = ConstantValue.ATTACHMENT_FILE_PATH;
+                String filePath = ConstantValue.TASK_ATTACHMENT_FILE_PATH;
                 for (String attachName : currentNode.getAttachmentNameList()) {
                     MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
                     MultipartFile file = multipartRequest.getFile("attach-" + attachName);

@@ -20,7 +20,7 @@
 
             <div class="row" th:each="document : ${pageBean.getRows()}">
                 <p class="lead"><a href="#" th:text="${document.getDocumentName()}+'-'+${document.getDocumentYear()}+'-'+${document.getDocumentMenuName()}"></a></p>
-                <p class="text-success" th:text="${document.getPublisherDesc()}"></p>
+                <p class="text-success" th:utext="${document.getPublisherDesc()}"></p>
                 <p th:text="${document.getSummaryDesc()}"></p>
                 <p th:text="${document.getKeyWords()}"></p>
                 <p class="text-right">下载频次 3</p>

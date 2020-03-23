@@ -66,6 +66,9 @@ public class PageController {
     private NoticeFlowService noticeFlowService;
 
     @Autowired
+    private NoticeAttachmentService noticeAttachmentService;
+
+    @Autowired
     private ElasticsearchService elasticsearchService;
 
     @RequestMapping("")
@@ -83,25 +86,72 @@ public class PageController {
         model.addAttribute("user", user);
         model.addAttribute("userRole", userRole);
 
-        List<NoticeFlow> noticeFlowList = null;
-        List<Notice> noticeList = null;
-        if(user!=null) {
-            noticeFlowList = noticeFlowService.selectNoticeFlowByTargetUserId(user.getId());
-            if(!CollectionUtils.isEmpty(noticeFlowList)){
-                List<Long> noticeIdList = noticeFlowList.stream().map(NoticeFlow::getNoticeId).collect(Collectors.toList());
-                noticeList = noticeService.selectNoticeListByIdList(noticeIdList);
-            }
-        }else{
-            noticeList = noticeService.selectNoticeInnerOneMonth();
+        List<Notice> noticeList = noticeService.selectNoticeInnerOneMonth();
+
+        if(user==null || (userRole !=null && userRole.getRoleId().equals(3))){
+            //过滤掉只能内部看的
+            noticeList = noticeList.stream().filter(notice -> !notice.getNoticeType().equals(1)).collect(Collectors.toList());
         }
 
-        if(noticeList!=null && noticeList.size()>6){
-            noticeList = noticeList.subList(0,6);
+        if(noticeList != null && noticeList.size()>0) {
+            model.addAttribute("noticeList", noticeList);
         }
-
-        model.addAttribute("noticeList",noticeList);
 
         return "hello";
+    }
+
+    @RequestMapping("/noticeDetail")
+    public String noticeDetail(HttpServletRequest request,Model model){
+        User user = (User)request.getSession().getAttribute(ConstantValue.USER_SESSION_KEY);
+        UserRole userRole = (UserRole)request.getSession().getAttribute(ConstantValue.USER_ROLE_SESSION_KEY);
+
+        boolean ifInnerUser = userRole!=null && !userRole.getRoleId().equals(3);
+
+        Long noticeId = Long.parseLong(request.getParameter("noticeId"));
+
+        Notice notice = noticeService.selectNoticeById(noticeId);
+
+        if(!ifInnerUser && notice.getNoticeType().equals(1)){
+            //无权限查看
+        }else {
+            model.addAttribute("notice", notice);
+
+            List<NoticeAttachment> attachmentList = noticeAttachmentService.selectNoticeAttachmentByNoticeId(noticeId);
+            if(attachmentList!=null && attachmentList.size()>0){
+                model.addAttribute("attachmentList", attachmentList);
+            }
+        }
+
+        return "notice_detail";
+    }
+
+    @RequestMapping("noticeAttachmentDownload")
+    @ResponseBody
+    public void noticeAttachmentDownload(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        User user = (User)request.getSession().getAttribute(ConstantValue.USER_SESSION_KEY);
+        UserRole userRole = (UserRole)request.getSession().getAttribute(ConstantValue.USER_ROLE_SESSION_KEY);
+        boolean ifInnerUser = userRole!=null && !userRole.getRoleId().equals(3);
+
+        Long attachmentId = Long.parseLong(request.getParameter("attachmentId"));
+
+        NoticeAttachment noticeAttachment = noticeAttachmentService.selectNoticeAttachmentById(attachmentId);
+        Notice notice = noticeService.selectNoticeById(noticeAttachment.getNoticeId());
+
+        if(!ifInnerUser && notice.getNoticeType().equals(1)){
+            //无权限下载
+        }else{
+            String filePath = noticeAttachment.getAttachmentUrl();
+            String fileName = filePath.substring(filePath.lastIndexOf("/")+1);
+            String type = new MimetypesFileTypeMap().getContentType(filePath);
+            // 设置contenttype，即告诉客户端所发送的数据属于什么类型
+            response.setHeader("Content-type",type);
+            // 设置编码
+            String realFileName = new String(fileName.getBytes("utf-8"), "iso-8859-1");
+            // 设置扩展头，当Content-Type 的类型为要下载的类型时 , 这个信息头会告诉浏览器这个文件的名字和类型。
+            response.setHeader("Content-Disposition", "attachment;filename=" + realFileName);
+            FileUtil.download(filePath, response);
+        }
+        return ;
     }
 
     @RequestMapping("detail")

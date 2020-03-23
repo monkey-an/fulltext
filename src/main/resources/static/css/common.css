@@ -11,7 +11,7 @@ body{
 }
 
 .background{
-    height: 600px;
+    /*height: 600px;*/
     background: url("/static/img/banner.jpg") repeat-x,repeat-y center top #1b66e6;
 }
 

@@ -41,4 +41,11 @@ public class DocumentInfo {
     private Integer status;
     private Date createTime;
     private Date updateTime;
+
+    public String getDocumentSummaryDesc(){
+        if(documentSummary.length()>60){
+            return documentSummary.substring(0,57)+"...";
+        }
+        return documentSummary;
+    }
 }

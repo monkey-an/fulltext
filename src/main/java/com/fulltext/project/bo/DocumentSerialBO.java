@@ -19,4 +19,11 @@ public class DocumentSerialBO {
     private String documentDesc;
     private String documentSummary;
     private String serialName;
+
+    public String getDocumentSummaryDesc(){
+        if(documentSummary.length()>48){
+            return documentSummary.substring(0,44)+"...";
+        }
+        return documentSummary;
+    }
 }

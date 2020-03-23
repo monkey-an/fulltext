@@ -35,20 +35,20 @@ public class DocumentDetail {
     public String getPublisherDesc(){
         StringBuilder sb = new StringBuilder();
         if(StringUtils.isNotEmpty(author)){
-            sb.append(author+";  ");
+            sb.append(author+";&nbsp;&nbsp&nbsp&nbsp;&nbsp;&nbsp&nbsp&nbsp;");
         }
         if(StringUtils.isNotEmpty(members)){
-            sb.append(members+";  ");
+            sb.append(members+";&nbsp;&nbsp&nbsp&nbsp;&nbsp;&nbsp&nbsp&nbsp;");
         }
         if(StringUtils.isNotEmpty(documentPublisher)){
-            sb.append(documentPublisher+";  ");
+            sb.append(documentPublisher+";&nbsp;&nbsp&nbsp&nbsp;&nbsp;&nbsp&nbsp&nbsp;");
         }
         if(StringUtils.isNotEmpty(completionUnit)){
-            sb.append(completionUnit+";  ");
+            sb.append(completionUnit+";&nbsp;&nbsp&nbsp&nbsp;&nbsp;&nbsp&nbsp&nbsp;");
         }
 
-        if(sb.length()>50){
-            return sb.toString().substring(0,47)+"...";
+        if(sb.length()>250){
+            return sb.toString().substring(0,247)+"...";
         }else{
             return sb.toString();
         }

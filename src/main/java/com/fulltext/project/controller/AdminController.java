@@ -2,10 +2,14 @@ package com.fulltext.project.controller;
 
 import com.fulltext.project.bo.DocumentSearchBO;
 import com.fulltext.project.bo.PageBean;
+import com.fulltext.project.constants.ConstantValue;
+import com.fulltext.project.entity.TaskAttachment;
 import com.fulltext.project.entity.User;
 import com.fulltext.project.service.DocumentInfoService;
+import com.fulltext.project.service.NoticeService;
 import com.fulltext.project.service.UserRoleService;
 import com.fulltext.project.service.UserService;
+import com.fulltext.project.util.FileUploadUtil;
 import com.fulltext.project.util.PageVoUtils;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +19,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +47,9 @@ public class AdminController {
 
     @Autowired
     private DocumentInfoService documentInfoService;
+
+    @Autowired
+    private NoticeService noticeService;
 
 
     @RequestMapping("")
@@ -89,6 +99,8 @@ public class AdminController {
         }
         PageInfo<User> pageInfo = userService.selectAllUserByPaging(pageNo, pageSize, nickName, email);
         PageBean<User> pageBean = PageVoUtils.convertTopageVo(pageInfo);
+        pageBean.setPageSize(pageSize);
+        pageBean.setCurrentPage(pageNo);
         return pageBean;
     }
 
@@ -106,6 +118,8 @@ public class AdminController {
         }
         PageInfo<DocumentSearchBO> pageInfo = documentInfoService.selectSearchDocumentByPaging(pageNo, pageSize, documentName, year);
         PageBean<DocumentSearchBO> pageBean = PageVoUtils.convertTopageVo(pageInfo);
+        pageBean.setPageSize(pageSize);
+        pageBean.setCurrentPage(pageNo);
         return pageBean;
     }
 
@@ -133,6 +147,12 @@ public class AdminController {
     @ResponseBody
     public String menuAdd(HttpServletRequest request) {
         return documentInfoService.addMenu(request) ? "SUCCESS" : "ERROR";
+    }
+
+    @RequestMapping("/notice_add")
+    @ResponseBody
+    public String noticeAdd(HttpServletRequest request){
+        return noticeService.addNotice(request);
     }
 
 }
