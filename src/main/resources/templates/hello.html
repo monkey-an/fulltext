@@ -29,11 +29,12 @@
                     <div class="media-body">
                         <h5 class="media-heading" ><a style="color: #fff" th:href="@{/noticeDetail(noticeId=${notice.getId()})}" target="_blank" th:text="${notice.getNoticeTitle()}"></a></h5>
                         <p class="small" th:text="${notice.getNoticeDesc()}"></p>
+                        <hr style="height:1px;border:none;border-top:1px dashed #ebebeb;"/>
                     </div>
                 </div>
                 <div style="text-align: center;" th:if="${noticeList==null}">
-                <img src="/static/img/emptytask.png" style="margin: 0 auto;">
-                <p style="margin-top:25px;color: gray">暂无新闻</p>
+                    <img src="/static/img/emptytask.png" style="margin: 0 auto;">
+                    <p style="margin-top:25px;color: gray">暂无新闻</p>
                 </div>
             </div>
         </div>
