@@ -134,7 +134,7 @@ public class AdminController {
     public String createDocumentSearch(@RequestParam(value = "document_menu_id", required = true) String documentMenuId,
                                        @RequestParam(value = "content", required = true) String content) {
         documentInfoService.createDocumentSearch(documentMenuId, content);
-        return "";
+        return "SUCCESS";
     }
 
     @RequestMapping("/document_add")
