@@ -243,14 +243,10 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
         }
 
         List<String> members = new ArrayList<>();
-        members.add("董淑广");
-        members.add("韩峰");
-        members.add("孙燕");
-        members.add("吴承恩");
 
         List<String> keyWords = null;
         if(StringUtils.isNotEmpty(documentDetail.getKeyWords())) {
-            keyWords = new ArrayList<>(Arrays.asList(documentDetail.getKeyWords().split(",")));
+            keyWords = new ArrayList<>(Arrays.asList(documentDetail.getKeyWords().split(";")));
         }else{
             keyWords = new ArrayList<>();
         }
@@ -267,7 +263,7 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
 
         List<String> resultKeyWordList = elasticsearchService.saveReturnKeywords(docBean, 10);
         StringBuilder sb = new StringBuilder();
-        resultKeyWordList.forEach(keyWord -> sb.append(keyWord + ","));
+        resultKeyWordList.forEach(keyWord -> sb.append(keyWord + ";"));
         String keyWordStr = sb.substring(0, sb.length() - 1);
         documentDetail.setKeyWords(keyWordStr);
 

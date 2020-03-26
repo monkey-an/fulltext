@@ -263,7 +263,9 @@ public class PageController {
 
         PageInfo<DocumentDetail> pageInfo = documentInfoService.selectUserSearchDocumentByPaging(pageNo, pageSize, searchKey, searchValue, searchWords);
         PageBean<DocumentDetail> pageBean = PageVoUtils.convertTopageVo(pageInfo);
-        documentInfoService.addDocumentInfo(pageBean.getRows());
+        if(pageBean!=null && pageBean.getRows()!=null) {
+            documentInfoService.addDocumentInfo(pageBean.getRows());
+        }
         pageBean.setCurrentPage(pageNo);
         pageBean.setPageSize(pageSize);
 

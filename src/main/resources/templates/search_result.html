@@ -16,7 +16,7 @@
     <input type="hidden" id="searchValueInput" th:value="${searchValue}">
 
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-6 col-md-offset-3" th:unless="${pageBean.getRows()==null}">
 
             <div class="row" th:each="document : ${pageBean.getRows()}">
                 <p class="lead"><a th:href="'/downLoadPage?documentId='+${document.getDocumentId()}+'&menuId='+${document.getMenuId()}" th:text="${document.getDocumentName()}+'-'+${document.getDocumentYear()}+'-'+${document.getDocumentMenuName()}"></a></p>
@@ -35,6 +35,11 @@
                 <ul id="example"></ul>
             </div>
         </div>
+    </div>
+
+    <div class="" style="text-align: center;" th:if="${pageBean.getRows()==null}">
+        <img src="/static/img/emptytask.png" style="margin: 0 auto;">
+        <p style="margin-top:25px;color: gray">暂无数据</p>
     </div>
 
     <div th:replace="common/page_footer :: page_footer"></div>
