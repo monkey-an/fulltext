@@ -6,14 +6,11 @@ import com.fulltext.project.elastic.service.ElasticsearchService;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.NotionalTokenizer;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
-import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
@@ -21,9 +18,9 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -141,6 +138,11 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
         List<DocBean> rs = elasticsearchRestTemplate.queryForList(searchQuery, DocBean.class);
 
         return rs;
+    }
+
+    @Override
+    public Map<String, Object> getMapping() {
+        return elasticsearchRestTemplate.getMapping(DocBean.class);
     }
 
     @Override

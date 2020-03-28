@@ -1,10 +1,10 @@
 package com.fulltext.project.elastic.service;
 
 import com.fulltext.project.elastic.entity.DocBean;
-import org.springframework.data.domain.Page;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Description
@@ -39,4 +39,5 @@ public interface ElasticsearchService {
     List<String> extractKeyword(String content, int topk);
     List<String> saveReturnKeywords(DocBean docBean, int topK);
     List<DocBean> matchQuery(String query, String fields);
+    Map<String, Object> getMapping();
 }

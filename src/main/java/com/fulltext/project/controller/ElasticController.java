@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tiefanding on 2020/3/14.
@@ -65,5 +66,11 @@ public class ElasticController {
                                     @RequestParam(value = "field", defaultValue = "title") String field){
         return elasticService.matchQuery(query, field);
     }
+
+    @GetMapping("/get_mapping")
+    public Map<String, Object> getMapping(){
+        return elasticService.getMapping();
+    }
+
 
 }
