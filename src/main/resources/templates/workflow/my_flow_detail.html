@@ -23,6 +23,7 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="row">
                 <p th:text="${currentNode.getFlowName()}"></p>
+                <p th:text="'流程编号：'+${task.getTaskId()}"></p>
                 <p th:text="'提交者：'+${task.getCommitUserName()}"></p>
                 <p th:text="'当前节点：'+${task.getCurrentNodeName()}"></p>
                 <p th:text="'当前状态：'+${task.getStatusDesc()}"></p>
@@ -32,6 +33,12 @@
                         <span class="glyphicon glyphicon-arrow-right"></span>
                     </span>
                     <span style="color: red" th:text="${task.getStatusDesc()}"></span>
+                </p>
+                <p th:unless="${waitingApprovalUserList==null}">
+                    待审核人：
+                    <span th:each="approvalUser : ${waitingApprovalUserList}">
+                        <span th:text="${approvalUser}+' '"></span>
+                    </span>
                 </p>
                 <div th:unless="${taskAttachmentList==null}">
                     <p>附件：</p>

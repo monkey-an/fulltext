@@ -1,6 +1,7 @@
 package com.fulltext.project.service;
 import com.fulltext.project.entity.User;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface UserService {
     User login(String userName,String password);
 
     PageInfo<User> selectAllUserByPaging(int pageNo, int pageSize,String nickName,String email);
+
+    User selectUserByRealName(String userName);
 }

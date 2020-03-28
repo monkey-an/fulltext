@@ -102,4 +102,10 @@
     from user
     where id in <foreach collection="idList" item="id" open="(" close=")" separator=",">#{id}</foreach>
   </select>
+  <select id="selectUserByRealName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_col"></include>
+    from user
+    where real_name=#{userName} limit 1;
+  </select>
 </mapper>

@@ -13,12 +13,14 @@
     <div class="row background">
         <div class="row col-md-8" style="margin-top: 50px;">
             <div th:each="documentSerial : ${documentSerialBOList}" class="col-md-3 col-md-offset-1">
+                <div class="caption" style="color:#fff;text-align:center;">
+                    <h2 th:text="${documentSerial.serialName}"></h2>
+                </div>
                 <div class="thumbnail">
-                    <img class="shadow-box" style="width: 300px;height: 300px" th:src="${documentSerial.documentImagePath}" alt="...">
-                    <div class="caption">
-                        <h3 th:text="${documentSerial.serialName}"></h3>
+                    <img  style="width: 280px;height: 280px" th:src="${documentSerial.documentImagePath}" alt="...">
+                    <div class="caption" style="margin-top: 15px;">
                         <p th:utext="${documentSerial.getDocumentSummaryDesc()}"></p>
-                        <p><a th:href="@{/detail(serial=${documentSerial.serialName})}" class="btn btn-default" role="button">详情</a></p>
+                        <p style="text-align:right"><a th:href="@{/detail(serial=${documentSerial.serialName})}" class="btn btn-default" role="button">详情</a></p>
                     </div>
                 </div>
             </div>
@@ -29,11 +31,12 @@
                     <div class="media-body">
                         <h5 class="media-heading" ><a style="color: #fff" th:href="@{/noticeDetail(noticeId=${notice.getId()})}" target="_blank" th:text="${notice.getNoticeTitle()}"></a></h5>
                         <p class="small" th:text="${notice.getNoticeDesc()}"></p>
+                        <hr style="height:1px;border:none;border-top:1px dashed #ebebeb;"/>
                     </div>
                 </div>
                 <div style="text-align: center;" th:if="${noticeList==null}">
-                <img src="/static/img/emptytask.png" style="margin: 0 auto;">
-                <p style="margin-top:25px;color: gray">暂无新闻</p>
+                    <img src="/static/img/emptytask.png" style="margin: 0 auto;">
+                    <p style="margin-top:25px;color: gray">暂无新闻</p>
                 </div>
             </div>
         </div>

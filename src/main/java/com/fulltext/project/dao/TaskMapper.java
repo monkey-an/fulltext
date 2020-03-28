@@ -28,4 +28,6 @@ public interface TaskMapper {
     List<Task> selectByCurrentUserId(@Param("userId")String userId);
 
     List<Task> selectTaskListByTaskIdList(@Param("taskIdList") List<Long> taskIdList);
+
+    List<Long> selectAllTaskId();
 }

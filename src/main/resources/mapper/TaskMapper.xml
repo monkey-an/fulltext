@@ -87,4 +87,8 @@
         from task
         where task_id in <foreach collection="taskIdList" item="taskId" open="(" close=")" separator=",">#{taskId}</foreach>
     </select>
+    <select id="selectAllTaskId" resultType="java.lang.Long">
+        select task_id
+        from task;
+    </select>
 </mapper>

@@ -1,17 +1,35 @@
 $("#save").on("click",function() {
+    var approvalResult = $('input:radio[name=drone]:checked').val();
+    var approvalMsg = $('input[name=approvalMsg]').val();
+
     $.each($("td input"), function (i, val) {
-        var temp = $(val).val();
-        $(val).parent().html(temp);
+        if($(val).prop("name")!='drone' && $(val).prop("name")!='approvalMsg') {
+            var temp = $(val).val();
+            $(val).parent().html(temp);
+        }
+        if($(val).prop("name")=='approvalMsg'){
+            $(val).parent().html(approvalResult+" "+approvalMsg);
+        }
     });
+
+    var resultScore = 0;
+    $.each($("td[type='need-accounting']"), function (i, val) {
+        resultScore += parseInt($(val).html());
+    });
+    $("#result-score").html(resultScore);
+
     $.each($("td textarea"), function (i, val) {
         var temp = $(val).val().replace(/\n/g,"<br/>");
         $(val).parent().html(temp);
     });
     $("table button").remove();
+
+
+
     $("#commit").removeAttr("disabled");
 })
 
-$(".newForm td").on("dblclick",function() {
+$(".newForm td").on("click",function() {
     if($(this).html()=='') {
         var inputHtml = "<input type='text' style='width: 95%;'/>";
         var inputAera = "<textarea style='width: 95%;' rows='8'>";
@@ -23,14 +41,6 @@ $(".newForm td").on("dblclick",function() {
             $(this).find("textarea").focus();
         }
     }
-})
-
-$("#agreey").on("click",function(){
-    $(this).parent().html("同意");
-})
-
-$("#unagreey").on("click",function(){
-    $(this).parent().html("<input type='text' class='form-control' placeholder='请输入指导意见' value='不同意，请'/>");
 })
 
 $("#commit").on("click",function(){
