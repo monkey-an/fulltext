@@ -69,8 +69,25 @@ public class ElasticController {
 
     @GetMapping("/get_mapping")
     public Map<String, Object> getMapping(){
-        return elasticService.getMapping();
+        String indexName = "book";
+        String type = "_doc";
+        return elasticService.getMapping(indexName, type);
     }
 
+    @GetMapping("/delete_index")
+    public Boolean deleteIndex(@RequestParam(value = "index", defaultValue = "book")  String index_name){
+        return elasticService.deleteIndex(index_name);
+    }
+
+    @GetMapping("/create_index")
+    public Boolean createIndex(){
+        return elasticService.createIndex();
+    }
+
+
+    @GetMapping("/put_mapping")
+    public Boolean putMapping(){
+        return elasticService.putMapping();
+    }
 
 }

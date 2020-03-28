@@ -15,9 +15,9 @@ import java.util.Map;
  * @author anlu.
  */
 public interface ElasticsearchService {
-    void createIndex();
+    Boolean createIndex();
 
-    void deleteIndex(String index);
+    boolean deleteIndex(String index);
 
     void save(DocBean docBean);
 
@@ -39,5 +39,6 @@ public interface ElasticsearchService {
     List<String> extractKeyword(String content, int topk);
     List<String> saveReturnKeywords(DocBean docBean, int topK);
     List<DocBean> matchQuery(String query, String fields);
-    Map<String, Object> getMapping();
+    Map<String, Object> getMapping(String indexName, String type);
+    Boolean putMapping();
 }

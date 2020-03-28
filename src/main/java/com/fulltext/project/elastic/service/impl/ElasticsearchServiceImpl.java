@@ -43,13 +43,13 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
     private Pageable pageable = PageRequest.of(0,10);
 
     @Override
-    public void createIndex() {
-        elasticsearchRestTemplate.createIndex(DocBean.class);
+    public Boolean createIndex() {
+        return elasticsearchRestTemplate.createIndex(DocBean.class);
     }
 
     @Override
-    public void deleteIndex(String index) {
-        elasticsearchRestTemplate.deleteIndex(index);
+    public boolean deleteIndex(String index) {
+        return elasticsearchRestTemplate.deleteIndex(index);
     }
 
     @Override
@@ -141,8 +141,13 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
     }
 
     @Override
-    public Map<String, Object> getMapping() {
-        return elasticsearchRestTemplate.getMapping(DocBean.class);
+    public Map<String, Object> getMapping(String indexName, String type) {
+        return elasticsearchRestTemplate.getMapping(indexName, type);
+    }
+
+    @Override
+    public Boolean putMapping() {
+        return elasticsearchRestTemplate.putMapping(DocBean.class);
     }
 
     @Override
