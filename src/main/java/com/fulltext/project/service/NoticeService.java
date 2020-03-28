@@ -1,5 +1,7 @@
 package com.fulltext.project.service;
 import com.fulltext.project.entity.Notice;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -12,4 +14,6 @@ public interface NoticeService {
     int update(Notice entity);
 
     List<Notice> selectNoticeInnerOneMonth();
+
+    String addNotice(HttpServletRequest request);
 }

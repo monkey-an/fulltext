@@ -32,17 +32,20 @@
                 </div>
                 <div class="row">
                     <div class="col-md-9">
-                        <div class="row">
-                            <span class="label label-default">摘要：</span>
-                            <span th:text="${documentDetail.getSummary()}"></span>
-                        </div>
                         <div class="row" style="margin-top: 10px;">
                             <span class="label label-default">简介：</span>
                             <span th:text="${documentInfo.getDocumentDesc()}"></span>
                         </div>
                         <div class="row" style="margin-top: 10px;">
+                            <span class="label label-default">摘要：</span>
+                            <span th:text="${documentDetail.getSummary()}"></span>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
                             <span class="label label-default">关键词：</span>
                             <span th:text="${documentDetail.getKeyWords()}"></span>
+                        </div>
+                        <div  class="row" style="margin-top: 10px;" align="center">
+                            <img class="shadow-box" style="width: 40%;height: 40%;" alt="缩略图加载失败" th:src="'/getPdfPreview?documentIdInfo='+${documentIdStr}+'-'+${menuIdStr}">
                         </div>
                     </div>
                     <div class="col-md-3">
