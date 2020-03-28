@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tiefanding on 2020/3/14.
@@ -64,6 +65,23 @@ public class ElasticController {
     public List<DocBean> matchQuery(@RequestParam(value = "query", defaultValue = "改革")  String query,
                                     @RequestParam(value = "field", defaultValue = "title") String field){
         return elasticService.matchQuery(query, field);
+    }
+
+
+    @GetMapping("/delete_index")
+    public Boolean deleteIndex(@RequestParam(value = "index", defaultValue = "book")  String index_name){
+        return elasticService.deleteIndex(index_name);
+    }
+
+    @GetMapping("/create_index")
+    public Boolean createIndex(){
+        return elasticService.createIndex();
+    }
+
+
+    @GetMapping("/put_mapping")
+    public Boolean putMapping(){
+        return elasticService.putMapping();
     }
 
 }
