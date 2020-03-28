@@ -39,6 +39,5 @@ public interface ElasticsearchService {
     List<String> extractKeyword(String content, int topk);
     List<String> saveReturnKeywords(DocBean docBean, int topK);
     List<DocBean> matchQuery(String query, String fields);
-    Map<String, Object> getMapping(String indexName, String type);
     Boolean putMapping();
 }

@@ -67,12 +67,6 @@ public class ElasticController {
         return elasticService.matchQuery(query, field);
     }
 
-    @GetMapping("/get_mapping")
-    public Map<String, Object> getMapping(){
-        String indexName = "book";
-        String type = "_doc";
-        return elasticService.getMapping(indexName, type);
-    }
 
     @GetMapping("/delete_index")
     public Boolean deleteIndex(@RequestParam(value = "index", defaultValue = "book")  String index_name){

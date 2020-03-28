@@ -140,10 +140,6 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
         return rs;
     }
 
-    @Override
-    public Map<String, Object> getMapping(String indexName, String type) {
-        return elasticsearchRestTemplate.getMapping(indexName, type);
-    }
 
     @Override
     public Boolean putMapping() {
