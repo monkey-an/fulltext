@@ -236,10 +236,16 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
         String[] menuInfoStrArr = documentMenuId.split("-");
         DocumentInfo documentInfo = documentInfoMapper.selectByDocumentId(Long.parseLong(menuInfoStrArr[0]));
         DocumentDetail documentDetail = null;
+        String title = "";
         if ("null".equals(menuInfoStrArr[1])) {
             documentDetail = documentDetailService.selectDocumentDetailByDocumentId(Long.parseLong(menuInfoStrArr[0]));
+            title = documentInfo.getDocumentName();
         } else {
             documentDetail = documentDetailService.selectDocumentDetailByDocumentAndMenuId(Long.parseLong(menuInfoStrArr[0]), Long.parseLong(menuInfoStrArr[1]));
+            DocumentMenu documentMenu = documentMenuService.selectDocumentMenuById(Long.parseLong(menuInfoStrArr[1]));
+            if(documentMenu!=null){
+                title = documentMenu.getMenuName();
+            }
         }
 
         List<String> members = new ArrayList<>();
@@ -258,7 +264,7 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
                 .businessId(documentMenuId)
                 .keyWords(keyWords)
                 .summary(documentDetail.getSummary())
-                .title(documentInfo.getDocumentName())
+                .title(title)
                 .build();
 
         List<String> resultKeyWordList = elasticsearchService.saveReturnKeywords(docBean, 10);
@@ -320,7 +326,7 @@ public class DocumentInfoServiceImpl implements DocumentInfoService {
             });
 
             PageHelper.startPage(pageNo, pageSize);
-            List<DocumentDetail> documentDetailList = documentDetailService.selectDocumentDetailByMenuIdOrDocumentId(new ArrayList<>(menuIdSet),new ArrayList<>(documentIdSet));
+            List<DocumentDetail> documentDetailList = documentDetailService.selectDocumentDetailByMenuIdOrDocumentId(new ArrayList<>(menuIdSet),null);
             PageInfo<DocumentDetail> info=new PageInfo<>(documentDetailList);
             return info;
         }
