@@ -29,17 +29,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional
 public class TaskServiceImpl implements TaskService {
-    private static final String approval_html_temp = "<table><tr>\n" +
-            "            <td rowspan=\"2\">%1$s意见</td>\n" +
-            "            <td colspan=\"4\" style=\"border-bottom-color: #fff;\">\n" +
-            "                <button type=\"button\" class=\"btn btn-success\" id=\"agreey\">同意</button>\n" +
-            "                <button type=\"button\" class=\"btn btn-success\" id=\"unagreey\">不同意</button>\n" +
-            "            </td>\n" +
-            "        </tr>\n" +
-            "        <tr>\n" +
-            "            <td colspan=\"4\" style=\"text-align: right;\">审核人：%2$s</td>\n" +
-            "        </tr></table>";
-
     @Resource
     private TaskMapper taskMapper;
 
@@ -54,6 +43,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private SoftScienceProjectApplicationServiceImpl softScienceProjectApplicationService;
+
+    @Autowired
+    private ReportSignApplicationServiceImpl reportSignApplicationService;
 
     @Autowired
     private TaskFormService taskFormService;
@@ -168,9 +160,9 @@ public class TaskServiceImpl implements TaskService {
                 TaskFormHtml taskFormHtml = taskFormHtmlList.get(0);
                 String html = taskFormHtml.getFormContent();
                 Document doc = Jsoup.parse(html);
-                String addHtml = String.format(approval_html_temp,currentNode.getNodeName(),user.getRealName());
+                String addHtml = String.format(getApprovalHtml(task.getTaskName()),currentNode.getNodeName(),user.getRealName());
                 Element table = doc.select("table tbody").first();
-                table.insertChildren(table.childNodeSize(),Jsoup.parse(addHtml).select("tr"));
+                table.insertChildren(table.childNodeSize()-1,Jsoup.parse(addHtml).select("tr"));
                 taskFormHtml.setFormContent(doc.select("table").first().outerHtml());
             }
         }
@@ -191,8 +183,45 @@ public class TaskServiceImpl implements TaskService {
             }
         }
 
+        if ("DOING".equals(task.getCurrentApprovalStatus())) {
+            //待审核人
+            List<TaskDetail> nowNodetaskDetailList = taskDetailService.selectTaskDetailByTaskIdAndOperNodeNo(task.getTaskId(), currentNode.getFlowNo());
+
+            if (nowNodetaskDetailList.stream().map(TaskDetail::getOperUserId).distinct().count() != (task.getCurrentApprovalUserCount())) {
+                List<String> tempApprovalUserList = new ArrayList<>();
+                tempApprovalUserList.addAll(Arrays.asList(task.getCurrentApprovalUserName().split(",")));
+
+                Iterator<String> iterator = tempApprovalUserList.iterator();
+                while (iterator.hasNext()) {
+                    String userName = iterator.next();
+                    if (nowNodetaskDetailList.stream().anyMatch(taskDetail -> userName.equals(taskDetail.getOperUserName()))) {
+                        iterator.remove();
+                    }
+                }
+
+                if (tempApprovalUserList.size() > 0) {
+                    model.addAttribute("waitingApprovalUserList", tempApprovalUserList);
+                }
+            }
+        }
+
         //返回success
         return "SUCCESS";
+    }
+
+    private String getApprovalHtml(String taskName) {
+        String result = "";
+        switch (taskName){
+            case "软科学课题申报":
+                result = SoftScienceProjectApplicationServiceImpl.approval_html_temp;
+                break;
+            case "签报":
+                result = ReportSignApplicationServiceImpl.approval_html_temp;
+                break;
+            default:
+                break;
+        }
+        return result;
     }
 
     @Override
@@ -243,6 +272,28 @@ public class TaskServiceImpl implements TaskService {
             taskFormHtmlList = taskFormHtmlList.subList(0, 1);
             //装进model
             model.addAttribute("taskFormHtmlList", taskFormHtmlList);
+        }
+
+        if ("DOING".equals(task.getCurrentApprovalStatus())) {
+            //待审核人
+            List<TaskDetail> nowNodetaskDetailList = taskDetailService.selectTaskDetailByTaskIdAndOperNodeNo(task.getTaskId(), currentNode.getFlowNo());
+
+            if (nowNodetaskDetailList.stream().map(TaskDetail::getOperUserId).distinct().count() != (task.getCurrentApprovalUserCount())) {
+                List<String> tempApprovalUserList = new ArrayList<>();
+                tempApprovalUserList.addAll(Arrays.asList(task.getCurrentApprovalUserName().split(",")));
+
+                Iterator<String> iterator = tempApprovalUserList.iterator();
+                while (iterator.hasNext()) {
+                    String userName = iterator.next();
+                    if (nowNodetaskDetailList.stream().anyMatch(taskDetail -> userName.equals(taskDetail.getOperUserName()))) {
+                        iterator.remove();
+                    }
+                }
+
+                if (tempApprovalUserList.size() > 0) {
+                    model.addAttribute("waitingApprovalUserList", tempApprovalUserList);
+                }
+            }
         }
 
         //返回success
@@ -310,16 +361,45 @@ public class TaskServiceImpl implements TaskService {
             model.addAttribute("taskFormHtmlList", taskFormHtmlList);
         }
 
+        if ("DOING".equals(task.getCurrentApprovalStatus())) {
+            //待审核人
+            List<TaskDetail> nowNodetaskDetailList = taskDetailService.selectTaskDetailByTaskIdAndOperNodeNo(task.getTaskId(), currentNode.getFlowNo());
+
+            if (nowNodetaskDetailList.stream().map(TaskDetail::getOperUserId).distinct().count() != (task.getCurrentApprovalUserCount())) {
+                List<String> tempApprovalUserList = new ArrayList<>();
+                tempApprovalUserList.addAll(Arrays.asList(task.getCurrentApprovalUserName().split(",")));
+
+                Iterator<String> iterator = tempApprovalUserList.iterator();
+                while (iterator.hasNext()) {
+                    String userName = iterator.next();
+                    if (nowNodetaskDetailList.stream().anyMatch(taskDetail -> userName.equals(taskDetail.getOperUserName()))) {
+                        iterator.remove();
+                    }
+                }
+
+                if (tempApprovalUserList.size() > 0) {
+                    model.addAttribute("waitingApprovalUserList", tempApprovalUserList);
+                }
+            }
+        }
+
         //返回success
         return "SUCCESS";
     }
 
+    @Override
+    public List<Long> selectAllTaskId() {
+        return taskMapper.selectAllTaskId();
+    }
 
     private WorkFlowNode getRootNode(String taskName) {
         WorkFlowServiceImpl workFlowService = null;
         switch (taskName){
             case "软科学课题申报":
                 workFlowService = softScienceProjectApplicationService;
+                break;
+            case "签报":
+                workFlowService = reportSignApplicationService;
                 break;
             default:
                 break;

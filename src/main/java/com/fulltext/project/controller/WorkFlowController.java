@@ -5,6 +5,7 @@ import com.fulltext.project.entity.Task;
 import com.fulltext.project.entity.User;
 import com.fulltext.project.service.TaskService;
 import com.fulltext.project.service.WorkFlowService;
+import com.fulltext.project.service.impl.workflow.ReportSignApplicationServiceImpl;
 import com.fulltext.project.service.impl.workflow.SoftScienceProjectApplicationServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -32,6 +33,9 @@ import java.util.List;
 public class WorkFlowController {
     @Autowired
     private SoftScienceProjectApplicationServiceImpl softScienceProjectApplicationService;
+
+    @Autowired
+    private ReportSignApplicationServiceImpl reportSignApplicationService;
 
     @Autowired
     private TaskService taskService;
@@ -64,23 +68,26 @@ public class WorkFlowController {
                     resultView = "workflow/mywork";
                     break;
                 case "work-subject-apply-input":
+                    //软科学课题申报
                     model.addAttribute("rootNode",softScienceProjectApplicationService.getRootNode());
                     resultView = "workflow/subject_apply";
                     break;
                 case "work-report-sign-manage":
+                    //签报
+                    model.addAttribute("rootNode",reportSignApplicationService.getRootNode());
                     resultView = "workflow/report_sign";
                     break;
                 case "work-office-paper-manage":
+                    //办文要报
                     resultView = "workflow/office_paper";
                     break;
                 case "work-dispatch-paper-manage":
+                    //发文纸
                     resultView = "workflow/dispatch_paper";
                     break;
                 case "work-report-create-manage":
+                    //发展报告年鉴
                     resultView = "workflow/report_create";
-                    break;
-                case "work-notify-create-manage":
-                    resultView = "workflow/notify_create";
                     break;
                 default:
                     break;
@@ -97,6 +104,9 @@ public class WorkFlowController {
         switch (flowName){
             case "软科学课题申报":
                 workFlowService = softScienceProjectApplicationService;
+                break;
+            case "签报":
+                workFlowService = reportSignApplicationService;
                 break;
             default:
                 break;

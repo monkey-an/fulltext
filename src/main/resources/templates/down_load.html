@@ -20,8 +20,6 @@
                 </div>
                 <div class="row" th:unless="${documentMenu==null}">
                     <h3 class="text-center" th:text="${documentMenu.getMenuName()}"></h3>
-                    <P class="text-center" th:text="${documentDetail.getAuthor()}"></P>
-                    <P class="text-center" th:text="${documentDetail.getCompletionUnit()}"></P>
                     <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
                 </div>
                 <div class="row" th:if="${documentMenu==null}">
@@ -33,8 +31,16 @@
                 <div class="row">
                     <div class="col-md-9">
                         <div class="row" style="margin-top: 10px;">
-                            <span class="label label-default">简介：</span>
-                            <span th:text="${documentInfo.getDocumentDesc()}"></span>
+                            <span class="label label-default">负责人：</span>
+                            <span th:text="${documentDetail.getAuthor()}"></span>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <span class="label label-default">课题组成员：</span>
+                            <span th:text="${documentDetail.getMembers()}"></span>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <span class="label label-default">课题单位：</span>
+                            <span th:text="${documentDetail.getCompletionUnit()}"></span>
                         </div>
                         <div class="row" style="margin-top: 10px;">
                             <span class="label label-default">摘要：</span>

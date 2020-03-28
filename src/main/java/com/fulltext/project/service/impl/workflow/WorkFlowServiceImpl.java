@@ -1,8 +1,9 @@
 package com.fulltext.project.service.impl.workflow;
 
 import com.fulltext.project.bo.WorkFlowNode;
-import com.fulltext.project.service.WorkFlowService;
+import com.fulltext.project.service.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -20,7 +21,33 @@ import java.util.Map;
 @Service
 @Slf4j
 public abstract class WorkFlowServiceImpl implements WorkFlowService {
+    @Autowired
+    protected TaskIdSeqService taskIdSeqService;
+
+    @Autowired
+    protected TaskService taskService;
+
+    @Autowired
+    protected TaskFormHtmlService taskFormHtmlService;
+
+    @Autowired
+    protected TaskDetailService taskDetailService;
+
+    @Autowired
+    protected TaskAttachmentService taskAttachmentService;
+
+    @Autowired
+    protected UserService userService;
+
+    @Autowired
+    protected UserRoleService userRoleService;
+
+    @Autowired
+    protected DepartmentService departmentService;
+
+
     protected static final String softScienceProjectApplication = "软科学课题申报";
+    protected static final String reportSignApplication = "签报";
 
     protected static final Map<String, WorkFlowNode> flowRootNodeMap = new HashMap<>();
 
@@ -34,6 +61,14 @@ public abstract class WorkFlowServiceImpl implements WorkFlowService {
                 .build();
 
         flowRootNodeMap.put(softScienceProjectApplication,softScienceRootNode);
+
+        WorkFlowNode reportSignRootNode = WorkFlowNode.builder()
+                .flowName(reportSignApplication)
+                .nodeName("提交申请")
+                .needApproval(false)
+                .build();
+
+        flowRootNodeMap.put(reportSignApplication,reportSignRootNode);
     }
 
     public abstract WorkFlowNode getRootNode();

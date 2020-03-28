@@ -6,6 +6,8 @@
         <result column="task_id" jdbcType="BIGINT" property="taskId"/>
         <result column="form_no" jdbcType="VARCHAR" property="formNo"/>
         <result column="form_content" jdbcType="VARCHAR" property="formContent"/>
+        <result column="node_name" jdbcType="VARCHAR" property="nodeName"/>
+        <result column="commit_user_name" jdbcType="VARCHAR" property="commitUserName"/>
         <result column="commit_user_id" jdbcType="INTEGER" property="commitUserId"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
@@ -18,9 +20,10 @@
         <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        insert into task_form_html (task_id, form_no, form_content,commit_user_id,
+        insert into task_form_html (task_id, form_no, form_content,commit_user_id, node_name, commit_user_name,
         create_time, update_time)
-        values (#{taskId,jdbcType=BIGINT}, #{formNo,jdbcType=VARCHAR}, #{formContent,jdbcType=VARCHAR}, #{commitUserId,jdbcType=INTEGER},
+        values (#{taskId,jdbcType=BIGINT}, #{formNo,jdbcType=VARCHAR}, #{formContent,jdbcType=VARCHAR}, #{commitUserId,jdbcType=INTEGER}, #{nodeName,jdbcType=VARCHAR},
+        #{commitUserName,jdbcType=VARCHAR},
         #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.fulltext.project.entity.TaskFormHtml">
@@ -29,27 +32,42 @@
         form_no = #{formNo,jdbcType=VARCHAR},
         form_content = #{formContent,jdbcType=VARCHAR},
         commit_user_id = #{commitUserId,jdbcType=INTEGER},
+        node_name = #{nodeName,jdbcType=VARCHAR},
+        commit_user_name = #{commitUserName,jdbcType=VARCHAR},
         create_time = #{createTime,jdbcType=TIMESTAMP},
         update_time = #{updateTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=BIGINT}
     </update>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select id, task_id, form_no, form_content, commit_user_id, create_time, update_time
+        select id, task_id, form_no, form_content, commit_user_id, node_name, commit_user_name, create_time, update_time
         from task_form_html
         where id = #{id,jdbcType=BIGINT}
     </select>
     <select id="selectAll" resultMap="BaseResultMap">
-        select id, task_id, form_no, form_content, commit_user_id, create_time, update_time
+        select id, task_id, form_no, form_content, commit_user_id, node_name, commit_user_name, create_time, update_time
         from task_form_html
     </select>
     <select id="selectByTaskIdAndFormNo" resultMap="BaseResultMap">
-        select id, task_id, form_no, form_content, commit_user_id, create_time, update_time
+        select id, task_id, form_no, form_content, commit_user_id, node_name, commit_user_name, create_time, update_time
         from task_form_html
         where task_id=#{taskId} and form_no=#{formNo} limit 1;
     </select>
     <select id="selectTaskFormHtmlByTaskId" resultMap="BaseResultMap">
-        select id, task_id, form_no, form_content, commit_user_id, create_time, update_time
+        select id, task_id, form_no, form_content, commit_user_id, node_name, commit_user_name, create_time, update_time
         from task_form_html
         where task_id=#{taskId} order by form_no;
+    </select>
+    <select id="selectByTaskIdList" resultMap="BaseResultMap">
+        select id, task_id, form_no, form_content, commit_user_id, node_name, commit_user_name, create_time, update_time
+        from task_form_html
+        <where>
+            node_name is not null
+            <if test="taskIdList != null" >
+                AND task_id in
+                <foreach collection="taskIdList" item="taskId" separator="," close=")" open="(">
+                    #{taskId}
+                </foreach> order by id desc
+            </if>
+        </where>
     </select>
 </mapper>

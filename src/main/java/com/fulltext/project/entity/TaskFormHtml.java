@@ -10,6 +10,8 @@ public class TaskFormHtml {
     private String formNo;
     private String formContent;
     private Long commitUserId;
+    private String nodeName;
+    private String commitUserName;
     private Date createTime;
     private Date updateTime;
 

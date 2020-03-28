@@ -63,4 +63,9 @@ public class UserServiceImpl implements UserService {
         PageInfo<User> info=new PageInfo<>(allUser);
         return info;
     }
+
+    @Override
+    public User selectUserByRealName(String userName) {
+        return userMapper.selectUserByRealName(userName);
+    }
 }

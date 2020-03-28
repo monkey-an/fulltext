@@ -12,4 +12,6 @@ public interface TaskFormHtmlMapper {
     TaskFormHtml selectByTaskIdAndFormNo(@Param("taskId") Long taskId,@Param("formNo") String formNo);
 
     List<TaskFormHtml> selectTaskFormHtmlByTaskId(@Param("taskId") Long taskId);
+
+    List<TaskFormHtml> selectByTaskIdList(@Param("taskIdList") List<Long> taskIdList);
 }

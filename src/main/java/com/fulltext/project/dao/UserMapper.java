@@ -24,4 +24,6 @@ public interface UserMapper {
     User selectOneByLoginName(@Param("loginName") String loginName);
 
     List<User> selectByPrimaryKeyList(@Param("idList") List<Long> idList);
+
+    User selectUserByRealName(@Param("userName") String userName);
 }

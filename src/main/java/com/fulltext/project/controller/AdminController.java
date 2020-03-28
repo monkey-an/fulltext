@@ -4,11 +4,9 @@ import com.fulltext.project.bo.DocumentSearchBO;
 import com.fulltext.project.bo.PageBean;
 import com.fulltext.project.constants.ConstantValue;
 import com.fulltext.project.entity.TaskAttachment;
+import com.fulltext.project.entity.TaskFormHtml;
 import com.fulltext.project.entity.User;
-import com.fulltext.project.service.DocumentInfoService;
-import com.fulltext.project.service.NoticeService;
-import com.fulltext.project.service.UserRoleService;
-import com.fulltext.project.service.UserService;
+import com.fulltext.project.service.*;
 import com.fulltext.project.util.FileUploadUtil;
 import com.fulltext.project.util.PageVoUtils;
 import com.github.pagehelper.PageInfo;
@@ -51,6 +49,9 @@ public class AdminController {
     @Autowired
     private NoticeService noticeService;
 
+    @Autowired
+    private TaskFormHtmlService taskFormHtmlService;
+
 
     @RequestMapping("")
     public String innerIndex() {
@@ -78,6 +79,9 @@ public class AdminController {
                 case "admin-add-notice":
                     resultView = "admin/add_notice";
                     break;
+                case "admin-expert-result":
+                    resultView = "admin/expert_result";
+                    break;
                 default:
                     break;
             }
@@ -99,6 +103,18 @@ public class AdminController {
         }
         PageInfo<User> pageInfo = userService.selectAllUserByPaging(pageNo, pageSize, nickName, email);
         PageBean<User> pageBean = PageVoUtils.convertTopageVo(pageInfo);
+        pageBean.setPageSize(pageSize);
+        pageBean.setCurrentPage(pageNo);
+        return pageBean;
+    }
+
+    @RequestMapping("/getAllWorkFlowFormHtml")
+    @ResponseBody
+    public PageBean<TaskFormHtml> getAllWorkFlowFormHtml(@RequestParam(value = "pageNo", required = true, defaultValue = "1") int pageNo,
+                                             @RequestParam(value = "pageSize", required = true, defaultValue = "10") int pageSize,
+                                             @RequestParam(value = "taskId", required = false) String taskId) {
+        PageInfo<TaskFormHtml> pageInfo = taskFormHtmlService.selectAllUserByPaging(pageNo, pageSize, taskId);
+        PageBean<TaskFormHtml> pageBean = PageVoUtils.convertTopageVo(pageInfo);
         pageBean.setPageSize(pageSize);
         pageBean.setCurrentPage(pageNo);
         return pageBean;

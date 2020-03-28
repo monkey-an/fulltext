@@ -1,5 +1,8 @@
 $("p").on("click",function () {
     var funName = $(this).attr("fun");
+    if(funName==undefined || funName==''){
+        return;
+    }
     $.ajax({
         //请求方式
         type : "POST",
