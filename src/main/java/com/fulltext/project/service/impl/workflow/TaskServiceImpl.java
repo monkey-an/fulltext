@@ -48,6 +48,9 @@ public class TaskServiceImpl implements TaskService {
     private ReportSignApplicationServiceImpl reportSignApplicationService;
 
     @Autowired
+    private SoftScienceDoneApplicationService softScienceDoneApplicationService;
+
+    @Autowired
     private TaskFormService taskFormService;
 
 
@@ -218,6 +221,9 @@ public class TaskServiceImpl implements TaskService {
             case "签报":
                 result = ReportSignApplicationServiceImpl.approval_html_temp;
                 break;
+            case "软科学课题结题":
+                result = SoftScienceDoneApplicationService.approval_html_temp;
+                break;
             default:
                 break;
         }
@@ -356,9 +362,11 @@ public class TaskServiceImpl implements TaskService {
         //取出表单
         List<TaskFormHtml> taskFormHtmlList = taskFormHtmlService.selectTaskFormHtmlByTaskId(task.getTaskId());
         if (taskAttachmentList != null && taskAttachmentList.size() > 0) {
-            taskFormHtmlList = taskFormHtmlList.subList(0, 1);
-            //装进model
-            model.addAttribute("taskFormHtmlList", taskFormHtmlList);
+            if(StringUtils.isNotEmpty(getRootNode(task.getTaskName()).getFormNo())) {
+                taskFormHtmlList = taskFormHtmlList.subList(0, 1);
+                //装进model
+                model.addAttribute("taskFormHtmlList", taskFormHtmlList);
+            }
         }
 
         if ("DOING".equals(task.getCurrentApprovalStatus())) {
@@ -400,6 +408,9 @@ public class TaskServiceImpl implements TaskService {
                 break;
             case "签报":
                 workFlowService = reportSignApplicationService;
+                break;
+                case "软科学课题结题":
+                workFlowService = softScienceDoneApplicationService;
                 break;
             default:
                 break;

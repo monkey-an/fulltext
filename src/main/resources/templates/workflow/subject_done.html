@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+    /* 表格样式 */
+    .table>tbody>tr>td {
+        text-align: center;
+        vertical-align: middle;
+        height: 30px;
+    }
+</style>
+<div class="col-md-12" style="margin-left: 10px; margin-top: 10px;">
+    <h4>软科学课题结题</h4>
+    <div th:unless="${rootNode.getAttachmentNameList()==null}">
+        <p>所需附件如下：</p>
+        <p th:each="attachName,attachNameStat : ${rootNode.getAttachmentNameList()}">
+            <span th:text="${attachName}"></span><input type="file" th:name="'attach-'+${attachName}" th:id="'upload-attach-'+${attachNameStat.index}" style="margin-left: 10px;display: inline;"/>
+        </p>
+    </div>
+    <div class="form-group" id="document-menu-summary-div">
+        <input type="hidden" id="flow-no" th:data="${rootNode.getFlowNo()}">
+        <input type="hidden" id="flow-name" th:data="${rootNode.getFlowName()}">
+        <button type="button" class="btn btn-success" id="save">保存</button>
+        <button type="button" class="btn btn-danger" id="commit" disabled="disabled">提交</button>
+    </div>
+</div>
+</html>
+<script>
+    function pageDivCallBack() {
+        $("#save").on("click",function() {
+            $.each($("td input"), function (i, val) {
+                var temp = $(val).val();
+                $(val).parent().html(temp);
+            });
+            $.each($("td textarea"), function (i, val) {
+                var temp = $(val).val().replace(/\n/g,"<br/>");
+                $(val).parent().html(temp);
+            });
+            $("#commit").removeAttr("disabled");
+        })
+
+        $("#commit").on("click",function(){
+            var flowNo = $("#flow-no").attr("data");
+            var flowName = $("#flow-name").attr("data");
+
+            var formData = new FormData();
+            formData.append("flow-no",flowNo);
+            formData.append("flow-name",flowName);
+
+            $.each($("input[type='file']") ,function (i, val) {
+                var tempFile = $(val)[0].files[0];
+                var name = $(val).attr("name");
+                formData.append(name,tempFile);
+            });
+
+            $.each($("table") ,function (i, val) {
+                if("need"==$(val).attr("form-type")) {
+                    var formId = $(val).prop("id");
+                    var tableHtml = $(val).prop("outerHTML");
+                    formData.append(formId, tableHtml);
+                }
+            });
+
+            $.ajax({
+                url:"/workflow/commitFlow",
+                type:'post',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success:function(result){
+                    if("SUCCESS"==result){
+                        alert("提交成功了，请后续在工作台中查看");
+                        if($("#work-mywork-input").length>0){
+                            $("#work-mywork-input").click();
+                        }
+                    }else{
+                        alert("提交失败，请检查表单并重试");
+                    }
+                }
+            })
+        })
+    }
+</script>

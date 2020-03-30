@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class ReportSignApplicationServiceImpl extends WorkFlowServiceImpl {
     public static final String approval_html_temp = "<table><tr>\n" +
             "            <td rowspan='2'>%1$s意见</td>\n" +
-            "            <td colspan='4' style='text-align: left;border-bottom-color: #fff;'>\n" +
+            "            <td colspan='6' style='text-align: left;border-bottom-color: #fff;'>\n" +
             "                <lable>同意</lable><input type='radio' name='drone' value='同意' checked>\n" +
             "                <lable>不同意</lable><input type='radio' name='drone' value='不同意'>\n" +
             "                 <input type='text' class='form-control' name='approvalMsg' value='' placeholder='请填写审批意见'>"+
@@ -40,7 +40,7 @@ public class ReportSignApplicationServiceImpl extends WorkFlowServiceImpl {
             "            </td>\n" +
             "        </tr>\n" +
             "        <tr>\n" +
-            "            <td colspan='4' style='text-align: right;'>审核人：%2$s</td>\n" +
+            "            <td colspan='6' style='text-align: right;'>审核人：%2$s</td>\n" +
             "        </tr></table>";
 
     private static Map<String, String> formHtmlToFormNo = new HashMap<>();

@@ -48,6 +48,7 @@ public abstract class WorkFlowServiceImpl implements WorkFlowService {
 
     protected static final String softScienceProjectApplication = "软科学课题申报";
     protected static final String reportSignApplication = "签报";
+    protected static final String softScienceDoneApplication = "软科学课题结题";
 
     protected static final Map<String, WorkFlowNode> flowRootNodeMap = new HashMap<>();
 
@@ -69,6 +70,14 @@ public abstract class WorkFlowServiceImpl implements WorkFlowService {
                 .build();
 
         flowRootNodeMap.put(reportSignApplication,reportSignRootNode);
+
+        WorkFlowNode softScienceDoneRootNode = WorkFlowNode.builder()
+                .flowName(softScienceDoneApplication)
+                .nodeName("报送研究成果")
+                .needApproval(false)
+                .build();
+
+        flowRootNodeMap.put(softScienceDoneApplication,softScienceDoneRootNode);
     }
 
     public abstract WorkFlowNode getRootNode();

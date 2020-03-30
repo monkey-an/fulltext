@@ -14,8 +14,8 @@
                 <li class="active"><p class="navbar-text">中国粮食研究院培训中心文献库</p></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li th:if="${userRole!=null and userRole.getRoleId()!=3}"><a href="admin"><span class="glyphicon glyphicon-th-list"></span> 系统管理 </a></li>
-                <li th:if="${userRole!=null and userRole.getRoleId()!=3}"><a href="workflow"><span class="glyphicon glyphicon-th-list"></span> 工作台 </a></li>
+                <li th:if="${userRole!=null and userRole.getRoleId()!=3}"><a href="/admin"><span class="glyphicon glyphicon-th-list"></span> 系统管理 </a></li>
+                <li th:if="${userRole!=null and userRole.getRoleId()!=3}"><a href="/workflow"><span class="glyphicon glyphicon-th-list"></span> 工作台 </a></li>
                 <li><p class="navbar-text" th:text="'您好，'+${user==null?'游客':user.getNickName()}"> <span class="glyphicon glyphicon-user"></span></p></li>
                 <li th:if="${user==null}">
                     <div class="btn-group" role="group" aria-label="...">

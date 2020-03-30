@@ -3,16 +3,13 @@ package com.fulltext.project.service.impl.workflow;
 import com.fulltext.project.bo.WorkFlowNode;
 import com.fulltext.project.constants.ConstantValue;
 import com.fulltext.project.entity.*;
-import com.fulltext.project.service.*;
 import com.fulltext.project.util.FileUploadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -25,13 +22,14 @@ import java.util.stream.Collectors;
  * Description
  * <p>
  * </p>
- * DATE 2020/3/14.
+ * DATE 2020/3/30.
  *
  * @author anlu.
  */
+
 @Service
 @Slf4j
-public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImpl {
+public class SoftScienceDoneApplicationService extends WorkFlowServiceImpl{
     public static final String approval_html_temp = "<table><tr>\n" +
             "            <td rowspan='2'>%1$s意见</td>\n" +
             "            <td colspan='4' style='text-align: left;border-bottom-color: #fff;'>\n" +
@@ -47,117 +45,48 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
 
     private static Map<String,String> formHtmlToFormNo = new HashMap<>();
     static {
-        formHtmlToFormNo.put("form11","form-1-1");
-        formHtmlToFormNo.put("form17","form-1-7");
-        formHtmlToFormNo.put("form110","form-110");
+        formHtmlToFormNo.put("form22","form-2-2");
     }
+
 
     @Override
     public void createWholeFlow(WorkFlowNode rootNode) {
-//        1、申请单位提交表单，提交表单的PDF
-//        2、申报单位审核，审核人角色：提报人上级
-//        3、处员初审，审核人角色：评审专家委员会办公室处员
-//        4、处长审核，审核人角色：评审专家委员会办公室处长
-//        5、主管副主任审核，审核人角色：评审专家委员会办公室主管副主任
-//        6、主任审核，审核人角色：评审专家委员会办公室主任
-//        7、多对多专家评审，审核人角色：软科学课题申报专家，引入一个新的表单：评审表
-
+//        1、报送研究成果，无需审核，上传结题材料电子版和纸质版扫描件
+//        2、多对多专家评审，审核人角色：软科学课题申报专家，引入一个新的表单：结题评审表
         List<String> stepOneAttachList = new ArrayList<>();
-        stepOneAttachList.add("申请表PDF扫描件");
+        stepOneAttachList.add("结题材料电子版");
+        stepOneAttachList.add("结题材料纸质版扫描件");
         rootNode.setAttachmentNameList(stepOneAttachList);
-        rootNode.setFlowNo("1-1");
-        rootNode.setFormNo("form-1-1");
+        rootNode.setFlowNo("2-1");
+
 
         WorkFlowNode stepTwoNode = WorkFlowNode.builder()
                 .flowName(rootNode.getFlowName())
-                .flowNo("1-2")
-                .nodeName("申报单位审核")
+                .flowNo("2-2")
+                .nodeName("专家复审")
                 .needApproval(true)
-                .approvalRole("leader")
+                .approvalRole("soft-office-expert")
+                .formNo("form-2-2")
                 .build();
 
         rootNode.setNextFlow(stepTwoNode);
-
-        WorkFlowNode stepThreeNode = WorkFlowNode.builder()
-                .flowName(rootNode.getFlowName())
-                .flowNo("1-3")
-                .nodeName("处员初审")
-                .needApproval(true)
-                .approvalRole("soft-office-member")
-                .build();
-
-        stepTwoNode.setNextFlow(stepThreeNode);
-
-        WorkFlowNode stepFourNode = WorkFlowNode.builder()
-                .flowName(rootNode.getFlowName())
-                .flowNo("1-4")
-                .nodeName("处长审核")
-                .needApproval(true)
-                .approvalRole("soft-office-master")
-                .build();
-
-        stepThreeNode.setNextFlow(stepFourNode);
-
-        WorkFlowNode stepFiveNode = WorkFlowNode.builder()
-                .flowName(rootNode.getFlowName())
-                .flowNo("1-5")
-                .nodeName("主管副主任审核")
-                .needApproval(true)
-                .approvalRole("soft-office-deputy-director")
-                .build();
-
-        stepFourNode.setNextFlow(stepFiveNode);
-
-        WorkFlowNode stepSixNode = WorkFlowNode.builder()
-                .flowName(rootNode.getFlowName())
-                .flowNo("1-6")
-                .nodeName("主任审核")
-                .needApproval(true)
-                .approvalRole("soft-office-director")
-                .build();
-
-        stepFiveNode.setNextFlow(stepSixNode);
-
-        WorkFlowNode stepSevenNode = WorkFlowNode.builder()
-                .flowName(rootNode.getFlowName())
-                .flowNo("1-7")
-                .nodeName("专家评审")
-                .needApproval(true)
-                .approvalRole("soft-office-expert")
-                .formNo("form-1-7")
-                .build();
-
-        stepSixNode.setNextFlow(stepSevenNode);
-
-        WorkFlowNode stepEightNode = WorkFlowNode.builder()
-                .flowName(rootNode.getFlowName())
-                .flowNo("1-8")
-                .nodeName("专家结果评估")
-                .needApproval(true)
-                .approvalRole("soft-office-member")
-                .build();
-
-        stepSevenNode.setNextFlow(stepEightNode);
     }
 
     @Override
     public WorkFlowNode getRootNode() {
-        WorkFlowNode rootNode = flowRootNodeMap.get(softScienceProjectApplication);
+        WorkFlowNode rootNode = flowRootNodeMap.get(softScienceDoneApplication);
         createWholeFlow(rootNode);
         return rootNode;
     }
 
     @Override
-    @Transactional
     public String process(HttpServletRequest request) {
         String result = "";
         try {
             //先判断当前处于哪个节点
             String flowNo = request.getParameter("flow-no");
             String flowName = request.getParameter("flow-name");
-            String form11Html = request.getParameter("form-1-1");
-            String form17Html = request.getParameter("form-1-7");
-            String form110Html = request.getParameter("form-1-10");
+            String form22Html = request.getParameter("form-2-2");
 
             WorkFlowNode currentNode = null;
             WorkFlowNode rootNode = flowRootNodeMap.get(flowName);
@@ -178,7 +107,7 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
                 return "ERROR";
             }
 
-        User user = (User) request.getSession().getAttribute(ConstantValue.USER_SESSION_KEY);
+            User user = (User) request.getSession().getAttribute(ConstantValue.USER_SESSION_KEY);
 //            User user = new User();
 
             Task task = null;
@@ -245,14 +174,14 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
             }
 
             //当前节点的表单，存起来
-            createOrUpdateHtml(form11Html, form17Html, form110Html, task,user,currentNode);
+            createOrUpdateHtml(form22Html, task,user,currentNode);
 
             //判断当前节点是否需要审批
             //如果当前节点需要审批，通过审批表单最后一行取，判断是否有同意两个字
             //如果当前节点通过了，且有下一个节点，推进到下一节点，否则整个流程结束
             WorkFlowNode nextNode = null;
             if (currentNode.isNeedApproval()) {
-                Document tableDoc = Jsoup.parse(form11Html);
+                Document tableDoc = Jsoup.parse(form22Html);
                 Elements lastTrTds = tableDoc.select("tr").select("td");
                 String approvalResult = lastTrTds.get(lastTrTds.size()-2).html();
                 if (!approvalResult.contains("不同意")) {
@@ -366,57 +295,21 @@ public class SoftScienceProjectApplicationServiceImpl extends WorkFlowServiceImp
         return result;
     }
 
-    private void createOrUpdateHtml(String form11Html,String form17Html,String form110Html,Task task,User user,WorkFlowNode currentNode){
-        if(StringUtils.isNotEmpty(form11Html)){
-            String formNo = formHtmlToFormNo.get("form11");
-            TaskFormHtml taskFormHtml = taskFormHtmlService.selectTaskFormHtmlByTaskIdAndFormNo(task.getTaskId(),formNo);
-            if(taskFormHtml!=null){
-                taskFormHtml.setFormContent(form11Html);
-                taskFormHtmlService.update(taskFormHtml);
-            }else{
-                taskFormHtml = TaskFormHtml.builder()
-                        .taskId(task.getTaskId())
-                        .commitUserId(user.getId())
-                        .formNo(formNo)
-                        .formContent(form11Html)
-                        .createTime(new Date())
-                        .updateTime(new Date())
-                        .build();
-                taskFormHtmlService.insert(taskFormHtml);
-            }
-        }
-
-        if (StringUtils.isNotEmpty(form17Html)) {
+    private void createOrUpdateHtml(String form22Html,Task task,User user,WorkFlowNode currentNode){
+        if (StringUtils.isNotEmpty(form22Html)) {
             //直接写
-            String formNo = formHtmlToFormNo.get("form17");
+            String formNo = formHtmlToFormNo.get("form22");
             TaskFormHtml taskFormHtml = TaskFormHtml.builder()
                     .taskId(task.getTaskId())
                     .commitUserId(user.getId())
                     .nodeName(currentNode.getNodeName())
                     .commitUserName(user.getRealName())
                     .formNo(formNo)
-                    .formContent(form17Html)
-                    .createTime(new Date())
-                    .updateTime(new Date())
-                    .build();
-            taskFormHtmlService.insert(taskFormHtml);
-        }
-
-        if (StringUtils.isNotEmpty(form110Html)) {
-            String formNo = formHtmlToFormNo.get("form110");
-            TaskFormHtml taskFormHtml = TaskFormHtml.builder()
-                    .taskId(task.getTaskId())
-                    .commitUserId(user.getId())
-                    .nodeName(currentNode.getNodeName())
-                    .commitUserName(user.getRealName())
-                    .formNo(formNo)
-                    .formContent(form110Html)
+                    .formContent(form22Html)
                     .createTime(new Date())
                     .updateTime(new Date())
                     .build();
             taskFormHtmlService.insert(taskFormHtml);
         }
     }
-
-
 }

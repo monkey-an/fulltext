@@ -6,6 +6,7 @@ import com.fulltext.project.entity.User;
 import com.fulltext.project.service.TaskService;
 import com.fulltext.project.service.WorkFlowService;
 import com.fulltext.project.service.impl.workflow.ReportSignApplicationServiceImpl;
+import com.fulltext.project.service.impl.workflow.SoftScienceDoneApplicationService;
 import com.fulltext.project.service.impl.workflow.SoftScienceProjectApplicationServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +37,9 @@ public class WorkFlowController {
 
     @Autowired
     private ReportSignApplicationServiceImpl reportSignApplicationService;
+
+    @Autowired
+    private SoftScienceDoneApplicationService softScienceDoneApplicationService;
 
     @Autowired
     private TaskService taskService;
@@ -89,6 +93,11 @@ public class WorkFlowController {
                     //发展报告年鉴
                     resultView = "workflow/report_create";
                     break;
+                case "work-subject-done-input":
+                    //软科学课题结题
+                    model.addAttribute("rootNode",softScienceDoneApplicationService.getRootNode());
+                    resultView = "workflow/subject_done";
+                    break;
                 default:
                     break;
             }
@@ -107,6 +116,9 @@ public class WorkFlowController {
                 break;
             case "签报":
                 workFlowService = reportSignApplicationService;
+                break;
+            case "软科学课题结题":
+                workFlowService = softScienceDoneApplicationService;
                 break;
             default:
                 break;
