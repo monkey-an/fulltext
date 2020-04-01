@@ -46,9 +46,9 @@ public abstract class WorkFlowServiceImpl implements WorkFlowService {
     protected DepartmentService departmentService;
 
 
-    protected static final String softScienceProjectApplication = "软科学课题申报";
-    protected static final String reportSignApplication = "签报";
-    protected static final String softScienceDoneApplication = "软科学课题结题";
+    public static final String softScienceProjectApplication = "软科学课题申报";
+    public static final String reportSignApplication = "签报";
+    public static final String softScienceDoneApplication = "软科学课题结题";
 
     protected static final Map<String, WorkFlowNode> flowRootNodeMap = new HashMap<>();
 

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fulltext.project.dao.TaskScheduleMapper">
+  <resultMap id="BaseResultMap" type="com.fulltext.project.entity.TaskSchedule">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
+    <result column="begin_date_time" jdbcType="TIMESTAMP" property="beginDateTime" />
+    <result column="end_date_time" jdbcType="TIMESTAMP" property="endDateTime" />
+    <result column="oper_user_id" jdbcType="BIGINT" property="operUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from task_schedule
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fulltext.project.entity.TaskSchedule">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into task_schedule (task_name, begin_date_time, end_date_time, 
+      oper_user_id, create_time, update_time
+      )
+    values (#{taskName,jdbcType=VARCHAR}, #{beginDateTime,jdbcType=TIMESTAMP}, #{endDateTime,jdbcType=TIMESTAMP}, 
+      #{operUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.fulltext.project.entity.TaskSchedule">
+    update task_schedule
+    set task_name = #{taskName,jdbcType=VARCHAR},
+      begin_date_time = #{beginDateTime,jdbcType=TIMESTAMP},
+      end_date_time = #{endDateTime,jdbcType=TIMESTAMP},
+      oper_user_id = #{operUserId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, task_name, begin_date_time, end_date_time, oper_user_id, create_time,
+    update_time
+    from task_schedule
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, task_name, begin_date_time, end_date_time, oper_user_id, create_time,
+    update_time
+    from task_schedule
+  </select>
+  <select id="selectByTaskName" resultMap="BaseResultMap">
+    select id, task_name, begin_date_time, end_date_time, oper_user_id, create_time,
+    update_time
+    from task_schedule
+    where task_name=#{taskName}
+  </select>
+</mapper>

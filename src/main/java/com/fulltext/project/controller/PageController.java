@@ -81,7 +81,7 @@ public class PageController {
     @RequestMapping("")
     public String helloPage(HttpServletRequest request, Model model) {
         List<String> needLoadDocumentSerialList = new ArrayList<>();
-        needLoadDocumentSerialList.add("获奖汇编");
+        needLoadDocumentSerialList.add("软科学课题");
         needLoadDocumentSerialList.add("发展报告");
         needLoadDocumentSerialList.add("年鉴");
 

@@ -2,12 +2,15 @@ package com.fulltext.project.controller;
 
 import com.fulltext.project.constants.ConstantValue;
 import com.fulltext.project.entity.Task;
+import com.fulltext.project.entity.TaskSchedule;
 import com.fulltext.project.entity.User;
+import com.fulltext.project.service.TaskScheduleService;
 import com.fulltext.project.service.TaskService;
 import com.fulltext.project.service.WorkFlowService;
 import com.fulltext.project.service.impl.workflow.ReportSignApplicationServiceImpl;
 import com.fulltext.project.service.impl.workflow.SoftScienceDoneApplicationService;
 import com.fulltext.project.service.impl.workflow.SoftScienceProjectApplicationServiceImpl;
+import com.fulltext.project.service.impl.workflow.WorkFlowServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,8 +48,31 @@ public class WorkFlowController {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private TaskScheduleService taskScheduleService;
+
     @RequestMapping("")
-    public String workflowIndex() {
+    public String workflowIndex(Model model) {
+        //找出软科学课题申报和软科学课题结题的时间限制
+        String softScienceName = WorkFlowServiceImpl.softScienceDoneApplication;
+        String softScienceDoneName = WorkFlowServiceImpl.softScienceProjectApplication;
+        Boolean[] switchArr = new Boolean[2];
+
+        List<TaskSchedule> allTaskScheduleList = taskScheduleService.selectAll();
+        Date nowDate = new Date();
+        allTaskScheduleList
+                .stream()
+                .filter(taskSchedule -> taskSchedule.getBeginDateTime().before(nowDate)&&taskSchedule.getEndDateTime().after(nowDate))
+                .forEach(taskSchedule -> {
+                    if(softScienceName.equals(taskSchedule.getTaskName())){
+                        switchArr[0] = true;
+                    }
+                    if(softScienceDoneName.equals(taskSchedule.getTaskName())){
+                        switchArr[1] = true;
+                    }
+                });
+
+        model.addAttribute("switchArr",switchArr);
         return "workflow/index";
     }
 

@@ -64,3 +64,8 @@ function searchReload(){
     $("#searchValue").html($(temp[0]).find("a").html());
 }
 
+$("#searchWords").keypress(function(event){
+    if(event.keyCode ==13){
+        $("#search_form_button").trigger("click");
+    }
+});

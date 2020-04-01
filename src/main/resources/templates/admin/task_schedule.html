@@ -1,43 +1,41 @@
 <div id="toolbar">
-    图书名：<input type="text" name="document_name" id="query_document_name"/>
-    年份：<input type="text" name="year" id="query-year"/>
-    <input type="button" id="query" value="查询"/>
+    流程名称：<input type="text" name="realName" id="query-task-name"/>
+    <input type="button" id="query" value="查询" style='margin-right:20px;'/>
+    <input type="button" id="add_task_schedule" style='margin-right:20px;' data-toggle='modal' data-target='#addTaskScheduleDlg' value="新增"/>
 </div>
 <table id="table"></table>
-<div class="modal fade" id="docuemnt_modal">
+<div class="modal fade" id="addTaskScheduleDlg">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">编辑图书信息</h4>
+                <h4 class="modal-title">设置流程期限</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modalBody">
                 <form class="form-horizontal" id="formid">
                     <div class="form-group">
-                        <label for="document_name" class="col-md-2 control-label">图书名称</label>
+                        <label for="task_name" class="col-md-2 control-label">流程名称</label>
                         <div class="col-md-9">
-                            <input type="text" id="document_name" name="document_name" placeholder="图书名称" class="form-control" />
-                            <input type="hidden" id="document_menu_id" name="document_name" placeholder="id" class="form-control" />
+                            <input type="text" id="task_name" name="task_name" placeholder="请输入流程名称" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="menu_name" class="col-md-2 control-label">目录名称</label>
+                        <label for="begin_time" class="col-md-2 control-label">开始时间</label>
                         <div class="col-md-9">
-                            <input type="text" id="menu_name" name="menu_name" placeholder="目录名称" class="form-control" />
+                            <input type="text" id="begin_time" name="begin_time" placeholder="请选择开始时间" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="content" class="col-md-2 control-label">内容</label>
+                        <label for="end_time" class="col-md-2 control-label">结束时间</label>
                         <div class="col-md-9">
-                            <textarea style='width: 100%;' rows='15' id="content" name="content" placeholder="内容" class="form-control"></textarea>
-<!--                            <input type="text" id="content" name="content" placeholder="内容" class="form-control" />-->
+                            <input type="text" id="end_time" name="begin_time" placeholder="请选择结束时间" class="form-control" />
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="text-center form-group">
-                            <button type="button" id="do-create-document-search" class="btn btn-primary" data-dismiss="">构建检索</button>
-                            <button type="button" id="cancle-create-document-search" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" id="do-add-task-schedule" class="btn btn-primary" data-dismiss="">确定</button>
+                            <button type="button" id="cancle-add-task-schedule" class="btn btn-default" data-dismiss="modal">取消</button>
                         </div>
                     </div>
                 </form>
@@ -50,8 +48,7 @@
         var $table;
         $(function() {
             $table = $('#table').bootstrapTable({
-                url: '/admin/getAllSearchDocument',
-                data_local: "zh-US",
+                url: '/admin/getAllTaskSchedule',
                 method: 'get',                     //请求方式（*）
                 //post,contentType: "application/x-www-form-urlencoded",
                 toolbar: '#toolbar',                //工具按钮用哪个容器
@@ -79,9 +76,8 @@
                     //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                     var temp = {
                         pageSize: params.limit,                         //页面大小
-                        pageNo: (params.offset / params.limit) + 1, //页码
-                        documentName:$("#query_document_name").val(),
-                        year:$("#query-year").val()
+                        pageNo: (params.offset / params.limit) + 1,  //页码
+                        taskName:$("#query-task-name").val()
                         //sort: params.sort,      //排序列名
                         //sortOrder: params.order //排位命令（desc，asc）
                     }
@@ -91,41 +87,28 @@
                     checkbox: false,
                     visible: false                  //是否显示复选框
                 }, {
-                    field: 'documentName',
-                    title: '图书名称',
-                }, {
-                    field: 'menuName',
-                    title: '目录名称',
-                },{
-                    field: 'menuFullName',
-                    title: '目录全路径',
-                },{
-                    field: 'pageInfo',
-                    title: '页数',
-                },{
                     field: 'id',
-                    title: '操作',
-                    formatter:function(value,row,index){
-                        return "<button type='button' style='margin-right:20px;' class='btn btn-primary' document_menu_id='"+value+"' data-toggle='modal' data-target='#docuemnt_modal'>构建检索</button>";
-                    }
+                    title: '编号'
+                }, {
+                    field: 'taskName',
+                    title: '流程名称'
+                }, {
+                    field: 'beginDateStr',
+                    title: '开始时间'
+                },{
+                    field: 'endDateStr',
+                    title: '结束时间'
+                }, {
+                    field: 'createDateStr',
+                    title: '设置期限时间'
                 } ],
                 onLoadSuccess: function () {//加载绑定
-                    $("#table .btn-primary").click(function(ev){
-                        var tr = $(ev.target.parentElement.parentElement);
-                        var document_menu_id=$(ev.target).attr("document_menu_id");
-                        $("#document_name").val(tr.children()[0].innerHTML);
-                        $("#menu_name").val(tr.children()[2].innerHTML);
-                        $("#document_menu_id").val(document_menu_id);
-                        $("#content").val("");
-                    });
                 },
                 onLoadError: function () {
                     showTips("数据加载失败！");
                 },
                 onDblClickRow: function (row, $element) {
-                    var id = row.id;
-                    // alert(id);
-                }
+                },
             });
 
             $("#query").click(function(){
@@ -133,22 +116,41 @@
             });
         });
 
-        $("#do-create-document-search").on("click", function () {
+        $('#begin_time').datetimepicker({
+            language: 'zh-CN',//显示中文
+            format: 'yyyy-mm-dd hh:ii',//显示格式
+            minView: "hour",//设置只显示到月份
+            initialDate: new Date(),
+            autoclose: true,//选中自动关闭
+            todayBtn: true//显示今日按钮*/
+        });
+        $('#end_time').datetimepicker({
+            language: 'zh-CN',//显示中文
+            format: 'yyyy-mm-dd hh:ii',//显示格式
+            minView: "hour",//设置只显示到月份
+            initialDate: new Date(),
+            autoclose: true,//选中自动关闭
+            todayBtn: true//显示今日按钮*/
+        });
+
+        $("#do-add-task-schedule").on("click",function() {
+            $("#cancle-add-task-schedule").click();
             $.ajax({
                 //请求方式
                 type: "POST",
                 //请求地址
-                url: "/admin/createDocumentSearch",
+                url: "/admin/addTaskSchedule",
                 //数据
                 data: {
-                    document_menu_id: $("#document_menu_id").val(),
-                    content: $("#content").val()
+                    task_name: $("#task_name").val(),
+                    begin_time: $("#begin_time").val(),
+                    end_time: $("#end_time").val()
                 },
                 //请求成功
                 success: function (result) {
                     if("SUCCESS"==result){
                         alert("录入成功");
-                        $("#cancle-create-document-search").click();
+                        $("#table").bootstrapTable('refresh');
                     }
                 },
                 //请求失败，包含具体的错误信息
@@ -157,6 +159,6 @@
                     alert(e.responseText);
                 }
             });
-        })
+        });
     }
 </script>

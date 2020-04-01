@@ -5,6 +5,7 @@ import com.fulltext.project.bo.PageBean;
 import com.fulltext.project.constants.ConstantValue;
 import com.fulltext.project.entity.TaskAttachment;
 import com.fulltext.project.entity.TaskFormHtml;
+import com.fulltext.project.entity.TaskSchedule;
 import com.fulltext.project.entity.User;
 import com.fulltext.project.service.*;
 import com.fulltext.project.util.FileUploadUtil;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +54,9 @@ public class AdminController {
     @Autowired
     private TaskFormHtmlService taskFormHtmlService;
 
+    @Autowired
+    private TaskScheduleService taskScheduleService;
+
 
     @RequestMapping("")
     public String innerIndex() {
@@ -81,6 +86,9 @@ public class AdminController {
                     break;
                 case "admin-expert-result":
                     resultView = "admin/expert_result";
+                    break;
+                case "admin-task-schedule":
+                    resultView = "admin/task_schedule";
                     break;
                 default:
                     break;
@@ -170,5 +178,25 @@ public class AdminController {
     public String noticeAdd(HttpServletRequest request){
         return noticeService.addNotice(request);
     }
+
+    @RequestMapping("/getAllTaskSchedule")
+    @ResponseBody
+    public PageBean<TaskSchedule> getAllTaskSchedule(@RequestParam(value = "pageNo", required = true, defaultValue = "1") int pageNo,
+                                                         @RequestParam(value = "pageSize", required = true, defaultValue = "10") int pageSize,
+                                                         @RequestParam(value = "taskName", required = false) String taskName) {
+        PageInfo<TaskSchedule> pageInfo = taskScheduleService.selectAllByTaskNameAndPaging(pageNo, pageSize, taskName);
+        PageBean<TaskSchedule> pageBean = PageVoUtils.convertTopageVo(pageInfo);
+        pageBean.setPageSize(pageSize);
+        pageBean.setCurrentPage(pageNo);
+        return pageBean;
+    }
+
+    @RequestMapping("/addTaskSchedule")
+    @ResponseBody
+    public String addTaskSchedule(HttpServletRequest request) throws ParseException {
+        return taskScheduleService.addTaskSchedule(request);
+    }
+
+
 
 }
